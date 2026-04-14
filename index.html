@@ -3,492 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>理美容国家試験対策トレーニング</title>
+    <title>香粧品トレーニング v2.0</title>
     <style>
-        /* 見た目を整える指示（CSS） */
-        body { font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif; background-color: #f5f7fa; color: #333; line-height: 1.6; padding: 15px; margin: 0; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #2c3e50; font-size: 20px; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        body { font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; color: #333; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { font-size: 20px; text-align: center; color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        .hidden { display: none; }
         
-        /* メニュー画面 */
-        .menu-list { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
-        .menu-btn { padding: 18px; font-size: 18px; background-color: #3498db; color: white; border: none; border-radius: 10px; cursor: pointer; text-align: left; transition: 0.3s; }
-        .menu-btn:hover { background-color: #2980b9; }
-        .menu-btn span { font-size: 13px; display: block; opacity: 0.9; margin-top: 5px; }
+        /* ボタン共通 */
+        button { cursor: pointer; transition: 0.2s; border: none; border-radius: 8px; }
+        .btn-main { width: 100%; padding: 15px; font-size: 18px; background: #3498db; color: white; margin-bottom: 10px; }
+        .btn-choice { width: 100%; padding: 12px; text-align: left; background: white; border: 2px solid #3498db; margin: 8px 0; font-size: 16px; }
+        .btn-choice:hover { background: #ebf5fb; }
+        .btn-next { width: 100%; padding: 15px; background: #27ae60; color: white; font-size: 18px; margin-top: 15px; }
 
-        /* クイズ画面 */
-        #quiz-screen, #score-screen { display: none; }
-        .status { display: flex; justify-content: space-between; font-size: 14px; color: #7f8c8d; margin-bottom: 10px; }
-        .question-text { font-weight: bold; font-size: 18px; margin-bottom: 20px; min-height: 3em; }
-        .choice-btn { display: block; width: 100%; margin: 10px 0; padding: 14px; font-size: 16px; border: 2px solid #3498db; border-radius: 8px; background: white; cursor: pointer; text-align: left; }
-        .choice-btn:hover { background-color: #eaf2f8; }
-        #result-msg { font-weight: bold; text-align: center; font-size: 22px; margin: 15px 0; min-height: 1.5em; }
-        .nav-btn { width: 100%; padding: 16px; background-color: #27ae60; color: white; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; display: none; }
+        /* メニュー */
+        .menu-grid { display: grid; gap: 10px; }
+        .unit-btn { padding: 15px; background: #fff; border: 1px solid #ddd; border-left: 5px solid #3498db; text-align: left; font-size: 16px; }
 
-        /* 結果画面 */
-        .score-box { text-align: center; padding: 30px 10px; background: #ebf5fb; border-radius: 12px; margin: 20px 0; }
-        .percent { font-size: 50px; font-weight: bold; color: #e67e22; margin: 10px 0; }
-        .details { font-size: 18px; color: #2c3e50; margin-bottom: 10px; }
+        /* クイズ表示 */
+        .status { font-size: 14px; color: #666; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .question-box { font-weight: bold; font-size: 18px; margin-bottom: 15px; }
+        .explanation-box { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 5px solid #bdc3c7; }
+        .img-box img { max-width: 100%; border-radius: 5px; margin-top: 10px; }
+        .correct { background: #d4edda !important; border-color: #28a745 !important; }
+        .wrong { background: #f8d7da !important; border-color: #dc3545 !important; }
     </style>
 </head>
 <body>
-<div id="menu-screen">
-        <h1>学習メニュー</h1>
-        <div class="menu-list">
-<button class="menu-btn" onclick="startQuiz('gairon')">
-    1：概論、人体と水
-    <span>法律・皮膚の構造・化学の基礎（45問）</span>
-</button>
-<button class="menu-btn" onclick="startQuiz('yusei')">
-    2：油性原料
-    <span>エステル・油脂・ロウ類（15問）</span>
-</button>
-<button class="menu-btn" onclick="startQuiz('kaimen')">
-    3：界面活性剤
-    <span>乳化・可溶化・石けんの仕組み（15問）</span>
-</button>
-<button class="menu-btn" onclick="startQuiz('koubunnshi')">
-    4：高分子化合物
-    <span>天然・合成高分子、皮膜を作る成分（15問）</span>
-</button>
-<button class="menu-btn" onclick="startQuiz('shizai')">
-    5：色材
-    <span>染料・顔料、酸化チタンと酸化鉄（15問）</span>
-</button>
-<button class="menu-btn" onclick="startQuiz('koryo')">
-    6：香料
-    <span>天然・合成香料、動物性香料の由来（15問）</span>
-</button>
-<button class="menu-btn" onclick="startQuiz('haigo')">
-    7：配合原料
-    <span>防腐剤・酸化防止剤・紫外線吸収剤・収れん剤（20問）</span>
-</button>
-<button class="menu-btn" onclick="startQuiz('zakka')">
-    8：雑貨原料
-    <span>ネイル・まつ毛エクステ、プラスチックの基礎（10問）</span>
-</button>
-<button class="menu-btn" onclick="startQuiz('senjo')">
-    9：皮膚洗浄用化粧品
-    <span>石けんの製法（けん化）、硬質・軟質石けんの区別（15問）</span>
-</button>
-<button class="menu-btn" onclick="startQuiz('keshosui')">
-    10：化粧水、クリーム、乳液
-    <span>化粧水、クリーム、乳液(15問) </span>
-</button>
-<button class="menu-btn" onclick="startQuiz('treatment')">
-    11：トリートメント香粧品
-    <span>美白・日焼け止め（SPF/PA）・シェービング（15問）</span>
-</button>
-<button class="menu-btn" onclick="startQuiz('makeup')">
-    12：メイクアップ香粧品
-    <span>ベース・ポイントメイク、成分の役割（15問）</span>
-</button>
-<button class="menu-btn" onclick="startQuiz('shampoo')">
-    13：シャンプー・仕上げ剤
-    <span>洗浄・保護の仕組み、セット樹脂の役割（10問）</span>
-</button>
-<button class="menu-btn" onclick="startQuiz('perma')">
-    14：パーマ剤
-    <span>酸化・還元反応、1剤・2剤の成分と役割（15問）</span>
-</button>
-<button class="menu-btn" onclick="startQuiz('haircolor')">
-    15：ヘアカラー製品
-    <span>酸化染毛剤、パッチテスト、脱色の仕組み（10問）</span>
-</button>
-<button class="menu-btn" onclick="startQuiz('ikumou')">
-    16：育毛剤
-    <span>脱毛の原因、育毛と発毛の分類、有効成分（10問）</span>
-</button>
-</div>
-</div>
 
-    <div id="quiz-screen">
-        <div class="status">            
-            <span id="q-number"></span>
-        </div>
-        <div id="question" class="question-text"></div>
-        <div id="choices"></div>
-        <div id="result-msg"></div>
-        <button id="next-button" class="nav-btn" onclick="nextQuestion()">次の問題へ</button>
+<div class="container">
+    <h1>香粧品 習熟度テスト</h1>
+
+    <div id="screen-login">
+        <p style="text-align:center;">あなたの属性を選択してください</p>
+        <button class="btn-main" onclick="initApp('1')">1年生（前期・後期）</button>
+        <button class="btn-main" onclick="initApp('2')">2年生（全範囲）</button>
+        <button class="btn-main" onclick="initApp('0')">一般・その他</button>
     </div>
 
-    <div id="score-screen">
-        <h1>トレーニング終了！</h1>
-        <div class="score-box">
-            <div class="details" id="final-stats"></div>
-            <div class="percent" id="final-percent"></div>
-            <p id="feedback-msg" style="font-weight:bold;"></p>
+    <div id="screen-menu" class="hidden">
+        <div id="menu-title" style="font-weight:bold; margin-bottom:10px;">単元を選択してください</div>
+        <div id="unit-list" class="menu-grid"></div>
+        <button class="btn-main" style="background:#95a5a6; margin-top:20px;" onclick="location.reload()">戻る</button>
+    </div>
+
+    <div id="screen-quiz" class="hidden">
+        <div class="status">
+            <span id="current-unit-name"></span>
+            <span id="q-progress"></span>
         </div>
-        <button class="menu-btn" style="width:100%; text-align:center;" onclick="showMenu()">メニューに戻る</button>
+        <div id="q-text" class="question-box"></div>
+        <div id="choices-list"></div>
+        <div id="answer-area" class="hidden">
+            <div id="result-mark" style="font-size:24px; font-weight:bold; text-align:center;"></div>
+            <div class="explanation-box" id="explanation-text"></div>
+            <div id="img-area" class="img-box"></div>
+            <button id="btn-next" class="btn-next" onclick="nextQuestion()">次の問題へ</button>
+        </div>
+    </div>
+
+    <div id="screen-result" class="hidden">
+        <h2 style="text-align:center;">結果発表</h2>
+        <div id="result-score" style="font-size:40px; text-align:center; color: #e67e22;"></div>
+        <p id="result-summary" style="text-align:center;"></p>
+        <button class="btn-main" onclick="startQuiz(currentUnitId, true)">同じ単元をランダムに解く</button>
+        <button class="btn-main" style="background:#95a5a6;" onclick="showMenu()">メニューに戻る</button>
     </div>
 </div>
 
 <script>
-    /* アプリの動きを制御する命令（JavaScript） */
-    const allQuizzes = {
-        gairon: [
-            // PDF「01_概論」「02_人体」「03_水」からの45問（抜粋）
-            { q: "香粧品の定義を定めている法律は？", c: ["理容師法・美容師法", "医薬品医療機器等法", "PL法"], a: 1 },
-            { q: "健康な皮膚の角質層に含まれる水分の割合は？", c: ["5〜10％", "15〜20％", "30〜40％"], a: 1 },
-            { q: "物質を溶かしている液体のことを何といいますか？", c: ["溶質", "溶媒", "溶液"], a: 1 },
-            { q: "毒性が非常に強く、香粧品への配合が禁止されているのは？", c: ["エタノール", "メタノール", "グリセリン"], a: 1 },
-            { q: "化粧という行為は、人間特有のどのような欲求の現れですか？", c: ["自己顕示欲", "承認欲求", "生存欲求"], a: 0 },
-            { q: "理容師・美容師が薬剤を使う際、必ず必要なのは客の何？", c: ["氏名の確認", "本人の同意", "住所の確認"], a: 1 },
-            { q: "香粧品は、紫外線による皮膚の何を防御する価値がありますか？", c: ["乾燥", "老化", "多汗"], a: 1 },
-            { q: "角質層にある水分吸収物質「NMF」の日本語名は？", c: ["天然保湿因子", "皮脂膜", "角質細胞"], a: 0 },
-            { q: "真皮に含まれ、水を強力に保持するムコ多糖類は？", c: ["コラーゲン", "エラスチン", "ヒアルロン酸"], a: 2 },
-            { q: "真皮にあるタンパク質で、肌の弾力を保つものは？", c: ["ケラチン", "コラーゲン・エラスチン", "メラニン"], a: 1 },
-            { q: "皮膚の潤いを保つ作用を何効果といいますか？", c: ["モイスチャー効果", "エモリエント効果", "クレンジング効果"], a: 0 },
-            { q: "皮脂膜が水分の蒸発を防ぎ、肌を柔軟にする作用は？", c: ["モイスチャー効果", "エモリエント効果", "殺菌効果"], a: 1 },
-            { q: "液体に物質が均一に溶け合っている状態の液を何という？", c: ["溶媒", "溶質", "溶液"], a: 2 },
-            { q: "砂糖水における「砂糖」のように、溶けている物質のことは？", c: ["溶質", "溶媒", "溶液"], a: 0 },
-            { q: "水道水を不純物を取り除いて精製した水は？", c: ["精製水", "硬水", "天然水"], a: 0 },
-            { q: "エタノール濃度が約何％の時、最も消毒効果が高まりますか？", c: ["約40％", "約60％", "約80％"], a: 2 },
-            { q: "エタノールのように「炭素」を含む化合物を何といいますか？", c: ["無機化合物", "有機化合物", "酸化物"], a: 1 },
-            { q: "特有の臭気があるが、安価で殺菌力もあるアルコールは？", c: ["2-イソプロパノール", "メタノール", "アセトン"], a: 0 },
-            { q: "真皮の中で、水分を保持しているのは何に結合した水ですか？", c: ["脂質", "タンパク質", "ミネラル"], a: 1 },
-            { q: "香粧品の品質や安全性を定めている「薬機法」の正式名称は？", c: ["医薬品医療機器等法", "理容師・美容師法", "製造物責任法"], a: 0 }
-            // ※45問の残りは、ここに追加のセットを書くことで増やせます。
-        ],
-        yusei: [
-            // PDF「04_油性原料」からの15問
-            { q: "一般に酸とアルコールから得られる化合物を何といいますか？", c: ["エステル", "エーテル", "アルデヒド"], a: 0 },
-            { q: "油脂は何と3価のアルコールであるグリセリンのエステルですか？", c: ["アミノ酸", "脂肪酸", "核酸"], a: 1 },
-            { q: "油脂はグリセリド、または別名で何と呼ばれますか？", c: ["モノグリセリド", "ジグリセリド", "トリグリセリド"], a: 2 },
-            { q: "常温で「固体」の油脂を何といいますか？", c: ["脂肪", "脂肪油", "ロウ"], a: 0 },
-            { q: "常温で「液体」の油脂を何といいますか？", c: ["脂肪", "脂肪油", "精製油"], a: 1 },
-            { q: "高級脂肪酸と高級アルコールから成るエステルを何といいますか？", c: ["油脂", "ロウ類", "炭化水素"], a: 1 },
-            { q: "ロウ類の中で、例外的に常温で「液体」であるものはどれですか？", c: ["ミツロウ", "カルナウバロウ", "ホホバ油"], a: 2 },
-            { q: "油脂が日光や酸素などの作用で変質することを何といいますか？", c: ["還元", "酸化（酸敗）", "中和"], a: 1 },
-            { q: "スクワランは、鮫の肝油に含まれる何に水素を添加したものですか？", c: ["スクワレン", "コレステロール", "ラノリン"], a: 0 },
-            { q: "代表的な高級脂肪酸で、クリームの基剤原料として重要なものは？", c: ["ステアリン酸", "酢酸", "塩酸"], a: 0 },
-            { q: "洗顔クリームなどに使われ、良質な泡を生じるのは何石けんですか？", c: ["ナトリウム石けん", "カリウム石けん", "カルシウム石けん"], a: 1 },
-            { q: "化合物の中に含まれる何の数が少ないものを「低級」と呼びますか？", c: ["水素原子", "酸素原子", "炭素原子"], a: 2 },
-            { q: "乳化助剤として、粘度を出すために古くから使われる高級アルコールは？", c: ["メタノール", "エタノール", "セタノール"], a: 2 },
-            { q: "常温で液体の脂肪油のうち、空気中で固化する性質を持つものは？", c: ["乾性油", "不乾性油", "鉱物油"], a: 0 },
-            { q: "香粧品の原料として主に使われるのは、乾性油と不乾性油のどちら？", c: ["乾性油", "不乾性油", "両方"], a: 1 }
-        ],
-        kaimen: [
-            // PDF「05_界面活性剤」からの15問
-            { q: "界面活性剤の分子で、水になじみやすい部分を何といいますか？", c: ["親油基（しんゆき）", "親水基（しんすいき）", "疎水基（そすいき）"], a: 1 },
-            { q: "界面活性剤の分子で、油になじみやすい部分を何といいますか？", c: ["親油基（疎水基）", "親水基", "中和基"], a: 0 },
-            { q: "界面活性剤が表面を埋め尽くし、それ以上入れると「ミセル」を作り始める濃度は？", c: ["飽和濃度", "臨界ミセル濃度（cmc）", "限界浸透濃度"], a: 1 },
-            { q: "界面活性剤が水中で作る、分子の小さな集合体のことを何といいますか？", c: ["ゾル", "ゲル", "ミセル"], a: 2 },
-            { q: "水と油を混ぜて、乳液のように白く濁った分散状態にすることを何といいますか？", c: ["可溶化", "乳化（エマルション）", "分散"], a: 1 },
-            { q: "水の中に油の粒が分散しているタイプ（乳液など）の乳化型を何といいますか？", c: ["O/W型（水中油型）", "W/O型（油中水型）", "混合型"], a: 0 },
-            { q: "油の中に水の粒が分散しているタイプ（クレンジングクリーム等）の乳化型は？", c: ["O/W型", "W/O型（油中水型）", "透明型"], a: 1 },
-            { q: "ミセルの粒子が光の波長より小さく、透明に溶け合っている状態を何といいますか？", c: ["乳化", "可溶化", "沈殿"], a: 1 },
-            { q: "水や油の中に、粉（固体）の顔料などを均一に散らばらせる働きを何といいますか？", c: ["乳化作用", "可溶化作用", "分散作用"], a: 2 },
-            { q: "微粒子が液体や気体中に分散した状態を何といいますか？", c: ["コロイド", "結晶", "真溶液"], a: 0 },
-            { q: "親水基が「マイナスイオン」に電気を帯びるタイプの界面活性剤はどれですか？", c: ["陰（アニオン）界面活性剤", "陽（カチオン）界面活性剤", "非イオン界面活性剤"], a: 0 },
-            { q: "歴史的に最も古くから用いられ、洗浄性に優れている代表的な界面活性剤は？", c: ["リンス", "石けん", "合成洗剤"], a: 1 },
-            { q: "コロイドの状態のうち、液体状のものを「ゾル」といいますが、固体状のものは？", c: ["ゲル", "気体", "合金"], a: 0 },
-            { q: "界面活性剤を水に溶かしたとき、性質が最も大きく変化し始める濃度は？", c: ["0％のとき", "臨界ミセル濃度（cmc）", "100％のとき"], a: 1 },
-            { q: "界面活性剤が油汚れを取り囲み、水中に引き離すことで汚れが落ちる現象は？", c: ["酸化作用", "洗浄作用", "還元作用"], a: 1 }
-        ],
-        koubunnshi: [
-            // PDF「高分子化合物」からの15問
-            { q: "小さな分子が次々と結合して、一般に分子量が「1万以上」になった化合物を何といいますか？", c: ["低分子化合物", "中分子化合物", "高分子化合物"], a: 2 },
-            { q: "毛髪や爪の主成分である高分子化合物（タンパク質）は何ですか？", c: ["コラーゲン", "ケラチン", "エラスチン"], a: 1 },
-            { q: "皮膚の真皮に存在し、網目状に張り巡らされている動物系の高分子は？", c: ["コラーゲン", "キトサン", "ロジン"], a: 0 },
-            { q: "カニやエビの殻に含まれ、保湿作用や抗菌・殺菌作用がある成分は？", c: ["ケラチン", "アラビアゴム", "キトサン"], a: 2 },
-            { q: "次のうち、植物系の「天然高分子化合物」はどれですか？", c: ["エラスチン", "アラビアゴム", "デンプン", "2と3の両方"], a: 3 },
-            { q: "マツの樹脂から得られる、植物系の天然高分子化合物は何ですか？", c: ["ロジン", "キトサン", "ケラチン"], a: 0 },
-            { q: "ビニル系やアクリル系など、化学的に作られた高分子化合物を何といいますか？", c: ["天然高分子", "合成高分子", "半合成高分子"], a: 1 },
-            { q: "ヘアスプレーなどの「皮膜形成剤（ひまくけいせいざい）」として使われる合成高分子は？", c: ["PVP（ポリビニルピロリドン）", "PVA（ポリビニルアルコール）", "キトサン"], a: 0 },
-            { q: "シャンプーや乳液の「乳化安定剤」として用いられることが多い合成高分子は？", c: ["ケラチン", "PVA（ポリビニルアルコール）", "ロジン"], a: 1 },
-            { q: "次のうち、動物系の天然高分子「ではない」ものはどれですか？", c: ["エラスチン", "キトサン", "アラビアゴム"], a: 2 },
-            { q: "高分子化合物は、小さな分子（単量体）がどのようにつながっていますか？", c: ["バラバラに存在", "鎖（くさり）状に長く結合", "丸く固まっている"], a: 1 },
-            { q: "皮膚の弾力性を保つために、コラーゲンと共に真皮に存在する成分は？", c: ["エラスチン", "アラビアゴム", "PVP"], a: 0 },
-            { q: "天然の高分子化合物のうち、動物由来の成分を総称して何といいますか？", c: ["植物系天然高分子", "動物系天然高分子", "合成高分子"], a: 1 },
-            { q: "キトサンの原料として正しい組み合わせはどれですか？", c: ["豚や牛の真皮", "カニやエビの殻", "樹木の樹脂"], a: 1 },
-            { q: "高分子化合物の特性として正しいものはどれですか？", c: ["熱に非常に強い", "独特の粘り（粘性）や皮膜を作る力がある", "水に非常に溶けやすい"], a: 1 }
-        ],
-        shizai: [
-            // PDF「07_色材」からの15問
-            { q: "水や油に溶ける性質を持ち、粒子が小さく下地に染み込む色材を何といいますか？", c: ["顔料（がんりょう）", "染料（せんりょう）", "体質顔料"], a: 1 },
-            { q: "水や油に溶けない不溶性の粉末で、表面を覆い隠す力が強い色材を何といいますか？", c: ["染料", "顔料", "合成色素"], a: 1 },
-            { q: "代表的な白色顔料で、しみやそばかすを隠す「被覆力（ひふくりょく）」が最も強いのは？", c: ["酸化チタン", "酸化亜鉛", "カーボンブラック"], a: 0 },
-            { q: "粒子の細かい酸化チタンが散乱させ、日焼けを防ぐ効果がある光は何ですか？", c: ["赤外線", "紫外線", "可視光線"], a: 1 },
-            { q: "別名を「亜鉛華（あえんか）」といい、皮膚を引き締める作用がある白色顔料は？", c: ["酸化チタン", "酸化亜鉛", "カオリン"], a: 1 },
-            { q: "酸化亜鉛が持つ、皮膚を引き締めたり炎症を抑えたりする作用を何といいますか？", c: ["酸化作用", "収れん作用", "還元作用"], a: 1 },
-            { q: "黄色・赤色・黒色のバリエーションがあり、安全性・安定性が高い顔料はどれですか？", c: ["酸化鉄（さんかてつ）", "群青（ぐんじょう）", "タール色素"], a: 0 },
-            { q: "酸化鉄のうち、赤色をしたものの別名を何といいますか？", c: ["ベンガラ", "墨（すみ）", "真珠"], a: 0 },
-            { q: "眉墨（まゆずみ）やアイライナーなどに古くから使われている黒色の顔料は？", c: ["酸化チタン", "カーボンブラック", "コンジョウ"], a: 1 },
-            { q: "青色系の代表的な無機顔料で、アイメイクアップ等に使われるのはどれですか？", c: ["群青（ぐんじょう）", "酸化鉄", "亜鉛華"], a: 0 },
-            { q: "有機合成色素（ゆうきごうせいしきそ）の別名を何といいますか？", c: ["天然色素", "タール色素", "鉱物色素"], a: 1 },
-            { q: "色材が光や熱に強く、変色や退色を起こしにくい性質を何といいますか？", c: ["耐光性・耐熱性", "揮発性", "吸湿性"], a: 0 },
-            { q: "ファンデーションなどで、肌のしみやそばかすを隠し覆う力を何といいますか？", c: ["展延力（てんえんりょく）", "被覆力（ひふくりょく）", "吸着力"], a: 1 },
-            { q: "酸化鉄や群青のように、鉱物から得られる顔料を何といいますか？", c: ["有機顔料", "無機顔料", "合成染料"], a: 1 },
-            { q: "ファンデーションの「色味」を調整するために最もよく使われるのはどれですか？", c: ["着色顔料（酸化鉄など）", "体質顔料", "真珠光沢顔料"], a: 0 }
-        ],
-        koryo: [
-            // PDF「08_香料」からの15問
-            { q: "香料を大きく2つに分類すると、動植物から得られる天然香料と何に分けられますか？", c: ["有機香料", "無機香料", "合成香料"], a: 2 },
-            { q: "合成香料は、石油や石炭のほかに何を出発原料として製造されますか？", c: ["天然ガス", "水", "空気"], a: 0 },
-            { q: "ジャコウジカから得られる、別名を「ムスク」という動物性香料は何ですか？", c: ["じゃ香（麝香）", "霊猫香（れいびょうこう）", "龍涎香（りゅうぜんこう）"], a: 0 },
-            { q: "ジャコウネコから得られる、別名を「シペット」という動物性香料は何ですか？", c: ["龍涎香", "霊猫香（シペット）", "海狸香"], a: 1 },
-            { q: "マッコウクジラから得られる、別名を「アンバーグリス」という動物性香料は？", c: ["じゃ香", "海狸香", "龍涎香（アンバーグリス）"], a: 2 },
-            { q: "ビーバーから得られる、別名を「カストリウム」という動物性香料は何ですか？", c: ["海狸香（かいりこう）", "霊猫香", "じゃ香"], a: 0 },
-            { q: "香粧品に使われる主な動物性香料は何種類ですか？", c: ["2種類", "4種類", "10種類以上"], a: 1 },
-            { q: "希少な野生動植物の国際的な取引を規制している条約を何といいますか？", c: ["ワシントン条約", "ラムサール条約", "京都議定書"], a: 0 },
-            { q: "現在、野生動物保護の自主規制（IFRAなど）により、動物性香料の使用はどうなっていますか？", c: ["推奨されている", "禁止されている", "自由に使われている"], a: 1 },
-            { q: "ローズ油やラベンダー油は、植物のどの部分から得られる香料ですか？", c: ["葉", "花", "果皮"], a: 1 },
-            { q: "レモン油やオレンジ油は、植物のどの部分から得られる香料ですか？", c: ["種子", "樹脂", "果皮"], a: 2 },
-            { q: "ゼラニウム油やユーカリ油は、植物のどの部分から得られる香料ですか？", c: ["葉", "花", "幹"], a: 0 },
-            { q: "トンカ豆エクストラクトやナツメグ油は、植物のどの部分から得られますか？", c: ["種子", "葉", "樹脂"], a: 0 },
-            { q: "シダーウッド油やサンダルウッド油は、植物のどの部分から得られる香料ですか？", c: ["花", "果皮", "幹（心材）"], a: 2 },
-            { q: "ミル油（ミルラ）やガルバナム油は、植物のどの部分から得られる香料ですか？", c: ["樹脂", "種子", "葉"], a: 0 }
-        ],
-        haigo: [
-            // PDF「09_配合原料」からの20問
-            { q: "香粧品が製造されてから消費者が使い終わるまで、微生物やカビによる変質を防ぐために用いるのは？", c: ["殺菌剤", "防腐剤", "酸化防止剤"], a: 1 },
-            { q: "対象とする細菌を短時間で死滅させるために用いるのは？", c: ["防腐剤", "酸化防止剤", "殺菌剤"], a: 2 },
-            { q: "現在、香粧品の防腐剤として最も使われており、食品にも使われるほど安全性が高いのは？", c: ["パラベン（パラオキシ安息香酸エステル）", "ベンザルコニウム", "エデト酸"], a: 0 },
-            { q: "殺菌剤の主な働きは、微生物を死滅させ、その何を抑制することですか？", c: ["酸化", "変色", "増殖"], a: 2 },
-            { q: "代表的な殺菌剤として用いられる塩化物の名前は？", c: ["ベンザルコニウム塩化物", "ナトリウム塩化物", "カリウム塩化物"], a: 0 },
-            { q: "空気中の酸素により酸化して変質することを防ぐために配合されるのは？", c: ["防腐剤", "酸化防止剤（抗酸化剤）", "金属イオン封鎖剤"], a: 1 },
-            { q: "油性原料が空気中の酸素で徐々に変質することを何といいますか？", c: ["自動酸化", "中和反応", "還元反応"], a: 0 },
-            { q: "ビタミンEとも呼ばれ、安全性が高く広く使われる天然の酸化防止剤は？", c: ["BHT", "BHA", "トコフェロール"], a: 2 },
-            { q: "合成の酸化防止剤で、BHTの正式名称は何ですか？", c: ["ブチルヒドロキシアニソール", "ジブチルヒドロキシトルエン", "パラアミノ安息香酸"], a: 1 },
-            { q: "香粧品に含まれる微量な金属による酸化を促進させないために配合されるのは？", c: ["酸化防止剤", "金属イオン封鎖剤（キレート剤）", "収れん剤"], a: 1 },
-            { q: "金属イオン封鎖剤の代表例で、エデト酸（EDTA）とも呼ばれるのは？", c: ["クエン酸", "エチレンジアミン四酢酸", "安息香酸"], a: 1 },
-            { q: "地表に到達する長波長紫外線で、真皮まで届きメラニンを黒化させるのは？", c: ["UV-A", "UV-B", "UV-C"], a: 0 },
-            { q: "中波長紫外線で、細胞遺伝子にダメージを与えたり炎症（日焼け）を起こすのは？", c: ["UV-A", "UV-B", "UV-C"], a: 1 },
-            { q: "UV-Bを吸収する紫外線吸収剤の代表例は、パラアミノ安息香酸誘導体や何ですか？", c: ["ベンゾフェノン誘導体", "酸化チタン", "パラベン"], a: 0 },
-            { q: "肌を一時的に引き締め、汗や皮脂の分泌を抑制する作用を何といいますか？", c: ["収れん作用", "湿潤作用", "乳化作用"], a: 0 },
-            { q: "収れん作用は、皮膚表面の何の物質を凝固・収縮させることで起こりますか？", c: ["脂質", "タンパク質", "糖質"], a: 1 },
-            { q: "緩和な「陰イオン型」収れん剤の代表で、皮膚を酸性に保つ目的で使われるのは？", c: ["クエン酸", "乳酸", "どちらも正解"], a: 2 },
-            { q: "強力な収れん作用を持つ「陽イオン型」収れん剤に使われる金属は、亜鉛や何ですか？", c: ["アルミニウム", "鉄", "マグネシウム"], a: 0 },
-            { q: "広く用いられる収れん剤の一つで、パラフェノールスルホン酸（　　）などがあります。", c: ["ナトリウム", "カリウム", "亜鉛"], a: 2 },
-            { q: "収れん剤が汗腺や脂腺の開口部をふさぐことで、何が抑制されますか？", c: ["皮膚の老化", "汗や皮脂の分泌", "メラニンの生成"], a: 1 }
-        ],
-zakka: [
-            // PDF「10_雑貨原料」からの10問
-            { q: "ネイルやまつ毛エクステンションに用いる合成樹脂や接着剤は、何という扱いになりますか？", c: ["香粧品", "医薬部外品", "雑貨"], a: 2 },
-            { q: "雑貨として扱われる製品は、医薬品医療機器等法（薬機法）の規制をどうなっていますか？", c: ["受けている", "受けていない", "一部受けている"], a: 1 },
-            { q: "高分子化合物の元となる、比較的小さな分子のことを何といいますか？", c: ["単量体（モノマー）", "重合体（ポリマー）", "複合体"], a: 0 },
-            { q: "モノマーが結びついてできた高分子化合物のことを何といいますか？", c: ["単量体", "重合体（ポリマー）", "混合物"], a: 1 },
-            { q: "任意の形に成型できる可塑性（かそせい）を持つ合成高分子化合物を何といいますか？", c: ["合成樹脂（プラスチック）", "天然樹脂", "無機化合物"], a: 0 },
-            { q: "熱を加えると柔らかくなり、冷えると再び固くなる性質を持つ樹脂を何といいますか？", c: ["熱硬化性樹脂", "熱可塑性樹脂", "耐熱樹脂"], a: 1 },
-            { q: "ネイルやまつ毛エクステンションに使用される接着剤の一般的な呼び方は？", c: ["糊（のり）", "ボンド", "グルー"], a: 2 },
-            { q: "マニキュアに使用されるカラーエナメルに含まれる合成樹脂は、アクリル樹脂や何ですか？", c: ["ニトロセルロース", "ケラチン", "ラノリン"], a: 0 },
-            { q: "マニキュアの樹脂を溶かしたり、除光液に使われたりする液体の総称を何といいますか？", c: ["水溶液", "有機溶媒（ゆうきようばい）", "無機溶媒"], a: 1 },
-            { q: "除光液の主成分で、刺激臭があり火気への注意が必要な有機溶媒は？", c: ["エタノール", "アセトン", "グリセリン"], a: 1 }
-        ],
-        senjo: [
-            // PDF「11_皮膚洗浄用化粧品」からの15問
-            { q: "石けんは、動物や植物から得られる「油脂」と「何」を原料として作られますか？", c: ["アルカリ（水酸化ナトリウム等）", "酸", "エタノール"], a: 0 },
-            { q: "石けんの原料となる主な植物油は、ヤシ油や何ですか？", c: ["オリーブ油", "パーム核油", "ホホバ油"], a: 1 },
-            { q: "油脂にアルカリを加えて加水分解し、石けんを作る反応を何といいますか？", c: ["酸化", "還元", "けん化"], a: 2 },
-            { q: "「水酸化ナトリウム」で作った石けんは、一般にどのような性質になりますか？", c: ["硬い（硬質石けん）", "やわらかい（軟質石けん）", "液体"], a: 0 },
-            { q: "「水酸化カリウム」で作った石けんは、一般にどのような性質になりますか？", c: ["硬い", "やわらかい（軟質石けん）", "粉末"], a: 1 },
-            { q: "私たちが日常の洗顔や体を洗うのに用いる「化粧石けん」は、次のうちどれですか？", c: ["硬質石けん", "軟質石けん", "金属石けん"], a: 0 },
-            { q: "製造方法により、一般のほとんどの化粧石けんは何という種類に分類されますか？", c: ["機械練（きかいねり）石けん", "枠練（わくねり）石けん", "手練り石けん"], a: 0 },
-            { q: "透明石けんは、製造方法の分類では一般に何という種類になりますか？", c: ["機械練石けん", "枠練（わくねり）石けん", "粉末石けん"], a: 1 },
-            { q: "化粧石けんは人体に直接使うため、刺激を少なくするためにどのような油脂を使用しますか？", c: ["低級脂肪酸が少ないもの", "高級脂肪酸が少ないもの", "不飽和脂肪酸が多いもの"], a: 0 },
-            { q: "透明石けんを作る際、透明化剤として添加されるのはエタノール、多価アルコールと何ですか？", c: ["食塩", "砂糖", "粘土"], a: 1 },
-            { q: "普通の化粧石けんに殺菌剤などの薬剤を配合したものを何といいますか？", c: ["透明石けん", "薬用石けん", "液体石けん"], a: 1 },
-            { q: "石けんの分子が水の中で油汚れを取り囲んでできる小さな塊を何といいますか？", c: ["ミセル", "コロイド", "結晶"], a: 0 },
-            { q: "軟質石けん（カリ石けん）を主成分とし、使いやすくした洗顔料を一般に何といいますか？", c: ["洗顔フォーム", "固形石けん", "クレンジングオイル"], a: 0 },
-            { q: "石けんの洗浄作用において、汚れを浮き上がらせるために重要な力は何ですか？", c: ["酸化力", "界面活性（かいめんかっせい）", "還元力"], a: 1 },
-            { q: "硬質石けんは別名「何石けん」とも呼ばれますか？", c: ["ソーダ石けん", "カリ石けん", "金属石けん"], a: 0 }
-        ],
-        keshosui: [
-            // PDF「12_化粧水、クリーム、乳液」からの15問
-            { q: "化粧水は、水にさまざまな原料を溶かして機能を持たせたもので、何が低いのが特徴ですか？", c: ["粘度（ねばりけ）", "透明度", "温度"], a: 0 },
-            { q: "皮膚の汚れや分泌過剰な皮脂などを拭き取る目的の化粧水を何といいますか？", c: ["柔軟化粧水", "洗浄用化粧水", "収れん化粧水"], a: 1 },
-            { q: "皮膚面を一時的に引き締め、汗や皮脂の分泌を抑制する化粧水を何といいますか？", c: ["収れん化粧水", "柔軟化粧水", "多層式化粧水"], a: 0 },
-            { q: "収れん化粧水に配合される「パラフェノールスルホン酸亜鉛」などは何の仲間ですか？", c: ["保湿剤", "収れん剤", "防腐剤"], a: 1 },
-            { q: "収れん化粧水のpH（ピーエッチ）は、一般的にどのくらいに整えられていますか？", c: ["弱アルカリ性", "中性", "弱酸性"], a: 2 },
-            { q: "角質層に水分と保湿成分を補給し、皮膚を滑らかにする化粧水を何といいますか？", c: ["洗浄用化粧水", "柔軟化粧水", "多層式化粧水"], a: 1 },
-            { q: "柔軟化粧水は、従来は弱アルカリ性が多かったですが、最近は主に何性ですか？", c: ["強酸性", "中性", "弱酸性"], a: 2 },
-            { q: "水層と油層、あるいは水層と粉末に分かれており、振って使う化粧水を何といいますか？", c: ["多層式化粧水（シェイクローション）", "柔軟化粧水", "洗浄用化粧水"], a: 0 },
-            { q: "多層式化粧水の一種で、酸化亜鉛などを配合した「カラミンローション」の主な作用は？", c: ["収れん作用・消炎作用", "漂白作用", "加温作用"], a: 0 },
-            { q: "人間にとって最も理想的な「エモリエント剤（皮膚を柔らかくするもの）」は何ですか？", c: ["オリーブ油", "皮脂（ひし）", "ワセリン"], a: 1 },
-            { q: "皮脂は皮膚の表面を覆い、乾燥を防ぐとともに、皮膚に何を与えますか？", c: ["硬さ", "柔軟性と弾力性", "色味"], a: 1 },
-            { q: "乳液やクリームのように、水と油を界面活性剤で混ぜ合わせた状態を何といいますか？", c: ["溶解", "乳化", "酸化"], a: 1 },
-            { q: "乳液（エマルション）のうち、水の中に油が分散しているタイプはどれですか？", c: ["O/W型（水中油型）", "W/O型（油中水型）", "混合型"], a: 0 },
-            { q: "油の中に水が分散しており、保護力が強いナイトクリームなどに多いタイプは？", c: ["O/W型", "W/O型（油中水型）", "透明型"], a: 1 },
-            { q: "バニシングクリームの「バニシング」とは、どのような意味ですか？", c: ["消える（肌に塗りこむと見えなくなる）", "光る", "固まる"], a: 0 }
-        ],
-        treatment: [
-            // PDF「13_トリートメント香粧品」からの15問
-            { q: "トリートメントの本来の目的は、皮膚や毛髪の損傷や不快な感触、劣化をどうすることですか？", c: ["一時的に隠す", "積極的に解決する", "そのまま維持する"], a: 1 },
-            { q: "収れん化粧水は、皮膚を一時的に引き締めて何や皮脂の分泌を抑制しますか？", c: ["汗", "血液", "栄養分"], a: 0 },
-            { q: "収れん化粧水のpH（ピーエッチ）は、一般的にどれくらいに整えられていますか？", c: ["弱アルカリ性", "中性", "弱酸性（pH5〜6）"], a: 2 },
-            { q: "水層と油層、あるいは水層と粉末が分かれており、振って使う化粧水の別名は？", c: ["シェイクローション", "エモリエントローション", "バニシングローション"], a: 0 },
-            { q: "脂性肌用に使われるカラミンローションに配合され、収れん作用を持つ成分は？", c: ["酸化鉄", "酸化チタン", "酸化亜鉛"], a: 2 },
-            { q: "美白用香粧品は、肌の色に影響する何の生成機構に直接作用しますか？", c: ["ケラチン", "メラニン", "コラーゲン"], a: 1 },
-            { q: "市販されている美白用香粧品の多くは、法律（薬機法）上、何に分類されますか？", c: ["化粧品", "医薬部外品", "一般用医薬品"], a: 1 },
-            { q: "代表的な美白成分として、ビタミンC誘導体のほかに何が挙げられますか？", c: ["アルブチン", "エタノール", "パラベン"], a: 0 },
-            { q: "ひげを剃りやすくするために、水分を与えてひげを膨らませることを何といいますか？", c: ["収縮", "膨潤（ぼうじゅん）", "酸化"], a: 1 },
-            { q: "電気かみそり用のローションに収れん剤を配合する主な目的は、毛をどうすること？", c: ["柔らかく寝かせる", "立たせて剃りやすくする", "溶かして無くす"], a: 1 },
-            { q: "中波長紫外線（UV-B）による炎症（日焼け）を防ぐ指標を何といいますか？", c: ["SPF", "PA", "pH"], a: 0 },
-            { q: "長波長紫外線（UV-A）による真皮へのダメージを防ぐ指標を何といいますか？", c: ["SPF", "PA", "pH"], a: 1 },
-            { q: "美白成分の一つである「プラセンタエキス」は、動物の何の組織から得られますか？", c: ["皮膚", "胎盤（たいばん）", "筋肉"], a: 1 },
-            { q: "収れん剤の代表例であるパラフェノールスルホン酸（　　）はどれですか？", c: ["亜鉛", "ナトリウム", "カリウム"], a: 0 },
-            { q: "トリートメント香粧品は、従来の製品により高度な何を付加した製品ですか？", c: ["機能性", "価格帯", "広告宣伝"], a: 0 }
-        ],
-        makeup: [
-            // PDF「14_メイクアップ」「15_ポイントメイク」からの15問
-            { q: "「化粧すること」を指す正しい英語はどれですか？", c: ["make", "makeup（メイクアップ）", "face-making"], a: 1 },
-            { q: "肌の色や質感を整えて美しく見せるためのものを何といいますか？", c: ["ベースメイクアップ香粧品", "ポイントメイクアップ香粧品", "基礎化粧品"], a: 0 },
-            { q: "唇や目もとなどを色彩的に強調し、魅力を引き出すものを何といいますか？", c: ["ベースメイクアップ香粧品", "ポイントメイクアップ香粧品", "特殊化粧品"], a: 1 },
-            { q: "江戸時代のおしろい（鉛白など）に含まれ、中毒の原因となった有害な物質は？", c: ["鉛・水銀", "鉄・銅", "亜鉛・マグネシウム"], a: 0 },
-            { q: "おしろいの性質で、肌への「のび」の良さを指す言葉は何ですか？", c: ["被覆力", "展延性（てんえんせい）", "付着力"], a: 1 },
-            { q: "おしろいの「展延性」を高めるために主に用いられる原料は何ですか？", c: ["タルク", "酸化チタン", "マイカ"], a: 0 },
-            { q: "おしろいで、しみやそばかすを隠し覆う力を何といいますか？", c: ["付着力", "展延性", "被覆力（ひふくりょく）"], a: 2 },
-            { q: "おしろいの「被覆力」を高めるために主に用いられる原料は何ですか？", c: ["酸化チタン", "タルク", "カオリン"], a: 0 },
-            { q: "口紅の主な役割は、唇の色や光沢を整えることと、何から保護することですか？", c: ["紫外線", "乾燥", "摩擦"], a: 1 },
-            { q: "口紅やアイシャドウにパールのような光沢を与えるために用いられるのは？", c: ["ベンガラ", "酸化鉄", "雲母（うんも）チタン"], a: 2 },
-            { q: "頬紅（ほおべに）に「染料」が用いられず「顔料」のみが使われる主な理由は？", c: ["色が鮮やかだから", "皮膚に染着して「しみ」になるのを防ぐため", "安価だから"], a: 1 },
-            { q: "アイシャドウを眼瞼（まぶた）に塗布する主な目的は、何を与えることですか？", c: ["陰影と立体感", "透明感", "洗浄力"], a: 0 },
-            { q: "まつ毛の生え際沿いに細い線を描き、目の輪郭をはっきりさせるものは？", c: ["マスカラ", "アイライナー", "アイブロウ"], a: 1 },
-            { q: "まつ毛に塗布して、まつ毛を濃く長く見せるためのものはどれですか？", c: ["アイライナー", "マスカラ", "シャドウ"], a: 1 },
-            { q: "目の周辺は特に敏感なため、製造において何による汚染防止が重視されますか？", c: ["細菌（微生物）", "空気", "日光"], a: 0 }
-        ],
-        shampoo: [
-            // PDF「16_シャンプー・スタイリング剤」からの問題
-            { q: "シャンプー剤において、汚れを落とす主成分である界面活性剤は一般に何型ですか？", c: ["陰（アニオン）イオン型", "陽（カチオン）イオン型", "非イオン型"], a: 0 },
-            { q: "アミノ酸系やベタイン系のシャンプー剤の特徴は、低刺激であることと何性であることですか？", c: ["強アルカリ性", "弱酸性", "強酸性"], a: 1 },
-            { q: "以前の石けんシャンプー後に用いられた、石けんカスを除去し中和するためのリンスは？", c: ["油性リンス", "酸性リンス", "アルカリ性リンス"], a: 1 },
-            { q: "現代のリンス剤の主成分で、髪に吸着して皮膜を作るのは何型界面活性剤ですか？", c: ["陰イオン型", "陽（カチオン）イオン型", "非イオン型"], a: 1 },
-            { q: "リンス剤に含まれる代表的な陽イオン界面活性剤の名称はどれですか？", c: ["第四級アンモニウム塩", "ラウリル硫酸ナトリウム", "ステアリン酸"], a: 0 },
-            { q: "リンス剤がキューティクルに吸着して皮膜を作ることで防止できる現象は？", c: ["静電気（帯電防止）", "髪の変色", "毛根の消滅"], a: 0 },
-            { q: "フケやかゆみを防止するために、リンス剤に配合される特殊な薬用成分はどれですか？", c: ["メントール", "ジンクピリチオン", "エタノール"], a: 1 },
-            { q: "ヘア製品に「清涼感（せいりょうかん）」をもたせるために配合される成分はどれですか？", c: ["ジンクピリチオン", "メントール", "パラベン"], a: 1 },
-            { q: "ヘアリンスが表面に吸着するのに対し、ヘアトリートメントの主な目的は何ですか？", c: ["表面を厚く覆う", "損傷した内部まで浸透して修復する", "色を定着させる"], a: 1 },
-            { q: "スタイリング剤に配合される、髪の表面に皮膜を作り形を固定する成分はどれですか？", c: ["界面活性剤", "高分子化合物（樹脂）", "防腐剤"], a: 1 }
-        ],
-        perma: [
-            // PDF「18_パーマ剤」からの問題
-            { q: "パーマの第1剤（1液）の主な役割は、毛髪のシスチン結合をどうすることですか？", c: ["酸化させる", "還元（かんげん）して切断する", "熱で溶かす"], a: 1 },
-            { q: "パーマの第1剤に含まれ、毛髪を膨らませて薬液を浸透しやすくする成分は何ですか？", c: ["アルカリ剤（アンモニア等）", "酸化剤", "保存料"], a: 0 },
-            { q: "第1剤に使われる代表的な「還元剤（切断する薬）」は、チオグリコール酸と何ですか？", c: ["過酸化水素", "システイン", "クエン酸"], a: 1 },
-            { q: "パーマの第2剤（2液）の主な役割は、切断された結合をどうすることですか？", c: ["さらに切断する", "酸化させて再結合させる", "洗い流す"], a: 1 },
-            { q: "第2剤に使用される代表的な「酸化剤（つなぐ薬）」は、臭素酸ナトリウムと何ですか？", c: ["過酸化水素", "アンモニア", "セタノール"], a: 0 },
-            { q: "パーマ剤によって切断・再結合される、毛髪の化学的な結合を何といいますか？", c: ["ペプチド結合", "シスチン結合（S-S結合）", "水素結合"], a: 1 },
-            { q: "第1剤の作用後、第2剤をつける前にアルカリなどを洗い流す作業を何といいますか？", c: ["中間水洗（ちゅうかんすいせん）", "プレシャンプー", "アフターリンス"], a: 0 },
-            { q: "パーマのウェーブの強さを確認するために、途中でロッドを少し外して見る作業は？", c: ["テストカール", "ロッドアウト", "中間リンス"], a: 0 },
-            { q: "パーマ剤は、法律（薬機法）上の分類では一般的にどれに当たりますか？", c: ["化粧品", "医薬部外品", "雑貨"], a: 1 },
-            { q: "チオグリコール酸を主成分とする剤に比べ、システイン剤の仕上がりの特徴は？", c: ["非常に強いウェーブ", "比較的ソフト（軟らかい）な質感", "髪が真っ直ぐになる"], a: 1 },
-            { q: "加温式のパーマ剤において、頭皮や髪を保護するために設定される温度の限度は？", c: ["40度", "60度", "100度"], a: 1 },
-            { q: "第2剤の放置時間が短すぎた場合に起こりやすいトラブルはどれですか？", c: ["髪が焦げる", "ウェーブがすぐ取れてしまう", "頭皮が染まる"], a: 1 },
-            { q: "第1剤のアルカリが強すぎたり、放置時間が長すぎたりして髪が傷む状態を？", c: ["オーバータイム（過膨潤）", "テストカール", "中和"], a: 0 },
-            { q: "第2剤の酸化剤として過酸化水素を用いる場合、放置時間は一般にどうなりますか？", c: ["非常に長くかかる", "臭素酸ナトリウムより短時間で済む", "1時間以上必要"], a: 1 },
-            { q: "コールド式（二浴式）パーマ剤において、第1剤の反応はどのような温度で行いますか？", c: ["加温器で温める", "室温（常温）で放置する", "氷で冷やす"], a: 1 }
-        ],
-        haircolor: [
-            // PDF「19_ヘアカラー製品」からの問題
-            { q: "最も一般的で、髪を明るくしながらしっかり染まる「酸化染毛剤」は法律上どれですか？", c: ["化粧品", "医薬部外品", "医薬品"], a: 1 },
-            { q: "酸化染毛剤の第1剤に含まれる、髪の中で発色して色を作る成分を何といいますか？", c: ["酸化剤", "染料中間体（せんりょう ちゅうかんたい）", "還元剤"], a: 1 },
-            { q: "酸化染毛剤の第2剤の主成分で、染料を発色させメラニンを分解するのは何ですか？", c: ["過酸化水素（かさんかすいそ）", "アンモニア", "チオグリコール酸"], a: 0 },
-            { q: "カラー剤を使う前に、体質によるかぶれが起きないか確認する皮膚試験を何といいますか？", c: ["パッチテスト", "テストカール", "pHテスト"], a: 0 },
-            { q: "パッチテストは、薬剤を塗布してから通常何時間後に最終判定を行いますか？", c: ["1時間後", "24時間後", "48時間後"], a: 2 },
-            { q: "ヘアマニキュアなどの「酸性染毛料」は、法律上の分類ではどれですか？", c: ["化粧品", "医薬部外品", "雑貨"], a: 0 },
-            { q: "カラーの第2剤（過酸化水素）が毛髪の「何」を分解することで、髪が明るくなりますか？", c: ["ケラチン", "メラニン色素", "水分"], a: 1 },
-            { q: "髪の表面のみに色が付き、1回のシャンプーで落ちる「ヘアマスカラ」などの分類は？", c: ["一時着色料", "半永久染毛料", "永久染毛剤"], a: 0 },
-            { q: "第1剤に含まれるアルカリ剤（アンモニア等）の役割は、何の隙間を開けて浸透を助けること？", c: ["メデュラ", "キューティクル", "毛母細胞"], a: 1 },
-            { q: "髪の色を抜くことだけを目的とした「脱色剤（ブリーチ）」に含まれる強い酸化剤は？", c: ["過硫酸塩（かりゅうさんえん）", "パラベン", "セタノール"], a: 0 }
-        ],
-ikumou: [
-            // PDF「20_育毛剤」からの問題
-            { q: "毛包（もうほう）や毛乳頭を取り巻く何の血液量が減少すると、機能低下による脱毛の原因になりますか？", c: ["動脈", "毛細血管（もうさいけっかん）", "静脈"], a: 1 },
-            { q: "頭皮の生理機能を低下させ細菌感染を招く原因は、皮脂の過剰分泌と何の過剰発生ですか？", c: ["汗", "ふけ", "ケラチン"], a: 1 },
-            { q: "男性型脱毛症（AGA）に大きく関与し、皮脂の分泌にも関係している物質は何ですか？", c: ["ビタミン", "男性ホルモン", "タンパク質"], a: 1 },
-            { q: "育毛剤は、頭皮の何をよくすることで毛乳頭を活性化させますか？", c: ["血液循環", "水分量", "皮脂の粘り"], a: 0 },
-            { q: "「育毛剤」は、以前は一般的に何と呼ばれていましたか？", c: ["整髪剤", "養毛剤（ようもうざい）", "洗浄剤"], a: 1 },
-            { q: "ふけやかゆみの抑制のみを目的とする製品は、法律（薬機法）上どれに分類されますか？", c: ["化粧品", "医薬部外品", "医薬品"], a: 0 },
-            { q: "「脱毛の予防」や「育毛・養毛の促進」を目的とする製品は、一般にどれに分類されますか？", c: ["化粧品", "医薬部外品", "雑貨"], a: 1 },
-            { q: "「脱毛の治療（発毛）」を目的として用いられる製品は、法律上どれに当たりますか？", c: ["化粧品", "医薬部外品", "医薬品"], a: 2 },
-            { q: "育毛剤の基剤（ベースとなる液体）として、精製水と共に主に使われるのはどれですか？", c: ["エタノール", "グリセリン", "流動パラフィン"], a: 0 },
-            { q: "育毛剤において、毛母細胞の活性化や血行促進などを担う成分を総称して何といいますか？", c: ["有効成分", "防腐剤", "酸化防止剤"], a: 0 }
-        ]
-            };
-
-    let currentQuiz = [];
+    let allData = []; // CSVデータ保持
+    let currentQuizList = [];
     let currentIdx = 0;
-    let correctCount = 0;
+    let score = { correct: 0, wrong: 0 };
+    let userType = ""; 
+    let currentUnitId = "";
 
-    function startQuiz(category) {
-        currentQuiz = allQuizzes[category];
-        currentIdx = 0;
-        correctCount = 0;
-        document.getElementById("menu-screen").style.display = "none";
-        document.getElementById("score-screen").style.display = "none";
-        document.getElementById("quiz-screen").style.display = "block";
-        showQuestion();
+    // アプリ起動：CSV読み込み（GitHub上で自分自身のCSVを参照）
+    async function initApp(type) {
+        userType = type;
+        try {
+            // エクセルから書き出したCSVファイルを読み込む（ファイル名は適宜合わせてください）
+            const response = await fetch('questions.csv'); 
+            const csvText = await response.text();
+            allData = parseCSV(csvText);
+            showMenu();
+        } catch (e) {
+            alert("データの読み込みに失敗しました。CSVファイルが正しい場所に配置されているか確認してください。");
+        }
     }
 
-    function showMenu() {
-        document.getElementById("menu-screen").style.display = "block";
-        document.getElementById("quiz-screen").style.display = "none";
-        document.getElementById("score-screen").style.display = "none";
-    }
-
-    function showQuestion() {
-        const item = currentQuiz[currentIdx];
-        document.getElementById("q-number").innerText = `第 ${currentIdx + 1} 問 / 全 ${currentQuiz.length} 問`;
-        document.getElementById("question").innerText = item.q;
-        const choicesDiv = document.getElementById("choices");
-        choicesDiv.innerHTML = "";
-        document.getElementById("result-msg").innerText = "";
-        document.getElementById("next-button").style.display = "none";
-
-        item.c.forEach((choice, i) => {
-            const btn = document.createElement("button");
-            btn.className = "choice-btn";
-            btn.innerText = (i + 1) + ". " + choice;
-            btn.onclick = () => checkAnswer(i);
-            choicesDiv.appendChild(btn);
+    // CSVパース関数
+    function parseCSV(text) {
+        const lines = text.split(/\r?\n/);
+        const header = lines[0].split(',');
+        return lines.slice(1).filter(line => line).map(line => {
+            const cols = line.split(',');
+            return {
+                no: cols[0], grade: cols[1], unitId: cols[2], unitName: cols[3],
+                q: cols[4], c: [cols[5], cols[6], cols[7], cols[8]],
+                ans: parseInt(cols[9]),
+                ex: [cols[10], cols[11], cols[12], cols[13]],
+                imgs: [cols[14], cols[15]], freq: cols[16]
+            };
         });
     }
 
-    function checkAnswer(selectIdx) {
-        const correctIdx = currentQuiz[currentIdx].a;
-        const btns = document.querySelectorAll(".choice-btn");
-        btns.forEach(b => b.disabled = true);
+    // メニュー表示（学年に合わせてフィルタリング）
+    function showMenu() {
+        switchScreen('screen-menu');
+        const listDiv = document.getElementById('unit-list');
+        listDiv.innerHTML = "";
+        
+        // ユニークな単元リストを作成
+        const units = [...new Map(allData.map(item => [item.unitId, item])).values()];
+        
+        units.forEach(u => {
+            // 1年生の場合はB列の頭文字が'1'のものに限定（または適宜ルール変更）
+            if (userType === '1' && !u.grade.startsWith('1')) return;
 
-        if (selectIdx === correctIdx) {
-            document.getElementById("result-msg").innerText = "⭕️ 正解です！";
-            document.getElementById("result-msg").style.color = "#27ae60";
-            correctCount++;
-        } else {
-            document.getElementById("result-msg").innerText = "❌ 残念、不正解です";
-            document.getElementById("result-msg").style.color = "#e74c3c";
-            btns[selectIdx].style.borderColor = "#e74c3c";
+            const btn = document.createElement('button');
+            btn.className = 'unit-btn';
+            btn.innerHTML = `<strong>${u.unitName}</strong>`;
+            btn.onclick = () => startQuiz(u.unitId, false);
+            listDiv.appendChild(btn);
+        });
+    }
+
+    // クイズ開始
+    function startQuiz(unitId, shuffle) {
+        currentUnitId = unitId;
+        currentQuizList = allData.filter(d => d.unitId === unitId);
+        if (shuffle) {
+            currentQuizList.sort(() => Math.random() - 0.5);
         }
-        btns[correctIdx].style.backgroundColor = "#d1f2eb";
-        document.getElementById("next-button").style.display = "block";
+        currentIdx = 0;
+        score = { correct: 0, wrong: 0 };
+        switchScreen('screen-quiz');
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const item = currentQuizList[currentIdx];
+        document.getElementById('current-unit-name').innerText = item.unitName;
+        document.getElementById('q-progress').innerText = `${currentIdx + 1} / ${currentQuizList.length}`;
+        document.getElementById('q-text').innerText = item.q;
+        document.getElementById('answer-area').classList.add('hidden');
+        document.getElementById('img-area').innerHTML = "";
+        
+        const list = document.getElementById('choices-list');
+        list.innerHTML = "";
+        item.c.forEach((txt, i) => {
+            if (!txt || txt.trim() === "") return;
+            const btn = document.createElement('button');
+            btn.className = 'btn-choice';
+            btn.innerText = `${i + 1}. ${txt}`;
+            btn.onclick = () => checkAnswer(i);
+            list.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(idx) {
+        const item = currentQuizList[currentIdx];
+        const isCorrect = (idx === item.ans);
+        const btns = document.querySelectorAll('.btn-choice');
+        
+        btns.forEach((b, i) => {
+            b.disabled = true;
+            if (i === item.ans) b.classList.add('correct');
+            if (i === idx && !isCorrect) b.classList.add('wrong');
+        });
+
+        const mark = document.getElementById('result-mark');
+        mark.innerText = isCorrect ? "⭕️ 正解！" : "❌ 不正解...";
+        mark.style.color = isCorrect ? "#27ae60" : "#e74c3c";
+        
+        // 解説表示
+        let exHtml = "";
+        item.ex.forEach((text, i) => {
+            if (text && text.trim() !== "") {
+                const prefix = (i === item.ans) ? "<strong>【正解】</strong>" : `【選択肢${i+1}】`;
+                exHtml += `<p style="font-size:14px; margin:5px 0;">${prefix} ${text}</p>`;
+            }
+        });
+        document.getElementById('explanation-text').innerHTML = exHtml;
+
+        // 画像表示
+        item.imgs.forEach(img => {
+            if (img && img.trim() !== "") {
+                const im = document.createElement('img');
+                im.src = `images/${img}`; // imagesフォルダ内に画像を置く想定
+                document.getElementById('img-area').appendChild(im);
+            }
+        });
+
+        document.getElementById('answer-area').classList.remove('hidden');
+        if (isCorrect) score.correct++; else score.wrong++;
     }
 
     function nextQuestion() {
         currentIdx++;
-        if (currentIdx < currentQuiz.length) {
+        if (currentIdx < currentQuizList.length) {
             showQuestion();
         } else {
-            showFinalResult();
+            showResult();
         }
     }
 
-    function showFinalResult() {
-        document.getElementById("quiz-screen").style.display = "none";
-        document.getElementById("score-screen").style.display = "block";
+    function showResult() {
+        switchScreen('screen-result');
+        const percent = Math.round((score.correct / currentQuizList.length) * 100);
+        document.getElementById('result-score').innerText = `${percent}%`;
+        document.getElementById('result-summary').innerText = `正答数: ${score.correct} / 誤答数: ${score.wrong}`;
+    }
 
-        const total = currentQuiz.length;
-        const percentage = Math.round((correctCount / total) * 100);
-        document.getElementById("final-stats").innerText = `正答数: ${correctCount} / 誤答数: ${total - correctCount}`;
-        document.getElementById("final-percent").innerText = `${percentage}%`;
-
-        let msg = "";
-        if (percentage === 100) msg = "完璧です！素晴らしい！";
-        else if (percentage >= 80) msg = "合格点です！その調子！";
-        else if (percentage >= 60) msg = "あと少し！復習しましょう。";
-        else msg = "もう一度資料を確認してみましょう。";
-        document.getElementById("feedback-msg").innerText = msg;
+    function switchScreen(id) {
+        ['screen-login', 'screen-menu', 'screen-quiz', 'screen-result'].forEach(s => {
+            document.getElementById(s).classList.add('hidden');
+        });
+        document.getElementById(id).classList.remove('hidden');
     }
 </script>
-
 </body>
 </html>
