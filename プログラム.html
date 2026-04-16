@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>香粧品化学問題集</title>
+    <!-- エクセル解析用ライブラリ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --primary: #4a90e2; /* メインカラー（青） */
+            --primary-hover: #357abd; /* ホバー時の濃い青 */
+            --success: #2ecc71; /* 正解（緑） */
+            --error: #e74c3c;   /* 不正解（赤） */
+            --bg: #f4f7f6;
+            --text: #333;
+        }
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        #app {
+            width: 95%;
+            max-width: 650px;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        h1 { text-align: center; color: var(--primary); margin-bottom: 1.5rem; font-size: 1.8rem; }
+        .hidden { display: none; }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: left;
+        }
+        
+        .btn:hover:not(.btn-primary):not(:disabled) {
+            background-color: #f8fafc;
+            border-color: var(--primary);
+        }
+        
+        /* 青色ボタン（単元選択・次へボタン）のホバー修正 */
+        .btn-primary {
+            background-color: var(--primary) !important;
+            color: white !important;
+            text-align: center !important;
+            border: none;
+            font-weight: bold;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-hover) !important;
+            color: white !important;
+            opacity: 1;
+        }
+
+        /* ファイル読込用スタイル */
+        .file-input-wrapper {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        #file-input {
+            display: none;
+        }
+        .file-label {
+            background-color: #e67e22; /* オレンジ */
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            display: block;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .file-label:hover {
+            background-color: #d35400;
+        }
+        
+        .correct { background-color: var(--success) !important; color: white !important; border-color: var(--success) !important; }
+        .incorrect { background-color: var(--error) !important; color: white !important; border-color: var(--error) !important; }
+        
+        #feedback {
+            margin-top: 1.5rem;
+            padding: 1.2rem;
+            border-radius: 10px;
+            display: none;
+            line-height: 1.7;
+            font-size: 1rem;
+            border-left: 5px solid transparent;
+        }
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            color: #64748b;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #edf2f7;
+        }
+        .result-stats {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .score-big {
+            font-size: 3.5rem;
+            color: var(--primary);
+            font-weight: bold;
+            display: block;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <!-- スタート画面 -->
+    <div id="screen-start">
+        <h1>香粧品化学問題集</h1>
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <p>エクセルファイルを読み込んで開始してください</p>
+            <div class="file-input-wrapper">
+                <label for="file-input" class="file-label">エクセルを選択して読み込む</label>
+                <input type="file" id="file-input" accept=".xlsx, .xls, .csv">
+            </div>
+            <p id="file-status" style="font-size: 0.9rem; color: #666;">※ファイル未選択</p>
+        </div>
+        <button id="start-quiz-btn" class="btn btn-primary hidden" onclick="showMenu()">単元選択へ進む</button>
+    </div>
+
+    <!-- メニュー画面 -->
+    <div id="screen-menu" class="hidden">
+        <h1>単元を選択</h1>
+        <div id="unit-list"></div>
+    </div>
+
+    <!-- クイズ画面 -->
+    <div id="screen-quiz" class="hidden">
+        <div class="quiz-header">
+            <span id="display-unit" style="font-weight:bold; color:var(--primary);"></span>
+            <span id="display-progress"></span>
+        </div>
+        <h3 id="question-text" style="margin-bottom: 1.5rem; line-height: 1.6;"></h3>
+        <div id="option-list"></div>
+        <div id="feedback"></div>
+        <button id="next-btn" class="btn btn-primary hidden" onclick="handleNext()">次の問題へ</button>
+    </div>
+
+    <!-- 結果画面 -->
+    <div id="screen-result" class="hidden">
+        <h1>結果発表</h1>
+        <div class="result-stats">
+            正解数: <span id="res-score"></span> / <span id="res-total"></span>
+            <span class="score-big" id="res-percent"></span>
+        </div>
+        <button class="btn btn-primary" onclick="showMenu()">単元選択に戻る</button>
+    </div>
+</div>
+
+<script>
+let masterData = [];
+
+let state = {
+    currentQuestions: [],
+    currentIndex: 0,
+    score: 0,
+    isAnswered: false
+};
+
+// --- ファイル読み込み処理 ---
+document.getElementById('file-input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, {type: 'array'});
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+        
+        processExcelData(jsonData);
+    };
+    reader.readAsArrayBuffer(file);
+});
+
+/**
+ * ユーザー指定の列構成に基づき解析
+ * A(0):問題No, B(1):学年・学期, C(2):単元ID, D(3):単元名, E(4):問題文,
+ * F(5):選択肢1, G(6):選択肢2, H(7):選択肢3, I(8):選択肢4, J(9):正解番号(1〜4),
+ * K(10):解説1, L(11):解説2, M(12):解説3, N(13):解説4
+ */
+function processExcelData(rows) {
+    masterData = [];
+    // 1行目は見出しとして飛ばし、2行目から解析
+    for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (!row || row[4] === undefined) continue;
+
+        // 正解番号（J列/Index 9）を読み取り
+        let correctAnsNumber = parseInt(row[9]);
+        let ansIndex = !isNaN(correctAnsNumber) ? correctAnsNumber - 1 : -1;
+
+        // 解説文（N列優先、なければM...と遡る）を取得し、不要な「正解です」「不正解」を消去
+        let rawNote = (row[13] || row[12] || row[11] || row[10] || "解説はありません。").toString();
+        let cleanNote = rawNote.replace(/^(正解です。|不正解。|正解。|不正解)/g, "").trim();
+
+        masterData.push({
+            unit: row[3] || "未分類",      // D列：単元名
+            q: row[4],                    // E列：問題文
+            options: [row[5], row[6], row[7], row[8]].filter(o => o !== undefined && o !== ""), // F〜I列
+            ans: ansIndex,                // J列：正解番号（1始点を内部用の0始点へ変換）
+            note: cleanNote               // 加工済みの解説
+        });
+    }
+
+    if (masterData.length > 0) {
+        document.getElementById('file-status').innerText = `正常に読み込みました：${masterData.length}問`;
+        document.getElementById('file-status').style.color = "var(--success)";
+        document.getElementById('start-quiz-btn').classList.remove('hidden');
+    } else {
+        document.getElementById('file-status').innerText = "有効なデータが見つかりませんでした。";
+        document.getElementById('file-status').style.color = "var(--error)";
+    }
+}
+
+// --- クイズ基本機能 ---
+
+function showScreen(id) {
+    ["screen-start", "screen-menu", "screen-quiz", "screen-result"].forEach(s => {
+        document.getElementById(s).classList.add("hidden");
+    });
+    document.getElementById(id).classList.remove("hidden");
+}
+
+function showMenu() {
+    showScreen("screen-menu");
+    const units = [...new Set(masterData.map(d => d.unit))];
+    const list = document.getElementById("unit-list");
+    list.innerHTML = "";
+    units.forEach(unit => {
+        const btn = document.createElement("button");
+        btn.className = "btn btn-primary";
+        btn.innerText = unit;
+        btn.onclick = () => startQuiz(unit);
+        list.appendChild(btn);
+    });
+}
+
+function startQuiz(unit) {
+    const filtered = masterData.filter(d => d.unit === unit);
+    // ランダムにシャッフル
+    state.currentQuestions = filtered.sort(() => Math.random() - 0.5);
+    state.currentIndex = 0;
+    state.score = 0;
+    state.isAnswered = false;
+    
+    document.getElementById("display-unit").innerText = unit;
+    showQuestion();
+    showScreen("screen-quiz");
+}
+
+function showQuestion() {
+    state.isAnswered = false;
+    const q = state.currentQuestions[state.currentIndex];
+    document.getElementById("display-progress").innerText = `${state.currentIndex + 1} / ${state.currentQuestions.length}`;
+    document.getElementById("question-text").innerText = q.q;
+    
+    const options = document.getElementById("option-list");
+    options.innerHTML = "";
+    
+    q.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.className = "btn";
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(i);
+        options.appendChild(btn);
+    });
+    
+    document.getElementById("feedback").style.display = "none";
+    document.getElementById("next-btn").classList.add("hidden");
+}
+
+function checkAnswer(idx) {
+    if (state.isAnswered) return;
+    state.isAnswered = true;
+    
+    const q = state.currentQuestions[state.currentIndex];
+    const btns = document.getElementById("option-list").children;
+    const feedback = document.getElementById("feedback");
+    
+    if (idx === q.ans) {
+        btns[idx].classList.add("correct");
+        feedback.style.backgroundColor = "#d1e7dd";
+        feedback.style.color = "#0f5132";
+        feedback.style.borderLeftColor = "#198754";
+        feedback.innerHTML = `<strong>【正解！】</strong><br>${q.note}`;
+        state.score++;
+    } else {
+        btns[idx].classList.add("incorrect");
+        if (q.ans >= 0 && q.ans < btns.length) {
+            btns[q.ans].classList.add("correct");
+        }
+        feedback.style.backgroundColor = "#f8d7da";
+        feedback.style.color = "#842029";
+        feedback.style.borderLeftColor = "#dc3545";
+        feedback.innerHTML = `<strong>【不正解...】</strong><br>${q.note}`;
+    }
+    
+    feedback.style.display = "block";
+    document.getElementById("next-btn").classList.remove("hidden");
+}
+
+function handleNext() {
+    state.currentIndex++;
+    if (state.currentIndex < state.currentQuestions.length) {
+        showQuestion();
+    } else {
+        showResult();
+    }
+}
+
+function showResult() {
+    showScreen("screen-result");
+    const total = state.currentQuestions.length;
+    const percent = Math.round((state.score / total) * 100);
+    document.getElementById("res-score").innerText = state.score;
+    document.getElementById("res-total").innerText = total;
+    document.getElementById("res-percent").innerText = `${percent}%`;
+}
+</script>
+</body>
+</html>
+```
