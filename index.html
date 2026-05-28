@@ -16,7 +16,7 @@ HTML
             --text: #333;
         }
         body {
-            font-family: \"Helvetica Neue\", Arial, \"Hiragino Kaku Gothic ProN\", \"Hiragino Sans\", Meiryo, sans-serif;
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
@@ -214,27 +214,24 @@ HTML
 </div>
 
 <script>
-// アプリ全体のデータを管理する状態（ステート）
 const state = {
-    allQuestions: [],     // エクセルから読み込んだ全問題
-    categories: [],       // 単元のリスト
-    currentQuestions: [], // 現在選択されている単元の問題リスト
+    allQuestions: [],     // 全問題
+    categories: [],       // 単元リスト
+    currentQuestions: [], // 選択された単元の問題
     currentIndex: 0,      // 現在何問目か
     score: 0              // 正解数
 };
 
-// 画面が読み込まれたら自動的にMD.xlsxを探しにいく
+// 画面起動時に自動読み込みを開始
 window.onload = function() {
     autoLoadExcel();
-    // 手動でファイルが選ばれた時の動きも残しておく
     document.getElementById('excel-file').addEventListener('change', handleFileSelect, false);
 };
 
-// 自動読み込みを行う命令
+// 自動読み込み処理
 async function autoLoadExcel() {
     const statusMsg = document.getElementById("status-msg");
     try {
-        // 同じ場所にある「MD.xlsx」を自動で取得する
         const response = await fetch('MD.xlsx');
         if (!response.ok) {
             throw new Error("ファイルが見つかりません");
@@ -243,7 +240,6 @@ async function autoLoadExcel() {
         const data = new Uint8Array(arrayBuffer);
         const workbook = XLSX.read(data, { type: 'array' });
         
-        // 読み込み成功、中身を解析する
         processWorkbook(workbook);
         statusMsg.innerText = "自動読み込みが完了しました！";
         setTimeout(() => { showScreen("screen-menu"); }, 800);
@@ -254,7 +250,7 @@ async function autoLoadExcel() {
     }
 }
 
-// 手動でファイルを選んだ場合の処理
+// 手動ファイル選択処理
 function handleFileSelect(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -270,15 +266,15 @@ function handleFileSelect(e) {
     reader.readAsArrayBuffer(file);
 }
 
-// エクセルのデータを中身の配列に変換する共通処理
+// データ解析処理
 function processWorkbook(workbook) {
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
-    // 一行目を項目名（ヘッダー）としてJSON（ジェイソン）形式にする
     const rawData = XLSX.utils.sheet_to_json(worksheet);
     
-    // プログラムで扱いやすい形に整理（整形）する
     state.allQuestions = rawData.map(row => {
+        // エクセルの「正解番号」列から、1〜3（または1〜4）の数値をそのまま取得する
+        const correctNum = parseInt(row['正解番号']);
         return {
             category: row['単元名'] || '未分類',
             text: row['問題文'] || '',
@@ -287,17 +283,14 @@ function processWorkbook(workbook) {
                 row['選択肢2'] || '',
                 row['選択肢3'] || '',
                 row['選択肢4'] || ''
-            ].filter(opt => opt !== ''), // 空の選択肢は除外
-            ans: parseInt(row['正解番号']) - 1, // 1〜4の番号を0〜3の計算用に直す
+            ].filter(opt => opt !== ''),
+            ans: correctNum, // 【変更】引き算をせず、エクセルの1〜3をそのまま記憶
             note: row['解説'] || '解説はありません。'
         };
     });
     
-    // 重複のない単元名のリストを作る
     const catSet = new Set(state.allQuestions.map(q => q.category));
     state.categories = Array.from(catSet);
-    
-    // 単元選択画面にボタンを並べる
     makeMenu();
 }
 
@@ -320,9 +313,7 @@ function makeMenu() {
 }
 
 function startQuiz(category) {
-    // 選択された単元の問題だけを集める
     state.currentQuestions = state.allQuestions.filter(q => q.category === category);
-    // 問題をランダムに並び替える（シャッフル）
     state.currentQuestions.sort(() => Math.random() - 0.5);
     
     state.currentIndex = 0;
@@ -334,7 +325,6 @@ function startQuiz(category) {
 }
 
 function showQuestion() {
-    // 画面の表示をきれいにリセットする
     document.getElementById("next-btn").classList.add("hidden");
     const feedback = document.getElementById("feedback");
     feedback.style.display = "none";
@@ -347,39 +337,47 @@ function showQuestion() {
     const optionsDiv = document.getElementById("options-list");
     optionsDiv.innerHTML = "";
     
-    // 選択肢のボタンを作って画面に並べる
     q.options.forEach((opt, idx) => {
+        // ボタンに割り振る選択肢の番号（1〜3番）
+        const optionNumber = idx + 1; 
+        
         const btn = document.createElement("button");
         btn.className = "btn option-btn";
-        btn.innerText = `${idx + 1}. ${opt}`;
-        btn.onclick = () => handleAnswer(idx);
+        btn.innerText = `${optionNumber}. ${opt}`;
+        // クリックしたときに「1からの実際の選択肢番号」を判定に送る
+        btn.onclick = () => handleAnswer(optionNumber); 
         optionsDiv.appendChild(btn);
     });
 }
 
-function handleAnswer(idx) {
+// 判定処理
+function handleAnswer(selectedNum) {
     const q = state.currentQuestions[state.currentIndex];
     const optionsDiv = document.getElementById("options-list");
     const btns = optionsDiv.children;
     
-    // 一度答えたら他のボタンを押せなくする
+    // 全ボタンを押せなくする
     for (let i = 0; i < btns.length; i++) {
         btns[i].disabled = true;
     }
     
     const feedback = document.getElementById("feedback");
     
-    if (idx === q.ans) {
-        btns[idx].classList.add("correct");
+    // 【変更】選んだ番号（1〜3）と、データの正解番号（1〜3）をそのまま同じ基準で比較
+    if (selectedNum === q.ans) {
+        // 正解したボタンに緑色をつける（1を引いてボタンの位置を特定）
+        btns[selectedNum - 1].classList.add("correct");
         feedback.style.backgroundColor = "#d1e7dd";
         feedback.style.color = "#0f5132";
         feedback.style.borderLeftColor = "#198754";
         feedback.innerHTML = `<strong>【正解！】</strong><br>${q.note}`;
         state.score++;
     } else {
-        btns[idx].classList.add("incorrect");
-        if (q.ans >= 0 && q.ans < btns.length) {
-            btns[q.ans].classList.add("correct");
+        // 間違えたボタンに赤色をつける
+        btns[selectedNum - 1].classList.add("incorrect");
+        // 正しい答えのボタンに緑色をつける
+        if (q.ans >= 1 && q.ans <= btns.length) {
+            btns[q.ans - 1].classList.add("correct");
         }
         feedback.style.backgroundColor = "#f8d7da";
         feedback.style.color = "#842029";
