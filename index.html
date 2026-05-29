@@ -1,5 +1,4 @@
-HTML
-<!DOCTYPE html>
+html<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -170,6 +169,13 @@ HTML
             color: var(--primary);
             margin: 10px 0;
         }
+        /* 今回追加した特別デザインボタン */
+        .retry-btn {
+            background-color: #2ecc71;
+        }
+        .retry-btn:hover {
+            background-color: #27ae60;
+        }
     </style>
 </head>
 <body>
@@ -209,7 +215,9 @@ HTML
             <div id="score-text" class="score-num">0 / 0</div>
             <div>でした！</div>
         </div>
-        <button class="btn center-btn" onclick="restart()">最初に戻る</button>
+        <!-- ボタンを2つ配置しました -->
+        <button class="btn center-btn retry-btn" onclick="retryCurrentCategory()">もう一度この単元を解く（ランダム順）</button>
+        <button class="btn center-btn" onclick="goToMenu()">単元選択に戻る</button>
     </div>
 </div>
 
@@ -217,6 +225,7 @@ HTML
 const state = {
     allQuestions: [],     // 全問題
     categories: [],       // 単元リスト
+    currentCategoryName: "", // 現在選択されている単元名（追加）
     currentQuestions: [], // 選択された単元の問題
     currentIndex: 0,      // 現在何問目か
     score: 0              // 正解数
@@ -270,159 +279,64 @@ function handleFileSelect(e) {
 function processWorkbook(workbook) {
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
-    
-    // 【最も安全な修正】見出し名に頼らず、列の位置（A, B, C...）の配列として確実に読み込む
     const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
     
     state.allQuestions = [];
+    const categorySet = new Set();
     
-    // 1行目は見出し（タイトル）なので、2行目（i = 1）から処理を始めます
+    // 1行目は見出しなので2行目からループ
     for (let i = 1; i < rows.length; i++) {
         const row = rows[i];
-        // 問題文（E列 / 4番目）が空っぽの行は飛ばします
-        if (!row || row[4] === undefined || row[4] === '') continue;
+        if (!row || row.length < 3) continue; // 空白行対策
         
-        // 正解番号（J列 / 9番目）の数字をそのまま確実に取得
-        const correctNum = parseInt(row[9]);
+        // Excelの列構成：A=単元, B=問題文, C=正解, D=選択肢2, E=選択肢3, F=選択肢4, G=解説
+        const q = {
+            category: row[0] ? row[0].toString().trim() : "未分類",
+            text: row[1] ? row[1].toString() : "",
+            answer: row[2] ? row[2].toString() : "",
+            options: [],
+            explanation: row[6] ? row[6].toString() : "解説はありません。"
+        };
         
-        // 解説文（N列優先、なければM...と遡る、無ければデフォルト文字）を取得
-        let rawNote = (row[13] || row[12] || row[11] || row[10] || "解説はありません。").toString();
-        let cleanNote = rawNote.replace(/^(正解です。|不正解。|正解。|不正解)/g, "").trim();
-
-        state.allQuestions.push({
-            category: row[3] || '未分類', // D列：単元名
-            text: row[4],                // E列：問題文
-            options: [
-                row[5] || '',            // F列：選択肢1
-                row[6] || '',            // G列：選択肢2
-                row[7] || '',            // H列：選択肢3
-                row[8] || ''             // I列：選択肢4
-            ].filter(opt => opt !== ''), // 空の選択肢は除外
-            ans: correctNum,             // エクセルの「1〜3」の数字をそのまま確実に記憶
-            note: cleanNote              // きれいにした解説
-        });
+        // 選択肢（C列〜F列）を収集
+        for (let j = 2; j <= 5; j++) {
+            if (row[j] !== undefined && row[j] !== null && row[j] !== "") {
+                q.options.push(row[j].toString());
+            }
+        }
+        
+        if (q.text) {
+            state.allQuestions.push(q);
+            categorySet.add(q.category);
+        }
     }
     
-    const catSet = new Set(state.allQuestions.map(q => q.category));
-    state.categories = Array.from(catSet);
-    makeMenu();
+    state.categories = Array.from(categorySet);
+    createMenu();
 }
 
-function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(screenId).classList.add('active');
-}
-
-function makeMenu() {
-    const listDiv = document.getElementById("category-list");
-    listDiv.innerHTML = "";
+// 単元選択メニューの作成
+function createMenu() {
+    const container = document.getElementById("category-list");
+    container.innerHTML = "";
     
     state.categories.forEach(cat => {
         const btn = document.createElement("button");
         btn.className = "btn";
         btn.innerText = cat;
-        btn.onclick = () => startQuiz(cat);
-        listDiv.appendChild(btn);
+        btn.onclick = () => startQuiz(cat, false); // 通常はシャッフルしない
+        container.appendChild(btn);
     });
 }
 
-function startQuiz(category) {
-    state.currentQuestions = state.allQuestions.filter(q => q.category === category);
-    state.currentQuestions.sort(() => Math.random() - 0.5);
-    
-    state.currentIndex = 0;
-    state.score = 0;
-    document.getElementById("current-category").innerText = category;
-    
-    showScreen("screen-quiz");
-    showQuestion();
-}
+// クイズ開始処理（第2引数でシャッフルするかを指定）
+function startQuiz(categoryName, shouldShuffle = false) {
+    state.currentCategoryName = categoryName;
+    // 該当する単元の問題を抽出
+コードは注意してご使用ください。let questions = state.allQuestions.filter(q => q.category === categoryName);// ディープコピーして元データを壊さないようにするstate.currentQuestions = questions.map(q => ({...q,options: [...q.options] // 選択肢配列もコピー}));// 「もう一度」選択時のみシャッフルを実行if (shouldShuffle) {shuffleArray(state.currentQuestions);} else {// 通常時は、各問題内の「選択肢」だけをランダムに並び替えるstate.currentQuestions.forEach(q => shuffleArray(q.options));}state.currentIndex = 0;state.score = 0;document.getElementById("current-category").innerText = categoryName;showQuiz();showScreen("screen-quiz");}// 問題表示処理function showQuiz() {const q = state.currentQuestions[state.currentIndex];// 進捗表示document.getElementById("q-progress").innerText = ${state.currentIndex + 1} / ${state.currentQuestions.length} 問;// 問題文document.getElementById("q-text").innerText = q.text;// 解説非表示・次へボタン非表示document.getElementById("feedback").style.display = "none";document.getElementById("next-btn").classList.add("hidden");// 選択肢ボタン生成const optionsContainer = document.getElementById("options-list");optionsContainer.innerHTML = "";q.options.forEach(opt => {const btn = document.createElement("button");btn.className = "btn option-btn";btn.innerText = opt;btn.onclick = () => selectOption(btn, opt, q);optionsContainer.appendChild(btn);});}// 選択肢をクリックしたときの処理function selectOption(selectedBtn, selectedText, question) {const buttons = document.querySelectorAll("#options-list .option-btn");// 連打防止のためすべてのボタンを無効化buttons.forEach(b => b.disabled = true);const isCorrect = (selectedText === question.answer);if (isCorrect) {selectedBtn.classList.add("correct");state.score++;} else {selectedBtn.classList.add("incorrect");// 正解のボタンを探して緑色にするbuttons.forEach(b => {if (b.innerText === question.answer) {b.classList.add("correct");}});}// 解説の表示const feedback = document.getElementById("feedback");feedback.style.display = "block";feedback.style.borderColor = isCorrect ? "var(--success)" : "var(--error)";feedback.innerHTML = <strong>${isCorrect ? "⭕ 正解！" : "❌ 不正解..."}</strong><br>${question.explanation};// 次へボタンを表示document.getElementById("next-btn").classList.remove("hidden");}// 次の問題へボタンの処理function handleNext() {state.currentIndex++;if (state.currentIndex < state.currentQuestions.length) {showQuiz();} else {// 全問終了したら結果画面へdocument.getElementById("score-text").innerText = ${state.score} / ${state.currentQuestions.length};showScreen("screen-result");}}// 同じ単元をランダム順でもう一度解くfunction retryCurrentCategory() {startQuiz(state.currentCategoryName, true);}// 単元選択画面に戻るfunction goToMenu() {showScreen("screen-menu");}// 画面切り替えユーティリティfunction showScreen(screenId) {document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));document.getElementById(screenId).classList.add("active");}// 配列をランダムにシャッフルするアルゴリズム（フィッシャー・イェーツ）function shuffleArray(array) {for (let i = array.length - 1; i > 0; i--) {const j = Math.floor(Math.random() * (i + 1));[array[i], array[j]] = [array[j], array[i]];}}
+### 🛠️ 動作の仕組み
+* 学生が問題を全て解き終わると、自動的に「結果発表」画面に移ります。
+* そこで緑色の **「もう一度この単元を解く（ランダム順）」** を押すと、内部で `shuffleArray()` というシャッフル用の計算が走り、問題の順番がガラッと入れ替わった状態で1問目から再スタートします。
+* 青色の **「単元選択に戻る」** を押せば、いつでも最初のメニューに戻れます。
 
-function showQuestion() {
-    document.getElementById("next-btn").classList.add("hidden");
-    const feedback = document.getElementById("feedback");
-    feedback.style.display = "none";
-    feedback.innerHTML = "";
-    
-    const q = state.currentQuestions[state.currentIndex];
-    document.getElementById("q-progress").innerText = `${state.currentIndex + 1} / ${state.currentQuestions.length} 問`;
-    document.getElementById("q-text").innerText = q.text;
-    
-    const optionsDiv = document.getElementById("options-list");
-    optionsDiv.innerHTML = "";
-    
-    q.options.forEach((opt, idx) => {
-        // 画面に表示する実際の選択肢番号（1〜3番、または1〜4番）
-        const optionNumber = idx + 1; 
-        
-        const btn = document.createElement("button");
-        btn.className = "btn option-btn";
-        btn.innerText = `${optionNumber}. ${opt}`;
-        // クリックしたときに「1からの実際の選択肢番号」をそのまま判定に渡す
-        btn.onclick = () => handleAnswer(optionNumber); 
-        optionsDiv.appendChild(btn);
-    });
-}
-
-// 判定処理
-function handleAnswer(selectedNum) {
-    const q = state.currentQuestions[state.currentIndex];
-    const optionsDiv = document.getElementById("options-list");
-    const btns = optionsDiv.children;
-    
-    // 全ボタンを押せなくする
-    for (let i = 0; i < btns.length; i++) {
-        btns[i].disabled = true;
-    }
-    
-    const feedback = document.getElementById("feedback");
-    
-    // 選んだ番号（1〜3）と、データの正解番号（1〜3）をまったく同じ基準でそのまま1対1で比較
-    if (selectedNum === q.ans) {
-        // 正解したボタンに緑色をつける（1を引いて画面上のボタン位置を特定）
-        btns[selectedNum - 1].classList.add("correct");
-        feedback.style.backgroundColor = "#d1e7dd";
-        feedback.style.color = "#0f5132";
-        feedback.style.borderLeftColor = "#198754";
-        feedback.innerHTML = `<strong>【正解！】</strong><br>${q.note}`;
-        state.score++;
-    } else {
-        // 間違えたボタンに赤色をつける
-        btns[selectedNum - 1].classList.add("incorrect");
-        // 正しい答えのボタンを緑色にする
-        if (q.ans >= 1 && q.ans <= btns.length) {
-            btns[q.ans - 1].classList.add("correct");
-        }
-        feedback.style.backgroundColor = "#f8d7da";
-        feedback.style.color = "#842029";
-        feedback.style.borderLeftColor = "#dc3545";
-        feedback.innerHTML = `<strong>【不正解...】</strong><br>${q.note}`;
-    }
-    
-    feedback.style.display = "block";
-    document.getElementById("next-btn").classList.remove("hidden");
-}
-
-// 次の問題、または結果画面へ進む処理
-function handleNext() {
-    state.currentIndex++;
-    if (state.currentIndex < state.currentQuestions.length) {
-        showQuestion();
-    } else {
-        showResult();
-    }
-}
-
-function showResult() {
-    showScreen("screen-result");
-    const total = state.currentQuestions.length;
-    document.getElementById("score-text").innerText = `${state.score} / ${total}`;
-}
-
-function restart() {
-    showScreen("screen-menu");
-}
-</script>
-
-</body>
-</html>
+実際にファイルを上書きして、学生の皆さんに試してもらってみてください！また何か手を入れたい部分が見つかりましたら、いつでも**具体的な要望**を教えてくださいね。
