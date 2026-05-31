@@ -1,4 +1,5 @@
-html<!DOCTYPE html>
+HTML
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -7,12 +8,12 @@ html<!DOCTYPE html>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
-            --primary: #4a90e2; /* メインカラー（青） */
-            --primary-hover: #357abd; /* ホバー時の濃い青 */
-            --success: #2ecc71; /* 正解（緑） */
-            --error: #e74c3c;   /* 不正解（赤） */
-            --bg: #f4f7f6;
-            --text: #333;
+            --primary: #4a90e2; /* 主な色（青） */
+            --primary-hover: #357abd; /* マウスを載せたときの濃い青 */
+            --success: #2ecc71; /* 正解時の色（緑） */
+            --error: #e74c3c;   /* 不正解時の色（赤） */
+            --bg: #f4f7f6;      /* 背景の色 */
+            --text: #333;       /* 文字の色 */
         }
         body {
             font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
@@ -41,10 +42,10 @@ html<!DOCTYPE html>
             margin-top: 0;
         }
         .screen {
-            display: none;
+            display: none; /* 通常は画面を非表示にする設定 */
         }
         .screen.active {
-            display: block;
+            display: block; /* 活発な（選択されている）画面だけを表示する設定 */
         }
         .btn {
             display: block;
@@ -70,7 +71,7 @@ html<!DOCTYPE html>
         .center-btn {
             text-align: center;
         }
-        /* ファイル入力エリアのデザイン */
+        /* ファイルを入れる場所の装飾 */
         .file-input-container {
             border: 2px dashed #ccc;
             border-radius: 8px;
@@ -101,7 +102,7 @@ html<!DOCTYPE html>
         #excel-file {
             display: none;
         }
-        /* 状態表示メッセージ */
+        /* 状態を表示する伝言板 */
         #status-msg {
             text-align: center;
             font-weight: bold;
@@ -109,7 +110,7 @@ html<!DOCTYPE html>
             margin: 15px 0;
             min-height: 24px;
         }
-        /* 問題表示用のスタイル */
+        /* 問題を表示する画面の装飾 */
         .q-header {
             display: flex;
             justify-content: space-between;
@@ -143,7 +144,7 @@ html<!DOCTYPE html>
             color: white;
             border-color: var(--error);
         }
-        /* 解説エリア */
+        /* 解説を載せる枠 */
         #feedback {
             margin: 20px 0;
             padding: 15px;
@@ -153,9 +154,9 @@ html<!DOCTYPE html>
             line-height: 1.6;
         }
         .hidden {
-            display: none !important;
+            display: none !important; /* 画面から隠す設定 */
         }
-        /* 結果画面 */
+        /* 得点結果を表示する枠 */
         .result-box {
             text-align: center;
             padding: 20px;
@@ -169,7 +170,7 @@ html<!DOCTYPE html>
             color: var(--primary);
             margin: 10px 0;
         }
-        /* 今回追加した特別デザインボタン */
+        /* 再挑戦用の特製ボタン */
         .retry-btn {
             background-color: #2ecc71;
         }
@@ -215,29 +216,29 @@ html<!DOCTYPE html>
             <div id="score-text" class="score-num">0 / 0</div>
             <div>でした！</div>
         </div>
-        <!-- ボタンを2つ配置しました -->
         <button class="btn center-btn retry-btn" onclick="retryCurrentCategory()">もう一度この単元を解く（ランダム順）</button>
         <button class="btn center-btn" onclick="goToMenu()">単元選択に戻る</button>
     </div>
 </div>
 
 <script>
+// 全体のデータを記憶しておく場所（状態管理）
 const state = {
-    allQuestions: [],     // 全問題
-    categories: [],       // 単元リスト
-    currentCategoryName: "", // 現在選択されている単元名（追加）
-    currentQuestions: [], // 選択された単元の問題
-    currentIndex: 0,      // 現在何問目か
-    score: 0              // 正解数
+    allQuestions: [],        // すべての問題
+    categories: [],          // 単元名の一覧
+    currentCategoryName: "", // 今選ばれている単元の名前
+    currentQuestions: [],    // 今解いている単元の問題たち
+    currentIndex: 0,         // 今何問目を解いているか
+    score: 0                 // 合格・正解した数
 };
 
-// 画面起動時に自動読み込みを開始
+// 画面が完全に表示されたら最初に動く処理
 window.onload = function() {
     autoLoadExcel();
     document.getElementById('excel-file').addEventListener('change', handleFileSelect, false);
 };
 
-// 自動読み込み処理
+// 自動でエクセル（MD.xlsx）を探して読み込む処理
 async function autoLoadExcel() {
     const statusMsg = document.getElementById("status-msg");
     try {
@@ -259,7 +260,7 @@ async function autoLoadExcel() {
     }
 }
 
-// 手動ファイル選択処理
+// 手動でファイルを選んだ時の処理
 function handleFileSelect(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -275,7 +276,7 @@ function handleFileSelect(e) {
     reader.readAsArrayBuffer(file);
 }
 
-// データ解析処理
+// エクセルのデータを中身の部品ごとに分解・整理する処理
 function processWorkbook(workbook) {
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
@@ -284,12 +285,12 @@ function processWorkbook(workbook) {
     state.allQuestions = [];
     const categorySet = new Set();
     
-    // 1行目は見出しなので2行目からループ
+    // 1行目は見出し（タイトル）なので2行目から順に処理
     for (let i = 1; i < rows.length; i++) {
         const row = rows[i];
-        if (!row || row.length < 3) continue; // 空白行対策
+        if (!row || row.length < 3) continue; // 中身が空っぽの行は飛ばす
         
-        // Excelの列構成：A=単元, B=問題文, C=正解, D=選択肢2, E=選択肢3, F=選択肢4, G=解説
+        // 各列の意味を割り当て
         const q = {
             category: row[0] ? row[0].toString().trim() : "未分類",
             text: row[1] ? row[1].toString() : "",
@@ -298,7 +299,7 @@ function processWorkbook(workbook) {
             explanation: row[6] ? row[6].toString() : "解説はありません。"
         };
         
-        // 選択肢（C列〜F列）を収集
+        // 選択肢（C列〜F列）を一つにまとめる
         for (let j = 2; j <= 5; j++) {
             if (row[j] !== undefined && row[j] !== null && row[j] !== "") {
                 q.options.push(row[j].toString());
@@ -315,7 +316,7 @@ function processWorkbook(workbook) {
     createMenu();
 }
 
-// 単元選択メニューの作成
+// 単元を選ぶためのボタン一覧を画面に作る処理
 function createMenu() {
     const container = document.getElementById("category-list");
     container.innerHTML = "";
@@ -324,19 +325,138 @@ function createMenu() {
         const btn = document.createElement("button");
         btn.className = "btn";
         btn.innerText = cat;
-        btn.onclick = () => startQuiz(cat, false); // 通常はシャッフルしない
+        btn.onclick = () => startQuiz(cat, false); // 最初は問題順を混ぜずに開始
         container.appendChild(btn);
     });
 }
 
-// クイズ開始処理（第2引数でシャッフルするかを指定）
+// クイズを開始する準備処理
 function startQuiz(categoryName, shouldShuffle = false) {
     state.currentCategoryName = categoryName;
-    // 該当する単元の問題を抽出
-コードは注意してご使用ください。let questions = state.allQuestions.filter(q => q.category === categoryName);// ディープコピーして元データを壊さないようにするstate.currentQuestions = questions.map(q => ({...q,options: [...q.options] // 選択肢配列もコピー}));// 「もう一度」選択時のみシャッフルを実行if (shouldShuffle) {shuffleArray(state.currentQuestions);} else {// 通常時は、各問題内の「選択肢」だけをランダムに並び替えるstate.currentQuestions.forEach(q => shuffleArray(q.options));}state.currentIndex = 0;state.score = 0;document.getElementById("current-category").innerText = categoryName;showQuiz();showScreen("screen-quiz");}// 問題表示処理function showQuiz() {const q = state.currentQuestions[state.currentIndex];// 進捗表示document.getElementById("q-progress").innerText = ${state.currentIndex + 1} / ${state.currentQuestions.length} 問;// 問題文document.getElementById("q-text").innerText = q.text;// 解説非表示・次へボタン非表示document.getElementById("feedback").style.display = "none";document.getElementById("next-btn").classList.add("hidden");// 選択肢ボタン生成const optionsContainer = document.getElementById("options-list");optionsContainer.innerHTML = "";q.options.forEach(opt => {const btn = document.createElement("button");btn.className = "btn option-btn";btn.innerText = opt;btn.onclick = () => selectOption(btn, opt, q);optionsContainer.appendChild(btn);});}// 選択肢をクリックしたときの処理function selectOption(selectedBtn, selectedText, question) {const buttons = document.querySelectorAll("#options-list .option-btn");// 連打防止のためすべてのボタンを無効化buttons.forEach(b => b.disabled = true);const isCorrect = (selectedText === question.answer);if (isCorrect) {selectedBtn.classList.add("correct");state.score++;} else {selectedBtn.classList.add("incorrect");// 正解のボタンを探して緑色にするbuttons.forEach(b => {if (b.innerText === question.answer) {b.classList.add("correct");}});}// 解説の表示const feedback = document.getElementById("feedback");feedback.style.display = "block";feedback.style.borderColor = isCorrect ? "var(--success)" : "var(--error)";feedback.innerHTML = <strong>${isCorrect ? "⭕ 正解！" : "❌ 不正解..."}</strong><br>${question.explanation};// 次へボタンを表示document.getElementById("next-btn").classList.remove("hidden");}// 次の問題へボタンの処理function handleNext() {state.currentIndex++;if (state.currentIndex < state.currentQuestions.length) {showQuiz();} else {// 全問終了したら結果画面へdocument.getElementById("score-text").innerText = ${state.score} / ${state.currentQuestions.length};showScreen("screen-result");}}// 同じ単元をランダム順でもう一度解くfunction retryCurrentCategory() {startQuiz(state.currentCategoryName, true);}// 単元選択画面に戻るfunction goToMenu() {showScreen("screen-menu");}// 画面切り替えユーティリティfunction showScreen(screenId) {document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));document.getElementById(screenId).classList.add("active");}// 配列をランダムにシャッフルするアルゴリズム（フィッシャー・イェーツ）function shuffleArray(array) {for (let i = array.length - 1; i > 0; i--) {const j = Math.floor(Math.random() * (i + 1));[array[i], array[j]] = [array[j], array[i]];}}
-### 🛠️ 動作の仕組み
-* 学生が問題を全て解き終わると、自動的に「結果発表」画面に移ります。
-* そこで緑色の **「もう一度この単元を解く（ランダム順）」** を押すと、内部で `shuffleArray()` というシャッフル用の計算が走り、問題の順番がガラッと入れ替わった状態で1問目から再スタートします。
-* 青色の **「単元選択に戻る」** を押せば、いつでも最初のメニューに戻れます。
+    
+    // 選んだ単元の問題だけを集める
+    let questions = state.allQuestions.filter(q => q.category === categoryName);
+    
+    // 元のデータを傷つけないように、新しく問題の複製（コピー）を作る
+    state.currentQuestions = questions.map(q => ({
+        ...q,
+        options: [...q.options]
+    }));
+    
+    // 「もう一度解く」ボタンから呼ばれた時（shouldShuffleが真の時）は問題の並びを混ぜる
+    if (shouldShuffle) {
+        shuffleArray(state.currentQuestions);
+        // 各問題の中の選択肢の並びも混ぜる
+        state.currentQuestions.forEach(q => shuffleArray(q.options));
+    } else {
+        // 通常の時は、問題順はそのままで、選択肢の並びだけを混ぜる
+        state.currentQuestions.forEach(q => shuffleArray(q.options));
+    }
+    
+    state.currentIndex = 0;
+    state.score = 0;
+    document.getElementById("current-category").innerText = categoryName;
+    showQuiz();
+    showScreen("screen-quiz");
+}
 
-実際にファイルを上書きして、学生の皆さんに試してもらってみてください！また何か手を入れたい部分が見つかりましたら、いつでも**具体的な要望**を教えてくださいね。
+// 実際に1問ずつの内容を画面に書き出す処理
+function showQuiz() {
+    const q = state.currentQuestions[state.currentIndex];
+    
+    // 何問中、今何問目かを表示
+    document.getElementById("q-progress").innerText = (state.currentIndex + 1) + " / " + state.currentQuestions.length + " 問";
+    
+    // 問題文を表示
+    document.getElementById("q-text").innerText = q.text;
+    
+    // 前の問題の解説枠や「次へ」ボタンを隠す
+    document.getElementById("feedback").style.display = "none";
+    document.getElementById("next-btn").classList.add("hidden");
+    
+    // 選択肢のボタンを新しく作り直して表示
+    const optionsContainer = document.getElementById("options-list");
+    optionsContainer.innerHTML = "";
+    
+    q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.className = "btn option-btn";
+        btn.innerText = opt;
+        btn.onclick = () => selectOption(btn, opt, q);
+        optionsContainer.appendChild(btn);
+    });
+}
+
+// 選択肢ボタンが押された時の正誤判定処理
+function selectOption(selectedBtn, selectedText, question) {
+    const buttons = document.querySelectorAll("#options-list .option-btn");
+    
+    // 何度もボタンを押せないようにすべての選択肢をロック（無効化）する
+    buttons.forEach(b => b.disabled = true);
+    
+    const isCorrect = (selectedText === question.answer);
+    if (isCorrect) {
+        selectedBtn.classList.add("correct");
+        state.score++;
+    } else {
+        selectedBtn.classList.add("incorrect");
+        // 間違えた場合は、どれが正解だったのかを緑色で教えてあげる
+        buttons.forEach(b => {
+            if (b.innerText === question.answer) {
+                b.classList.add("correct");
+            }
+        });
+    }
+    
+    // 解説枠を表示する
+    const feedback = document.getElementById("feedback");
+    feedback.style.display = "block";
+    feedback.style.borderColor = isCorrect ? "var(--success)" : "var(--error)";
+    feedback.innerHTML = "<strong>" + (isCorrect ? "⭕ 正解！" : "❌ 不正解...") + "</strong><br>" + question.explanation;
+    
+    // 「次の問題へ」進むボタンを画面に出す
+    document.getElementById("next-btn").classList.remove("hidden");
+}
+
+// 「次の問題へ」ボタンが押された時の行き先決定処理
+function handleNext() {
+    state.currentIndex++;
+    if (state.currentIndex < state.currentQuestions.length) {
+        // まだ問題が残っていれば次の問題を表示
+        showQuiz();
+    } else {
+        // すべて解き終わったら結果画面を表示
+        document.getElementById("score-text").innerText = state.score + " / " + state.currentQuestions.length;
+        showScreen("screen-result");
+    }
+}
+
+// 【今回追加機能】同じ単元の問題をランダム（順不同）にしてもう一度最初から解く処理
+function retryCurrentCategory() {
+    startQuiz(state.currentCategoryName, true);
+}
+
+// 単元を選ぶメニュー画面に戻る処理
+function goToMenu() {
+    showScreen("screen-menu");
+}
+
+// 指定した画面だけを表示して、それ以外を隠す切り替え機能
+function showScreen(screenId) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById(screenId).classList.add("active");
+}
+
+// 中身の並び順を完全に不規則（ランダム）に入れ替える仕組み
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+</script>
+
+</body>
+</html>
