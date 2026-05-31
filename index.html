@@ -276,41 +276,79 @@ function handleFileSelect(e) {
     reader.readAsArrayBuffer(file);
 }
 
-// エクセルのデータを中身の部品ごとに分解・整理する処理
+// エクセルのデータを読み込み、見出しを探して整理する処理
 function processWorkbook(workbook) {
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
-    const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+    // sheet_to_jsonの通常の変換機能を使い、1行目の見出しを基準としたデータ（連想配列）の集まりにする
+    const rawData = XLSX.utils.sheet_to_json(worksheet);
     
     state.allQuestions = [];
     const categorySet = new Set();
-    
-    // 1行目は見出し（タイトル）なので2行目から順に処理
-    for (let i = 1; i < rows.length; i++) {
-        const row = rows[i];
-        if (!row || row.length < 3) continue; // 中身が空っぽの行は飛ばす
-        
-        // 各列の意味を割り当て
-        const q = {
-            category: row[0] ? row[0].toString().trim() : "未分類",
-            text: row[1] ? row[1].toString() : "",
-            answer: row[2] ? row[2].toString() : "",
-            options: [],
-            explanation: row[6] ? row[6].toString() : "解説はありません。"
-        };
-        
-        // 選択肢（C列〜F列）を一つにまとめる
-        for (let j = 2; j <= 5; j++) {
-            if (row[j] !== undefined && row[j] !== null && row[j] !== "") {
-                q.options.push(row[j].toString());
+
+    if (rawData.length === 0) {
+        alert("エクセルファイルの中にデータが見つかりませんでした。");
+        return;
+    }
+
+    // 1行目の見出しの中から、どの言葉がどの項目に当てはまるかを自動で探す
+    const firstRow = rawData[0];
+    let keys = Object.keys(firstRow);
+
+    // 見出しの名前を判定するためのキーワードを設定
+    const categoryKey = keys.find(k => k.includes("単元") || k.includes("分類") || k.includes("カテゴリ"));
+    const textKey = keys.find(k => k.includes("問題") || k.includes("本文") || k.includes("問い"));
+    const answerKey = keys.find(k => k.includes("正解") || k.includes("答え") || k.includes("解答"));
+    const explanationKey = keys.find(k => k.includes("解説"));
+
+    // 選択肢の列（「選択肢」という文字が入っている、または「選択肢1」などの列）をすべて集める
+    const optionKeys = keys.filter(k => k.includes("選択肢") || k.includes("択"));
+
+    // もし上記の見つからない場合は、予備として元の「列の順番」で強制的に割り当てる
+    const finalCategoryKey = categoryKey || keys[0];
+    const finalTextKey = textKey || keys[1];
+    const finalAnswerKey = answerKey || keys[2];
+    const finalExplanationKey = explanationKey || keys[keys.length - 1]; // 一番最後の列を解説とみなす
+
+    rawData.forEach(row => {
+        // データの取り出しと、前後の余計な空白の削除
+        const categoryVal = row[finalCategoryKey] ? row[finalCategoryKey].toString().trim() : "未分類";
+        const textVal = row[finalTextKey] ? row[finalTextKey].toString().trim() : "";
+        const answerVal = row[finalAnswerKey] ? row[finalAnswerKey].toString().trim() : "";
+        const explanationVal = row[finalExplanationKey] ? row[finalExplanationKey].toString().trim() : "解説はありません。";
+
+        // 選択肢を1つのまとまりにする
+        let opts = [];
+        if (optionKeys.length > 0) {
+            // 「選択肢」という見出し列が見つかった場合はそこから集める
+            optionKeys.forEach(k => {
+                if (row[k] !== undefined && row[k] !== null && row[k] !== "") {
+                    opts.push(row[k].toString().trim());
+                }
+            });
+        } else {
+            // 見出しで判定できない場合は、正解の答えの列から4つ分を引っ張る
+            const ansIndex = keys.indexOf(finalAnswerKey);
+            for (let m = 0; m < 4; m++) {
+                const targetKey = keys[ansIndex + m];
+                if (targetKey && row[targetKey] !== undefined && row[targetKey] !== null && row[targetKey] !== "") {
+                    opts.push(row[targetKey].toString().trim());
+                }
             }
         }
-        
-        if (q.text) {
-            state.allQuestions.push(q);
-            categorySet.add(q.category);
+
+        // 最低限、問題文が存在する場合のみ問題リストに追加する
+        if (textVal) {
+            state.allQuestions.push({
+                category: categoryVal,
+                text: textVal,
+                answer: answerVal,
+                options: opts,
+                explanation: explanationVal
+            });
+            categorySet.add(categoryVal);
         }
-    }
+    });
     
     state.categories = Array.from(categorySet);
     createMenu();
@@ -431,7 +469,7 @@ function handleNext() {
     }
 }
 
-// 【今回追加機能】同じ単元の問題をランダム（順不同）にしてもう一度最初から解く処理
+// 同じ単元の問題をランダム（順不規則）にしてもう一度最初から解く処理
 function retryCurrentCategory() {
     startQuiz(state.currentCategoryName, true);
 }
