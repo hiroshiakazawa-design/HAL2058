@@ -222,23 +222,21 @@ HTML
 </div>
 
 <script>
-// 全体のデータを記憶しておく場所（状態管理）
+// 全体のデータを記憶しておく場所
 const state = {
     allQuestions: [],        // すべての問題
     categories: [],          // 単元名の一覧
     currentCategoryName: "", // 今選ばれている単元の名前
     currentQuestions: [],    // 今解いている単元の問題たち
     currentIndex: 0,         // 今何問目を解いているか
-    score: 0                 // 合格・正解した数
+    score: 0                 // 正解した数
 };
 
-// 画面が完全に表示されたら最初に動く処理
 window.onload = function() {
     autoLoadExcel();
     document.getElementById('excel-file').addEventListener('change', handleFileSelect, false);
 };
 
-// 自動でエクセル（MD.xlsx）を探して読み込む処理
 async function autoLoadExcel() {
     const statusMsg = document.getElementById("status-msg");
     try {
@@ -260,7 +258,6 @@ async function autoLoadExcel() {
     }
 }
 
-// 手動でファイルを選んだ時の処理
 function handleFileSelect(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -276,85 +273,77 @@ function handleFileSelect(e) {
     reader.readAsArrayBuffer(file);
 }
 
-// エクセルのデータを読み込み、見出しを探して整理する処理
+// エクセルのデータを読み込み、画像の通りの列順（A〜L列）で処理する
 function processWorkbook(workbook) {
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
-    // sheet_to_jsonの通常の変換機能を使い、1行目の見出しを基準としたデータ（連想配列）の集まりにする
-    const rawData = XLSX.utils.sheet_to_json(worksheet);
+    const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }); // 【変更】見出し名ではなく完全に行・列の番号で処理
     
     state.allQuestions = [];
     const categorySet = new Set();
 
-    if (rawData.length === 0) {
-        alert("エクセルファイルの中にデータが見つかりませんでした。");
+    if (rawData.length <= 1) {
+        alert("エクセルファイルの中に有効な問題データが見つかりませんでした。");
         return;
     }
 
-    // 1行目の見出しの中から、どの言葉がどの項目に当てはまるかを自動で探す
-    const firstRow = rawData[0];
-    let keys = Object.keys(firstRow);
+    // 0行目は見出し（問題No、単元名など）なので、1行目（実際のデータ）からループ処理
+    for (let i = 1; i < rawData.length; i++) {
+        const row = rawData[i];
+        if (!row || row.length === 0) continue;
 
-    // 見出しの名前を判定するためのキーワードを設定
-    const categoryKey = keys.find(k => k.includes("単元") || k.includes("分類") || k.includes("カテゴリ"));
-    const textKey = keys.find(k => k.includes("問題") || k.includes("本文") || k.includes("問い"));
-    const answerKey = keys.find(k => k.includes("正解") || k.includes("答え") || k.includes("解答"));
-    const explanationKey = keys.find(k => k.includes("解説"));
+        // 画像でご提示いただいたA列からL列の配置を定義
+        const categoryVal = row[1] ? row[1].toString().trim() : "未分類"; // B列: 単元名
+        const textVal     = row[2] ? row[2].toString().trim() : "";       // C列: 問題文
+        
+        // D〜G列: 選択肢1〜4
+        const opt1 = row[3] ? row[3].toString().trim() : "";
+        const opt2 = row[4] ? row[4].toString().trim() : "";
+        const opt3 = row[5] ? row[5].toString().trim() : "";
+        const opt4 = row[6] ? row[6].toString().trim() : "";
+        
+        // H列: 正答番号（1, 2, 3, 4 のいずれか。全角半角どちらでも対応できるようにします）
+        let answerIndexRaw = row[7] ? row[7].toString().trim() : "";
+        // 全角数字を半角数字に変換する処理
+        answerIndexRaw = answerIndexRaw.replace(/[１-４]/g, function(s) {
+            return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+        });
+        const answerIndex = parseInt(answerIndexRaw, 10);
 
-    // 選択肢の列（「選択肢」という文字が入っている、または「選択肢1」などの列）をすべて集める
-    const optionKeys = keys.filter(k => k.includes("選択肢") || k.includes("択"));
+        // 選択肢を配列にし、正解の文字列（テキスト）を特定する
+        const originalOptions = [opt1, opt2, opt3, opt4].filter(o => o !== "");
+        if (originalOptions.length === 0 || !textVal) continue;
 
-    // もし上記の見つからない場合は、予備として元の「列の順番」で強制的に割り当てる
-    const finalCategoryKey = categoryKey || keys[0];
-    const finalTextKey = textKey || keys[1];
-    const finalAnswerKey = answerKey || keys[2];
-    const finalExplanationKey = explanationKey || keys[keys.length - 1]; // 一番最後の列を解説とみなす
+        // 正答番号（1〜4）に対応する選択肢の文字列を正解データとする
+        const correctAnswerText = (answerIndex >= 1 && answerIndex <= originalOptions.length) 
+            ? originalOptions[answerIndex - 1] 
+            : "";
 
-    rawData.forEach(row => {
-        // データの取り出しと、前後の余計な空白の削除
-        const categoryVal = row[finalCategoryKey] ? row[finalCategoryKey].toString().trim() : "未分類";
-        const textVal = row[finalTextKey] ? row[finalTextKey].toString().trim() : "";
-        const answerVal = row[finalAnswerKey] ? row[finalAnswerKey].toString().trim() : "";
-        const explanationVal = row[finalExplanationKey] ? row[finalExplanationKey].toString().trim() : "解説はありません。";
+        // I〜L列: 解説1〜4 を綺麗に改行で繋いで1つの解説文にする
+        let explanationParts = [];
+        if (row[8])  explanationParts.push(row[8].toString().trim());
+        if (row[9])  explanationParts.push(row[9].toString().trim());
+        if (row[10]) explanationParts.push(row[10].toString().trim());
+        if (row[11]) explanationParts.push(row[11].toString().trim());
+        
+        const explanationVal = explanationParts.length > 0 
+            ? explanationParts.join("<br>") 
+            : "解説はありません。";
 
-        // 選択肢を1つのまとまりにする
-        let opts = [];
-        if (optionKeys.length > 0) {
-            // 「選択肢」という見出し列が見つかった場合はそこから集める
-            optionKeys.forEach(k => {
-                if (row[k] !== undefined && row[k] !== null && row[k] !== "") {
-                    opts.push(row[k].toString().trim());
-                }
-            });
-        } else {
-            // 見出しで判定できない場合は、正解の答えの列から4つ分を引っ張る
-            const ansIndex = keys.indexOf(finalAnswerKey);
-            for (let m = 0; m < 4; m++) {
-                const targetKey = keys[ansIndex + m];
-                if (targetKey && row[targetKey] !== undefined && row[targetKey] !== null && row[targetKey] !== "") {
-                    opts.push(row[targetKey].toString().trim());
-                }
-            }
-        }
-
-        // 最低限、問題文が存在する場合のみ問題リストに追加する
-        if (textVal) {
-            state.allQuestions.push({
-                category: categoryVal,
-                text: textVal,
-                answer: answerVal,
-                options: opts,
-                explanation: explanationVal
-            });
-            categorySet.add(categoryVal);
-        }
-    });
+        state.allQuestions.push({
+            category: categoryVal,
+            text: textVal,
+            answer: correctAnswerText, // 文字列として正解を記憶
+            options: originalOptions,  // 選択肢の配列
+            explanation: explanationVal
+        });
+        categorySet.add(categoryVal);
+    }
     
     state.categories = Array.from(categorySet);
     createMenu();
 }
 
-// 単元を選ぶためのボタン一覧を画面に作る処理
 function createMenu() {
     const container = document.getElementById("category-list");
     container.innerHTML = "";
@@ -363,33 +352,26 @@ function createMenu() {
         const btn = document.createElement("button");
         btn.className = "btn";
         btn.innerText = cat;
-        btn.onclick = () => startQuiz(cat, false); // 最初は問題順を混ぜずに開始
+        btn.onclick = () => startQuiz(cat, false);
         container.appendChild(btn);
     });
 }
 
-// クイズを開始する準備処理
 function startQuiz(categoryName, shouldShuffle = false) {
     state.currentCategoryName = categoryName;
-    
-    // 選んだ単元の問題だけを集める
     let questions = state.allQuestions.filter(q => q.category === categoryName);
     
-    // 元のデータを傷つけないように、新しく問題の複製（コピー）を作る
     state.currentQuestions = questions.map(q => ({
         ...q,
         options: [...q.options]
     }));
     
-    // 「もう一度解く」ボタンから呼ばれた時（shouldShuffleが真の時）は問題の並びを混ぜる
+    // クイズ開始時や「もう一度」のときは、問題順や選択肢をシャッフル（中身を混ぜる）
     if (shouldShuffle) {
         shuffleArray(state.currentQuestions);
-        // 各問題の中の選択肢の並びも混ぜる
-        state.currentQuestions.forEach(q => shuffleArray(q.options));
-    } else {
-        // 通常の時は、問題順はそのままで、選択肢の並びだけを混ぜる
-        state.currentQuestions.forEach(q => shuffleArray(q.options));
     }
+    // 選択肢の並び順は常にランダムに混ぜる（ただし内部の正解テキストと一致するので判定は壊れません）
+    state.currentQuestions.forEach(q => shuffleArray(q.options));
     
     state.currentIndex = 0;
     state.score = 0;
@@ -398,21 +380,14 @@ function startQuiz(categoryName, shouldShuffle = false) {
     showScreen("screen-quiz");
 }
 
-// 実際に1問ずつの内容を画面に書き出す処理
 function showQuiz() {
     const q = state.currentQuestions[state.currentIndex];
-    
-    // 何問中、今何問目かを表示
     document.getElementById("q-progress").innerText = (state.currentIndex + 1) + " / " + state.currentQuestions.length + " 問";
-    
-    // 問題文を表示
     document.getElementById("q-text").innerText = q.text;
     
-    // 前の問題の解説枠や「次へ」ボタンを隠す
     document.getElementById("feedback").style.display = "none";
     document.getElementById("next-btn").classList.add("hidden");
     
-    // 選択肢のボタンを新しく作り直して表示
     const optionsContainer = document.getElementById("options-list");
     optionsContainer.innerHTML = "";
     
@@ -425,11 +400,8 @@ function showQuiz() {
     });
 }
 
-// 選択肢ボタンが押された時の正誤判定処理
 function selectOption(selectedBtn, selectedText, question) {
     const buttons = document.querySelectorAll("#options-list .option-btn");
-    
-    // 何度もボタンを押せないようにすべての選択肢をロック（無効化）する
     buttons.forEach(b => b.disabled = true);
     
     const isCorrect = (selectedText === question.answer);
@@ -438,7 +410,6 @@ function selectOption(selectedBtn, selectedText, question) {
         state.score++;
     } else {
         selectedBtn.classList.add("incorrect");
-        // 間違えた場合は、どれが正解だったのかを緑色で教えてあげる
         buttons.forEach(b => {
             if (b.innerText === question.answer) {
                 b.classList.add("correct");
@@ -446,30 +417,24 @@ function selectOption(selectedBtn, selectedText, question) {
         });
     }
     
-    // 解説枠を表示する
     const feedback = document.getElementById("feedback");
     feedback.style.display = "block";
     feedback.style.borderColor = isCorrect ? "var(--success)" : "var(--error)";
     feedback.innerHTML = "<strong>" + (isCorrect ? "⭕ 正解！" : "❌ 不正解...") + "</strong><br>" + question.explanation;
     
-    // 「次の問題へ」進むボタンを画面に出す
     document.getElementById("next-btn").classList.remove("hidden");
 }
 
-// 「次の問題へ」ボタンが押された時の行き先決定処理
 function handleNext() {
     state.currentIndex++;
     if (state.currentIndex < state.currentQuestions.length) {
-        // まだ問題が残っていれば次の問題を表示
         showQuiz();
     } else {
-        // すべて解き終わったら結果画面を表示
         document.getElementById("score-text").innerText = state.score + " / " + state.currentQuestions.length;
         showScreen("screen-result");
     }
 }
 
-// 同じ単元の問題をランダム（順不規則）にしてもう一度最初から解く処理
 function retryCurrentCategory() {
     startQuiz(state.currentCategoryName, true);
 }
@@ -479,13 +444,11 @@ function goToMenu() {
     showScreen("screen-menu");
 }
 
-// 指定した画面だけを表示して、それ以外を隠す切り替え機能
 function showScreen(screenId) {
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     document.getElementById(screenId).classList.add("active");
 }
 
-// 中身の並び順を完全に不規則（ランダム）に入れ替える仕組み
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
