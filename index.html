@@ -276,9 +276,7 @@ function processWorkbook(workbook) {
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
     
-    // 【最重要修正】header: 1（番号管理）を完全に廃止。
-    // 1行目の「見出し文字」と各データを完全に紐付けるオブジェクト（連想配列）形式で直接読み込みます。
-    // これにより、右端の「選択肢4」や「解説4」が空欄で切り捨てられても、位置が絶対にズレなくなります。
+    // 見出し文字ベースで安全に取得
     const rawData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
     
     state.allQuestions = [];
@@ -289,7 +287,6 @@ function processWorkbook(workbook) {
         return;
     }
 
-    // 画像で送っていただいた1行目の見出し名を正確に定義
     const keyCategory    = "単元名";
     const keyText        = "問題文";
     const keyOpt1        = "選択肢1";
@@ -302,8 +299,7 @@ function processWorkbook(workbook) {
     const keyExplain3    = "解説3";
     const keyExplain4    = "解説4";
 
-    rawData.forEach((row, index) => {
-        // 各見出し名を使って安全にデータを抽出
+    rawData.forEach((row) => {
         const categoryVal = row[keyCategory] ? row[keyCategory].toString().trim() : "未分類";
         const textVal     = row[keyText] ? row[keyText].toString().trim() : "";
         
@@ -318,19 +314,19 @@ function processWorkbook(workbook) {
         });
         const answerIndex = parseInt(answerIndexRaw, 10);
 
-        // 4つの選択肢を配列にする（この段階では空文字の4番目もそのまま保持）
+        // 【改善】空欄が含まれていても、必ず4つの箱を持った配列（固定長）を作る
         const originalOptions = [opt1, opt2, opt3, opt4];
-        if (!textVal) return; // 問題文がなければスキップ
+        if (!textVal) return;
 
-        // 正答番号（1〜4）から1を引いて正しい正解テキストを狙い撃ち
+        // 正答番号（1〜4）から1を引いたインデックスで、正解の文字列を決定する
         const correctAnswerText = (answerIndex >= 1 && answerIndex <= 4) 
             ? originalOptions[answerIndex - 1] 
             : "";
 
-        // 正解テキストが空、あるいは番号が異常な場合は不備としてスキップ
-        if (!correctAnswerText) return;
+        // 正解の文字列が取得できない場合はスキップ
+        if (correctAnswerText === "") return;
 
-        // 解説1〜4を集約（空の項目は除外して改行でつなぐ）
+        // 解説1〜4を集約
         let explanationParts = [];
         if (row[keyExplain1] && row[keyExplain1].toString().trim() !== "") explanationParts.push(row[keyExplain1].toString().trim());
         if (row[keyExplain2] && row[keyExplain2].toString().trim() !== "") explanationParts.push(row[keyExplain2].toString().trim());
@@ -344,8 +340,8 @@ function processWorkbook(workbook) {
         state.allQuestions.push({
             category: categoryVal,
             text: textVal,
-            answer: correctAnswerText,
-            options: originalOptions.filter(o => o !== ""), // クイズ画面のボタン用。空文字（空の選択肢4など）をここで綺麗に除去
+            answer: correctAnswerText, // 内部的な正解の判定は、ここで確定した「文字列」で行う
+            options: originalOptions,  // 【修正】4つの選択肢をそのまま記憶（空欄データも維持）
             explanation: explanationVal
         });
         categorySet.add(categoryVal);
@@ -401,6 +397,9 @@ function showQuiz() {
     optionsContainer.innerHTML = "";
     
     q.options.forEach(opt => {
+        // 【修正】画面上にクイズの選択肢ボタンを作るときにだけ、空欄（選択肢4がないなど）を除外する仕組みに統合
+        if (opt === undefined || opt === null || opt === "") return;
+
         const btn = document.createElement("button");
         btn.className = "btn option-btn";
         btn.innerText = opt;
