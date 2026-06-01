@@ -222,7 +222,6 @@ HTML
 </div>
 
 <script>
-// 全体のデータを記憶しておく場所
 const state = {
     allQuestions: [],        // すべての問題
     categories: [],          // 単元名の一覧
@@ -273,11 +272,11 @@ function handleFileSelect(e) {
     reader.readAsArrayBuffer(file);
 }
 
-// エクセルのデータを読み込み、画像の通りの列順（A〜L列）で処理する
 function processWorkbook(workbook) {
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
-    const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }); // 【変更】見出し名ではなく完全に行・列の番号で処理
+    // sheet_to_jsonを行と列の番号（二次元配列）で取得
+    const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
     
     state.allQuestions = [];
     const categorySet = new Set();
@@ -287,12 +286,11 @@ function processWorkbook(workbook) {
         return;
     }
 
-    // 0行目は見出し（問題No、単元名など）なので、1行目（実際のデータ）からループ処理
+    // 1行目（インデックス1）からデータ処理
     for (let i = 1; i < rawData.length; i++) {
         const row = rawData[i];
         if (!row || row.length === 0) continue;
 
-        // 画像でご提示いただいたA列からL列の配置を定義
         const categoryVal = row[1] ? row[1].toString().trim() : "未分類"; // B列: 単元名
         const textVal     = row[2] ? row[2].toString().trim() : "";       // C列: 問題文
         
@@ -302,24 +300,26 @@ function processWorkbook(workbook) {
         const opt3 = row[5] ? row[5].toString().trim() : "";
         const opt4 = row[6] ? row[6].toString().trim() : "";
         
-        // H列: 正答番号（1, 2, 3, 4 のいずれか。全角半角どちらでも対応できるようにします）
+        // H列: 正答番号（1〜4）
         let answerIndexRaw = row[7] ? row[7].toString().trim() : "";
-        // 全角数字を半角数字に変換する処理
         answerIndexRaw = answerIndexRaw.replace(/[１-４]/g, function(s) {
             return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
         });
         const answerIndex = parseInt(answerIndexRaw, 10);
 
-        // 選択肢を配列にし、正解の文字列（テキスト）を特定する
-        const originalOptions = [opt1, opt2, opt3, opt4].filter(o => o !== "");
-        if (originalOptions.length === 0 || !textVal) continue;
+        // 選択肢を配列にする（空文字は除外しないようにして4要素を維持）
+        const originalOptions = [opt1, opt2, opt3, opt4];
+        if (!textVal) continue;
 
-        // 正答番号（1〜4）に対応する選択肢の文字列を正解データとする
-        const correctAnswerText = (answerIndex >= 1 && answerIndex <= originalOptions.length) 
+        // 【修正箇所】1から始まる解答番号を、0から始まるインデックス（0, 1, 2, 3）に合わせるため「- 1」する
+        const correctAnswerText = (answerIndex >= 1 && answerIndex <= 4) 
             ? originalOptions[answerIndex - 1] 
             : "";
 
-        // I〜L列: 解説1〜4 を綺麗に改行で繋いで1つの解説文にする
+        // もし正解テキストがうまく取得できなかった場合はスキップ
+        if (!correctAnswerText) continue;
+
+        // I〜L列: 解説1〜4
         let explanationParts = [];
         if (row[8])  explanationParts.push(row[8].toString().trim());
         if (row[9])  explanationParts.push(row[9].toString().trim());
@@ -333,8 +333,8 @@ function processWorkbook(workbook) {
         state.allQuestions.push({
             category: categoryVal,
             text: textVal,
-            answer: correctAnswerText, // 文字列として正解を記憶
-            options: originalOptions,  // 選択肢の配列
+            answer: correctAnswerText,
+            options: originalOptions.filter(o => o !== ""), // 空の選択肢を除外
             explanation: explanationVal
         });
         categorySet.add(categoryVal);
@@ -366,11 +366,9 @@ function startQuiz(categoryName, shouldShuffle = false) {
         options: [...q.options]
     }));
     
-    // クイズ開始時や「もう一度」のときは、問題順や選択肢をシャッフル（中身を混ぜる）
     if (shouldShuffle) {
         shuffleArray(state.currentQuestions);
     }
-    // 選択肢の並び順は常にランダムに混ぜる（ただし内部の正解テキストと一致するので判定は壊れません）
     state.currentQuestions.forEach(q => shuffleArray(q.options));
     
     state.currentIndex = 0;
@@ -439,7 +437,6 @@ function retryCurrentCategory() {
     startQuiz(state.currentCategoryName, true);
 }
 
-// 単元を選ぶメニュー画面に戻る処理
 function goToMenu() {
     showScreen("screen-menu");
 }
