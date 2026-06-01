@@ -276,57 +276,66 @@ function processWorkbook(workbook) {
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
     
-    // 【重要な修正】defval: "" を指定することで、空欄のセルがあっても左に詰められず、確実に空文字が入るようになります。
-    const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
+    // 【最重要修正】header: 1（番号管理）を完全に廃止。
+    // 1行目の「見出し文字」と各データを完全に紐付けるオブジェクト（連想配列）形式で直接読み込みます。
+    // これにより、右端の「選択肢4」や「解説4」が空欄で切り捨てられても、位置が絶対にズレなくなります。
+    const rawData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
     
     state.allQuestions = [];
     const categorySet = new Set();
 
-    if (rawData.length <= 1) {
+    if (rawData.length === 0) {
         alert("エクセルファイルの中に有効な問題データが見つかりませんでした。");
         return;
     }
 
-    // 1行目からデータ処理
-    for (let i = 1; i < rawData.length; i++) {
-        const row = rawData[i];
-        if (!row || row.length === 0) continue;
+    // 画像で送っていただいた1行目の見出し名を正確に定義
+    const keyCategory    = "単元名";
+    const keyText        = "問題文";
+    const keyOpt1        = "選択肢1";
+    const keyOpt2        = "選択肢2";
+    const keyOpt3        = "選択肢3";
+    const keyOpt4        = "選択肢4";
+    const keyAnswerNo    = "正答番号";
+    const keyExplain1    = "解説1";
+    const keyExplain2    = "解説2";
+    const keyExplain3    = "解説3";
+    const keyExplain4    = "解説4";
 
-        // 【列の位置を完全固定】
-        const categoryVal = row[1] ? row[1].toString().trim() : "未分類"; // B列(1): 単元名
-        const textVal     = row[2] ? row[2].toString().trim() : "";       // C列(2): 問題文
+    rawData.forEach((row, index) => {
+        // 各見出し名を使って安全にデータを抽出
+        const categoryVal = row[keyCategory] ? row[keyCategory].toString().trim() : "未分類";
+        const textVal     = row[keyText] ? row[keyText].toString().trim() : "";
         
-        // D〜G列(3〜6): 選択肢1〜4
-        const opt1 = row[3] ? row[3].toString().trim() : "";
-        const opt2 = row[4] ? row[4].toString().trim() : "";
-        const opt3 = row[5] ? row[5].toString().trim() : "";
-        const opt4 = row[6] ? row[6].toString().trim() : "";
+        const opt1 = row[keyOpt1] ? row[keyOpt1].toString().trim() : "";
+        const opt2 = row[keyOpt2] ? row[keyOpt2].toString().trim() : "";
+        const opt3 = row[keyOpt3] ? row[keyOpt3].toString().trim() : "";
+        const opt4 = row[keyOpt4] ? row[keyOpt4].toString().trim() : "";
         
-        // H列(7): 正答番号（1〜4）
-        let answerIndexRaw = row[7] ? row[7].toString().trim() : "";
+        let answerIndexRaw = row[keyAnswerNo] ? row[keyAnswerNo].toString().trim() : "";
         answerIndexRaw = answerIndexRaw.replace(/[１-４]/g, function(s) {
             return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
         });
         const answerIndex = parseInt(answerIndexRaw, 10);
 
-        // 4つの選択肢を固定配列にする
+        // 4つの選択肢を配列にする（この段階では空文字の4番目もそのまま保持）
         const originalOptions = [opt1, opt2, opt3, opt4];
-        if (!textVal) continue;
+        if (!textVal) return; // 問題文がなければスキップ
 
-        // 正答番号（1〜4）から「1」を引いて、正しい選択肢テキストを取得
+        // 正答番号（1〜4）から1を引いて正しい正解テキストを狙い撃ち
         const correctAnswerText = (answerIndex >= 1 && answerIndex <= 4) 
             ? originalOptions[answerIndex - 1] 
             : "";
 
-        // 万が一、正解テキストが空っぽの場合は、データ不備としてスキップ
-        if (!correctAnswerText) continue;
+        // 正解テキストが空、あるいは番号が異常な場合は不備としてスキップ
+        if (!correctAnswerText) return;
 
-        // I〜L列(8〜11): 解説1〜4
+        // 解説1〜4を集約（空の項目は除外して改行でつなぐ）
         let explanationParts = [];
-        if (row[8]  && row[8].toString().trim() !== "")  explanationParts.push(row[8].toString().trim());
-        if (row[9]  && row[9].toString().trim() !== "")  explanationParts.push(row[9].toString().trim());
-        if (row[10] && row[10].toString().trim() !== "") explanationParts.push(row[10].toString().trim());
-        if (row[11] && row[11].toString().trim() !== "") explanationParts.push(row[11].toString().trim());
+        if (row[keyExplain1] && row[keyExplain1].toString().trim() !== "") explanationParts.push(row[keyExplain1].toString().trim());
+        if (row[keyExplain2] && row[keyExplain2].toString().trim() !== "") explanationParts.push(row[keyExplain2].toString().trim());
+        if (row[keyExplain3] && row[keyExplain3].toString().trim() !== "") explanationParts.push(row[keyExplain3].toString().trim());
+        if (row[keyExplain4] && row[keyExplain4].toString().trim() !== "") explanationParts.push(row[keyExplain4].toString().trim());
         
         const explanationVal = explanationParts.length > 0 
             ? explanationParts.join("<br>") 
@@ -336,11 +345,11 @@ function processWorkbook(workbook) {
             category: categoryVal,
             text: textVal,
             answer: correctAnswerText,
-            options: originalOptions.filter(o => o !== ""), // 表示用のボタンからは空文字を除外
+            options: originalOptions.filter(o => o !== ""), // クイズ画面のボタン用。空文字（空の選択肢4など）をここで綺麗に除去
             explanation: explanationVal
         });
         categorySet.add(categoryVal);
-    }
+    });
     
     state.categories = Array.from(categorySet);
     createMenu();
@@ -435,7 +444,6 @@ function handleNext() {
     }
 }
 
-// 同じ単元の問題をランダム（順不規則）にしてもう一度最初から解く処理
 function retryCurrentCategory() {
     startQuiz(state.currentCategoryName, true);
 }
