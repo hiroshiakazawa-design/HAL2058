@@ -275,8 +275,9 @@ function handleFileSelect(e) {
 function processWorkbook(workbook) {
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
-    // sheet_to_jsonを行と列の番号（二次元配列）で取得
-    const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+    
+    // 【重要な修正】defval: "" を指定することで、空欄のセルがあっても左に詰められず、確実に空文字が入るようになります。
+    const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
     
     state.allQuestions = [];
     const categorySet = new Set();
@@ -286,45 +287,46 @@ function processWorkbook(workbook) {
         return;
     }
 
-    // 1行目（インデックス1）からデータ処理
+    // 1行目からデータ処理
     for (let i = 1; i < rawData.length; i++) {
         const row = rawData[i];
         if (!row || row.length === 0) continue;
 
-        const categoryVal = row[1] ? row[1].toString().trim() : "未分類"; // B列: 単元名
-        const textVal     = row[2] ? row[2].toString().trim() : "";       // C列: 問題文
+        // 【列の位置を完全固定】
+        const categoryVal = row[1] ? row[1].toString().trim() : "未分類"; // B列(1): 単元名
+        const textVal     = row[2] ? row[2].toString().trim() : "";       // C列(2): 問題文
         
-        // D〜G列: 選択肢1〜4
+        // D〜G列(3〜6): 選択肢1〜4
         const opt1 = row[3] ? row[3].toString().trim() : "";
         const opt2 = row[4] ? row[4].toString().trim() : "";
         const opt3 = row[5] ? row[5].toString().trim() : "";
         const opt4 = row[6] ? row[6].toString().trim() : "";
         
-        // H列: 正答番号（1〜4）
+        // H列(7): 正答番号（1〜4）
         let answerIndexRaw = row[7] ? row[7].toString().trim() : "";
         answerIndexRaw = answerIndexRaw.replace(/[１-４]/g, function(s) {
             return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
         });
         const answerIndex = parseInt(answerIndexRaw, 10);
 
-        // 選択肢を配列にする（空文字は除外しないようにして4要素を維持）
+        // 4つの選択肢を固定配列にする
         const originalOptions = [opt1, opt2, opt3, opt4];
         if (!textVal) continue;
 
-        // 【修正箇所】1から始まる解答番号を、0から始まるインデックス（0, 1, 2, 3）に合わせるため「- 1」する
+        // 正答番号（1〜4）から「1」を引いて、正しい選択肢テキストを取得
         const correctAnswerText = (answerIndex >= 1 && answerIndex <= 4) 
             ? originalOptions[answerIndex - 1] 
             : "";
 
-        // もし正解テキストがうまく取得できなかった場合はスキップ
+        // 万が一、正解テキストが空っぽの場合は、データ不備としてスキップ
         if (!correctAnswerText) continue;
 
-        // I〜L列: 解説1〜4
+        // I〜L列(8〜11): 解説1〜4
         let explanationParts = [];
-        if (row[8])  explanationParts.push(row[8].toString().trim());
-        if (row[9])  explanationParts.push(row[9].toString().trim());
-        if (row[10]) explanationParts.push(row[10].toString().trim());
-        if (row[11]) explanationParts.push(row[11].toString().trim());
+        if (row[8]  && row[8].toString().trim() !== "")  explanationParts.push(row[8].toString().trim());
+        if (row[9]  && row[9].toString().trim() !== "")  explanationParts.push(row[9].toString().trim());
+        if (row[10] && row[10].toString().trim() !== "") explanationParts.push(row[10].toString().trim());
+        if (row[11] && row[11].toString().trim() !== "") explanationParts.push(row[11].toString().trim());
         
         const explanationVal = explanationParts.length > 0 
             ? explanationParts.join("<br>") 
@@ -334,7 +336,7 @@ function processWorkbook(workbook) {
             category: categoryVal,
             text: textVal,
             answer: correctAnswerText,
-            options: originalOptions.filter(o => o !== ""), // 空の選択肢を除外
+            options: originalOptions.filter(o => o !== ""), // 表示用のボタンからは空文字を除外
             explanation: explanationVal
         });
         categorySet.add(categoryVal);
@@ -433,6 +435,7 @@ function handleNext() {
     }
 }
 
+// 同じ単元の問題をランダム（順不規則）にしてもう一度最初から解く処理
 function retryCurrentCategory() {
     startQuiz(state.currentCategoryName, true);
 }
