@@ -6,7 +6,7 @@
 <title>香粧品化学 AI個別指導チューター - 色材・香料・配合原料・雑貨編</title>
 <style>
   :root {
-    --primary: #c026d3; /* フューシャピンク（色材・香料の華やかさをイメージ） */
+    --primary: #c026d3;
     --primary-light: #fdf4ff;
     --primary-hover: #a21caf;
     --accent: #f59e0b;
@@ -29,53 +29,32 @@
     padding: 8px 10px;
     line-height: 1.5;
   }
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-  }
+  .container { max-width: 600px; margin: 0 auto; }
 
-  /* 上部ステータス（3点表示） */
   .top-status-bar {
     background: var(--card);
     border-radius: 8px;
     padding: 8px 12px;
     border: 1px solid var(--border);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04);
   }
-  .status-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .status-student {
-    font-size: 0.85rem;
-    font-weight: bold;
-    color: #475569;
-  }
-  .status-field {
-    font-size: 0.8rem;
-    font-weight: bold;
-    background: #fae8ff;
-    color: #86198f;
-    padding: 2px 8px;
-    border-radius: 4px;
-  }
-  .status-score {
-    font-size: 0.82rem;
-    font-weight: bold;
-    background: var(--primary-light);
-    color: var(--primary);
-    padding: 3px 10px;
-    border-radius: 12px;
-    border: 1px solid #f5d0fe;
-    white-space: nowrap;
-  }
+  .status-left { display: flex; align-items: center; gap: 8px; }
+  .status-student { font-size: 0.85rem; font-weight: bold; color: #475569; }
+  .status-field { font-size: 0.8rem; font-weight: bold; background: #fae8ff; color: #86198f; padding: 2px 8px; border-radius: 4px; }
+  .status-score { font-size: 0.82rem; font-weight: bold; background: var(--primary-light); color: var(--primary); padding: 3px 10px; border-radius: 12px; border: 1px solid #f5d0fe; white-space: nowrap; }
 
-  /* メイン問題カード */
+  /* 操作バー */
+  .action-bar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 8px; }
+  .btn-action-sm { padding: 5px 12px; font-size: 0.78rem; font-weight: bold; border-radius: 6px; border: 1px solid var(--border); cursor: pointer; background: #ffffff; color: var(--text); transition: all 0.15s; }
+  .btn-action-sm:hover { background: #f1f5f9; }
+  .btn-pause { border-color: #f59e0b; color: #b45309; }
+  .btn-resume { border-color: #10b981; color: #047857; background: #ecfdf5; }
+  .btn-quit { border-color: #ef4444; color: #b91c1c; }
+
   .card {
     background: var(--card);
     border-radius: 12px;
@@ -84,55 +63,14 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.03);
     margin-bottom: 14px;
   }
-  .q-progress {
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: #64748b;
-    margin-bottom: 4px;
-  }
-  h2 {
-    font-size: 1.12rem;
-    margin: 0 0 12px 0;
-    line-height: 1.35;
-    color: #0f172a;
-  }
+  .q-progress { font-size: 0.8rem; font-weight: bold; color: #64748b; margin-bottom: 4px; }
+  h2 { font-size: 1.12rem; margin: 0 0 12px 0; line-height: 1.35; color: #0f172a; }
 
-  /* 解説枠 */
-  .exp-box {
-    background: var(--accent-bg);
-    border-left: 4px solid var(--accent);
-    padding: 10px 12px;
-    border-radius: 4px;
-    margin-bottom: 14px;
-    font-size: 0.92rem;
-  }
-  .exp-tag {
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #b45309;
-    display: block;
-    margin-bottom: 3px;
-  }
+  .exp-box { background: var(--accent-bg); border-left: 4px solid var(--accent); padding: 10px 12px; border-radius: 4px; margin-bottom: 14px; font-size: 0.92rem; }
+  .exp-tag { font-size: 0.75rem; font-weight: bold; color: #b45309; display: block; margin-bottom: 3px; }
+  .question-box { background: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 8px; margin-bottom: 14px; font-weight: 600; font-size: 1rem; line-height: 1.5; white-space: pre-wrap; }
 
-  /* 設問枠 */
-  .question-box {
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    padding: 14px;
-    border-radius: 8px;
-    margin-bottom: 14px;
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.5;
-    white-space: pre-wrap;
-  }
-
-  /* 選択肢ボタン */
-  .btn-group {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-  }
+  .btn-group { display: flex; flex-direction: column; gap: 9px; }
   .btn-choice {
     background: #ffffff;
     border: 2px solid #cbd5e1;
@@ -149,239 +87,58 @@
     -webkit-tap-highlight-color: transparent;
   }
   .btn-choice:active { transform: scale(0.98); }
-  .btn-choice:hover:not(:disabled) {
-    border-color: var(--primary);
-    background: var(--primary-light);
-  }
+  .btn-choice:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-light); }
   .btn-choice:disabled { cursor: default; }
+  .btn-choice.correct-highlight { background: var(--success-bg) !important; border-color: var(--success) !important; color: var(--success) !important; }
+  .btn-choice.wrong-highlight { background: var(--danger-bg) !important; border-color: var(--danger) !important; color: var(--danger) !important; }
 
-  .btn-choice.correct-highlight {
-    background: var(--success-bg) !important;
-    border-color: var(--success) !important;
-    color: var(--success) !important;
-  }
-  .btn-choice.wrong-highlight {
-    background: var(--danger-bg) !important;
-    border-color: var(--danger) !important;
-    color: var(--danger) !important;
-  }
+  .feedback-box { display: none; margin-top: 14px; padding: 12px 14px; border-radius: 8px; animation: fadeIn 0.25s ease; }
+  .feedback-correct { background: var(--success-bg); border: 1px solid #86efac; color: var(--success); }
+  .feedback-wrong { background: var(--danger-bg); border: 1px solid #fca5a5; color: var(--danger); }
+  .feedback-header { font-weight: bold; font-size: 0.9rem; margin-bottom: 4px; }
 
-  /* AIフィードバック */
-  .feedback-box {
-    display: none;
-    margin-top: 14px;
-    padding: 12px 14px;
-    border-radius: 8px;
-    animation: fadeIn 0.25s ease;
-  }
-  .feedback-correct {
-    background: var(--success-bg);
-    border: 1px solid #86efac;
-    color: var(--success);
-  }
-  .feedback-wrong {
-    background: var(--danger-bg);
-    border: 1px solid #fca5a5;
-    color: var(--danger);
-  }
-  .feedback-header {
-    font-weight: bold;
-    font-size: 0.9rem;
-    margin-bottom: 4px;
-  }
-
-  /* 操作ボタン */
-  .nav-controls {
-    display: flex;
-    gap: 8px;
-    margin-top: 14px;
-  }
-  .btn-prev {
-    flex: 1;
-    padding: 12px;
-    background: #ffffff;
-    color: #475569;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 0.92rem;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  .btn-prev:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-  }
-  .btn-next {
-    flex: 2;
-    padding: 12px;
-    background: var(--primary);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.98rem;
-    font-weight: bold;
-    cursor: pointer;
-    display: none;
-  }
+  .nav-controls { display: flex; gap: 8px; margin-top: 14px; }
+  .btn-prev { flex: 1; padding: 12px; background: #ffffff; color: #475569; border: 1px solid var(--border); border-radius: 8px; font-size: 0.92rem; font-weight: bold; cursor: pointer; }
+  .btn-prev:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-next { flex: 2; padding: 12px; background: var(--primary); color: #ffffff; border: none; border-radius: 8px; font-size: 0.98rem; font-weight: bold; cursor: pointer; display: none; }
   .btn-next:hover { background: var(--primary-hover); }
 
-  /* 下部メニュー */
-  .bottom-menu-box {
-    background: var(--card);
-    border-radius: 10px;
-    padding: 12px;
-    border: 1px solid var(--border);
-    margin-bottom: 20px;
-  }
-  .bottom-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .bottom-title {
-    font-size: 0.78rem;
-    font-weight: bold;
-    color: #64748b;
-  }
-  .btn-reset {
-    font-size: 0.74rem;
-    color: #dc2626;
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-decoration: underline;
-    padding: 0;
-  }
-  .spine-steps {
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-  }
-  .spine-node {
-    flex: 1;
-    min-width: 58px;
-    text-align: center;
-    padding: 6px 2px;
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.72rem;
-    font-weight: bold;
-    color: #64748b;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .spine-node.active {
-    background: var(--primary);
-    color: #ffffff !important;
-    border-color: var(--primary);
-  }
-  .spine-node.cleared {
-    background: var(--success-bg);
-    color: var(--success);
-    border-color: #86efac;
-  }
-  .spine-node.exam-node {
-    background: #fef3c7;
-    border-color: #f59e0b;
-    color: #b45309;
-  }
-  .spine-node.exam-node.active {
-    background: #d97706 !important;
-    color: white !important;
-  }
+  .bottom-menu-box { background: var(--card); border-radius: 10px; padding: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
+  .bottom-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .bottom-title { font-size: 0.78rem; font-weight: bold; color: #64748b; }
+  .btn-reset { font-size: 0.74rem; color: #dc2626; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
+  .spine-steps { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 4px; }
+  .spine-node { flex: 1; min-width: 58px; text-align: center; padding: 6px 2px; background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; font-size: 0.72rem; font-weight: bold; color: #64748b; cursor: pointer; white-space: nowrap; }
+  .spine-node.active { background: var(--primary); color: #ffffff !important; border-color: var(--primary); }
+  .spine-node.cleared { background: var(--success-bg); color: var(--success); border-color: #86efac; }
+  .spine-node.exam-node { background: #fef3c7; border-color: #f59e0b; color: #b45309; }
+  .spine-node.exam-node.active { background: #d97706 !important; color: white !important; }
 
-  /* 成績グラフ表示スタイル */
-  .result-card {
-    padding: 10px 4px;
-  }
-  .result-header {
-    text-align: center;
-    margin-bottom: 16px;
-  }
-  .graph-container {
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 12px;
-    margin: 16px 0;
-  }
-  .graph-title {
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #334155;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-  }
-  .graph-item {
-    margin-bottom: 10px;
-    cursor: pointer;
-    padding: 4px 6px;
-    border-radius: 6px;
-    transition: background 0.15s;
-  }
-  .graph-item:hover {
-    background: #e2e8f0;
-  }
-  .graph-label-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-bottom: 3px;
-  }
-  .graph-bar-bg {
-    background: #e2e8f0;
-    height: 12px;
-    border-radius: 6px;
-    overflow: hidden;
-  }
-  .graph-bar-fill {
-    height: 100%;
-    border-radius: 6px;
-    transition: width 0.6s ease;
-  }
+  .result-card { padding: 10px 4px; }
+  .result-header { text-align: center; margin-bottom: 16px; }
+  .graph-container { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px 12px; margin: 16px 0; }
+  .graph-title { font-size: 0.9rem; font-weight: bold; color: #334155; margin-bottom: 12px; display: flex; justify-content: space-between; }
+  .graph-item { margin-bottom: 10px; cursor: pointer; padding: 4px 6px; border-radius: 6px; transition: background 0.15s; }
+  .graph-item:hover { background: #e2e8f0; }
+  .graph-label-row { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 3px; }
+  .graph-bar-bg { background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden; }
+  .graph-bar-fill { height: 100%; border-radius: 6px; transition: width 0.6s ease; }
   .bar-high { background-color: #22c55e; }
   .bar-mid  { background-color: #eab308; }
   .bar-low  { background-color: #ef4444; }
 
-  .advice-box {
-    background: #fdf4ff;
-    border-left: 4px solid var(--primary);
-    padding: 10px 12px;
-    border-radius: 4px;
-    font-size: 0.88rem;
-    margin-bottom: 16px;
-    text-align: left;
-  }
-
-  .btn-action {
-    width: 100%;
-    padding: 13px;
-    border-radius: 8px;
-    font-size: 0.98rem;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    margin-top: 8px;
-  }
+  .advice-box { background: #fdf4ff; border-left: 4px solid var(--primary); padding: 10px 12px; border-radius: 4px; font-size: 0.88rem; margin-bottom: 16px; text-align: left; }
+  .btn-action { width: 100%; padding: 13px; border-radius: 8px; font-size: 0.98rem; font-weight: bold; cursor: pointer; border: none; margin-top: 8px; box-sizing: border-box; display: block; }
   .btn-retry { background: #d97706; color: white; }
   .btn-restart { background: var(--primary); color: white; }
   .btn-switch-exam { background: #0284c7; color: white; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(3px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- 上部ステータス（3点表示） -->
   <div class="top-status-bar">
     <div class="status-left">
       <span class="status-student">出席：12番</span>
@@ -390,39 +147,31 @@
     <div class="status-score" id="status-score">正解率: 0% (0/56点)</div>
   </div>
 
-  <!-- メイン問題カード -->
+  <div class="action-bar">
+    <button class="btn-action-sm btn-pause" onclick="pauseQuiz()">⏸️ 中断</button>
+    <button class="btn-action-sm btn-resume" id="btn-resume" onclick="resumeQuiz()" style="display:none;">▶️ 再開</button>
+    <button class="btn-action-sm btn-quit" onclick="quitQuiz()">⏹️ 終了</button>
+  </div>
+
   <div class="card" id="main-card">
     <div class="q-progress" id="progress-text">問 1 / 28</div>
     <h2 id="lesson-title">問題タイトル</h2>
-
-    <!-- 解説（国試4択モードでは非表示） -->
     <div class="exp-box" id="exp-container">
       <span class="exp-tag">💡 香粧品AI先生のポイント</span>
       <div id="lesson-exp">解説</div>
     </div>
-
-    <!-- 設問 -->
-    <div class="question-box" id="question-text">
-      設問
-    </div>
-
-    <!-- 選択肢 -->
+    <div class="question-box" id="question-text">設問</div>
     <div class="btn-group" id="choices-container"></div>
-
-    <!-- フィードバック -->
     <div class="feedback-box" id="feedback-area">
       <div class="feedback-header">🧑‍🏫 AI先生の個別指導</div>
       <div id="feedback-desc"></div>
     </div>
-
-    <!-- 操作ボタン -->
     <div class="nav-controls">
       <button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button>
       <button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button>
     </div>
   </div>
 
-  <!-- 下部：分野ジャンプメニュー -->
   <div class="bottom-menu-box">
     <div class="bottom-header">
       <span class="bottom-title">🗺️ 分野・モード切替（タップで移動）</span>
@@ -453,550 +202,72 @@ const fieldNames = {
   "EXAM": "国試本番実戦演習（現行教科書完全準拠20題）"
 };
 
-// 基礎28問マスターデータ（正解位置：上14問 / 下14問の完全均等分散）
 const baseQuestions = [
-  // A. 色材（染料・無機顔料・有機色素）
-  {
-    id: "FM-001", block: "A", title: "染料と顔料の決定的な違い【国試最頻出】",
-    exp: "染料は水や溶媒に溶けて光を【透過】して発色します。顔料は水や溶媒に溶けず、光を【反射】して発色し、カバー力があります！",
-    q: "水や油などの溶媒に溶けず、光を「反射」して発色する粉体の色材はどっち？",
-    choices: ["顔料", "染料"], answer: 0,
-    hintCorrect: "大正解！+2pt！ 溶けない粉末で光を反射するのが顔料！ 溶けて光を通すのが染料だね！",
-    hintWrong: "溶媒に溶けて光を透過させるのが染料。溶けずに光を反射するのは『顔料』だよ。"
-  },
-  {
-    id: "FM-002", block: "A", title: "白色顔料（酸化チタン）の特徴【国試超定番】",
-    exp: "酸化チタンは無機顔料の中で屈折率・被覆力（隠蔽力）が最大！ しみやそばかすを隠すファンデーションやおしろいに不可欠です。",
-    q: "白色顔料の中で最も被覆力（カバー力）が大きく、肌の色むらやシミを覆い隠す目的で使われる成分はどっち？",
-    choices: ["タルク", "酸化チタン"], answer: 1,
-    hintCorrect: "その通り！+2pt！ 白さとカバー力の王様は酸化チタン！ タルクは透明感のある体質顔料だね！",
-    hintWrong: "タルクは肌を透かす体質顔料。圧倒的なカバー力（隠蔽力）をもつ白色顔料は『酸化チタン』だよ。"
-  },
-  {
-    id: "FM-003", block: "A", title: "体質顔料（タルク・カオリン）の役割",
-    exp: "体質顔料は見た目は白いですが、肌に塗ると透明〜半透明でカバー力はありません。粉末ののび（展延性）を良くし、色を薄める基剤になります。",
-    q: "滑石を粉砕して得られ、滑りがよく展延性に優れるためベビーパウダーやおしろいの主基剤となる体質顔料はどっち？",
-    choices: ["タルク", "カーボンブラック"], answer: 0,
-    hintCorrect: "見事！+2pt！ 滑石（タルク）はサラサラした滑りと透明感を与える体質顔料の代表だね！",
-    hintWrong: "カーボンブラックは黒い着色顔料。おしろいのベースになる滑らかな体質顔料は『タルク』だよ。"
-  },
-  {
-    id: "FM-004", block: "A", title: "光輝性顔料（雲母チタン）の原理【国試頻出】",
-    exp: "薄片状の雲母（マイカ）の表面に酸化チタンをコーティングしたもので、光の干渉作用によってパールのような真珠光沢を発します。",
-    q: "雲母チタンがパールのような美しい虹色・真珠様光沢を発する物理的な仕組みは何？",
-    choices: ["顔料の化学燃焼", "光の干渉作用"], answer: 1,
-    hintCorrect: "バッチリ！+2pt！ シャボン玉と同じ『光の干渉』によってキラキラしたパール光沢が出るんだ！",
-    hintWrong: "化学反応ではないよ。屈折率の異なる層が光を乱反射・強め合う『光の干渉作用』だね。"
-  },
-
-  // B. 香料と芳香製品（天然・合成・調合）
-  {
-    id: "FM-005", block: "B", title: "動物性天然香料の4種とワシントン条約",
-    exp: "動物性香料はムスク（ジャコウジカ）、シベット（ジャコウネコ）、カストリウム（ビーバー）、アンバーグリス（マッコウクジラ）の4種。現在は保護のため合成品が主流です。",
-    q: "ジャコウジカの雄の生殖腺分泌物から採取される、代表的な動物性香料の名称はどっち？",
-    choices: ["ムスク（麝香）", "ベルガモット油"], answer: 0,
-    hintCorrect: "正解！+2pt！ ジャコウジカから採れるのがムスク！ ベルガモットは柑橘系の植物性香料だね！",
-    hintWrong: "ベルガモットは柑橘類の果皮油。ジャコウジカから得られる動物性香料は『ムスク』だよ。"
-  },
-  {
-    id: "FM-006", block: "B", title: "香水の溶媒規制【国試直球ひっかけ】",
-    exp: "香水やオーデコロンなどの芳香製品は、調合香料を『エタノール』に溶かして作られます。失明の危険がある猛毒のメタノールは絶対禁止です！",
-    q: "「香水は、メタノールに十数種以上の調合香料を高濃度に溶解した製品である。」この記述は正しい？",
-    choices: ["正しい（○）", "誤り（×）"], answer: 1,
-    hintCorrect: "完璧！+2pt！ 第36回国試クリア！ メタノールは失明毒性があるため化粧品への配合は全面禁止！",
-    hintWrong: "過去問頻出の罠！ 香水の溶媒は絶対に『エタノール』！ メタノールは配合厳禁だよ。"
-  },
-  {
-    id: "FM-007", block: "B", title: "調合香料の保留剤（ラストノート）",
-    exp: "調合香料は基調剤・調和剤・変調剤・保留剤から成ります。保留剤は揮発速度を抑え、香りを長持ちさせる（残香性を調節する）役目を持ちます。",
-    q: "調合香料において、香気成分の急激な蒸発を防ぎ、香りを長く保たせる目的で配合されるものはどっち？",
-    choices: ["保留剤", "起泡剤"], answer: 0,
-    hintCorrect: "その通り！+2pt！ 香りを長持ちさせて余韻を残すのが『保留剤』の重要な役目だね！",
-    hintWrong: "起泡剤は泡立てる成分。香りを留めて持続させる成分は『保留剤』だよ。"
-  },
-  {
-    id: "FM-008", block: "B", title: "ベルロック皮膚炎（光アレルギー）",
-    exp: "ベルガモット油などの柑橘系香料に含まれる成分（ベルガプテン）が肌についた状態で日光を浴びると、光接触皮膚炎（ベルロック皮膚炎）を起こします。",
-    q: "香水をつけた皮膚が太陽光（紫外線）にさらされることで生じる、色素沈着を伴う皮膚炎を何という？",
-    choices: ["接触感染症", "ベルロック皮膚炎（光接触皮膚炎）"], answer: 1,
-    hintCorrect: "素晴らしい！+2pt！ 柑橘系オイル＋紫外線で起こるのがベルロック皮膚炎だね！",
-    hintWrong: "感染症ではないよ。光毒性・アレルギーによってシミや炎症が残る『ベルロック皮膚炎』だよ。"
-  },
-
-  // C. 防腐剤・殺菌剤と一次・二次汚染
-  {
-    id: "FM-009", block: "C", title: "香粧品の代表的防腐剤（パラベン）【国試超頻出】",
-    exp: "化粧品や食品に最も広く使われる防腐剤は『パラオキシ安息香酸エステル（パラベン）』です。配合上限が化粧品基準で定められています。",
-    q: "香粧品を微生物による腐敗から守るために最も汎用される防腐剤はどっち？",
-    choices: ["パラオキシ安息香酸エステル（パラベン）", "ジブチルヒドロキシトルエン（BHT）"], answer: 0,
-    hintCorrect: "大正解！+2pt！ 防腐剤といえばパラベン！ BHTは油の酸化を防ぐ酸化防止剤だよ！",
-    hintWrong: "BHTは酸化防止剤。微生物の繁殖やカビを防ぐ代表的な防腐剤は『パラベン』だね。"
-  },
-  {
-    id: "FM-010", block: "C", title: "一次汚染と二次汚染の定義【衛生管理連動】",
-    exp: "工場の製造段階で混入するのが「一次汚染」、消費者が指で直接クリームを触ったりフタを開けっぱなしにして混入するのが「二次汚染」です。",
-    q: "消費者が使用中に、汚れた手指を直接クリーム容器に入れて微生物を混入させてしまう現象はどっち？",
-    choices: ["一次汚染", "二次汚染"], answer: 1,
-    hintCorrect: "その通り！+2pt！ 使う人の手や空気中から菌が入るのが『二次汚染』だね！",
-    hintWrong: "メーカーの製造ラインで起こるのが一次汚染。家庭で使用中に起きるのは『二次汚染』だよ。"
-  },
-  {
-    id: "FM-011", block: "C", title: "殺菌剤の役割（薬用石けん・デオドラント）",
-    exp: "防腐剤が長期間の品質保持（静菌）を目的とするのに対し、殺菌剤（クロルヘキシジン、イソプロピルメチルフェノール等）は病原菌やニキビ菌を短時間で死滅させます。",
-    q: "薬用石けんやニキビ用化粧品に配合され、原因細菌を積極的に死滅させる目的の成分はどっち？",
-    choices: ["殺菌剤", "保湿剤"], answer: 0,
-    hintCorrect: "正解！+2pt！ 菌を殺して清潔を保つのが殺菌剤！ 防腐剤との目的の違いも押さえよう！",
-    hintWrong: "肌を潤すのは保湿剤。細菌を積極的に殺してトラブルを防ぐのは『殺菌剤』だね。"
-  },
-
-  // D. 酸化防止剤と金属イオン封鎖剤
-  {
-    id: "FM-012", block: "D", title: "酸化防止剤（抗酸化剤）の代表成分【国試最頻出】",
-    exp: "油脂や香料の自動酸化（酸敗）を防ぐ成分です。トコフェロール（ビタミンE）、ジブチルヒドロキシトルエン（BHT）、BHAが代表例です！",
-    q: "香粧品中の油脂類が空気中の酸素で酸化（酸敗）するのを防ぐために配合される成分はどっち？",
-    choices: ["エチレンジアミン四酢酸（EDTA）", "トコフェロール（ビタミンE）"], answer: 1,
-    hintCorrect: "バッチリ！+2pt！ ビタミンEやBHTは代表的な酸化防止剤！ EDTAはキレート剤だよ！",
-    hintWrong: "EDTAは金属イオン封鎖剤。油の酸化そのものを止める抗酸化剤は『トコフェロール』だね。"
-  },
-  {
-    id: "FM-013", block: "D", title: "金属イオン封鎖剤（キレート剤）の原理【国試最頻出】",
-    exp: "エチレンジアミン四酢酸（EDTA・エデト酸）は、酸化を促す触媒となる微量金属イオンをカニのはさみのように挟み込んで不活性化します！",
-    q: "原料中に含まれる微量金属イオンを捕捉して酸化反応の促進を防ぎ、沈殿や濁りを防止する成分はどっち？",
-    choices: ["エチレンジアミン四酢酸（EDTA）", "パラオキシ安息香酸メチル"], answer: 0,
-    hintCorrect: "見事！+2pt！ キレート（カニのはさみ）の名の通り、金属を捕まえるのがEDTAだね！",
-    hintWrong: "パラベンは防腐剤。金属イオンを包み込んで酸化触媒作用を封じるのが『EDTA』だよ。"
-  },
-  {
-    id: "FM-014", block: "D", title: "酸化防止剤と防腐剤の混同防止【第42回・44回国試】",
-    exp: "BHTやBHAは『酸化防止剤』であり、菌を殺す防腐剤ではありません！ 国試で「BHTは防腐剤である」という引っかけが非常に多いです！",
-    q: "「ジブチルヒドロキシトルエン（BHT）は、化粧品にカビが生えるのを防ぐ防腐剤として用いられる。」この記述は正しい？",
-    choices: ["正しい（○）", "誤り（×）"], answer: 1,
-    hintCorrect: "完璧！+2pt！ 国試最大の引っかけクリア！ BHTは油の酸化を防ぐ『酸化防止剤』だよ！",
-    hintWrong: "過去問で頻出の嘘！ カビを防ぐのはパラベン等の防腐剤。BHTは『酸化防止剤』だよ。"
-  },
-
-  // E. 緩衝作用・中和と保湿剤
-  {
-    id: "FM-015", block: "E", title: "緩衝作用（バッファー作用）の定義【第47回国試】",
-    exp: "弱酸とその塩（クエン酸＋クエン酸ナトリウム等）を混合した水溶液は、少量の酸やアルカリを加えても化学平衡の働きでpHが変化しません。",
-    q: "少量の酸やアルカリが加わっても、溶液のpHがほとんど変化しないように保つ作用を何という？",
-    choices: ["緩衝作用（バッファー作用）", "けん化作用"], answer: 0,
-    hintCorrect: "その通り！+2pt！ 肌を健康な弱酸性に安定して保つために緩衝作用が活躍しているよ！",
-    hintWrong: "けん化は石けんを作る反応。pHを一定にキープする働きを『緩衝作用』というよ。"
-  },
-  {
-    id: "FM-016", block: "E", title: "中和反応と塩の生成【化学基礎】",
-    exp: "酸の水素イオン（H+）と塩基の水酸化物イオン（OH-）が結合して水（H2O）になり、残りのイオン同士が結合して「塩（えん）」ができます。",
-    q: "塩酸（酸）と水酸化ナトリウム（塩基）を混ぜ合わせたときに水とともに生じる塩はどれ？",
-    choices: ["炭酸カルシウム", "塩化ナトリウム（食塩）"], answer: 1,
-    hintCorrect: "正解！+2pt！ 酸とアルカリが打ち消し合って水と塩（NaCl）ができる中和の基本だね！",
-    hintWrong: "HCl + NaOH ➔ H2O + NaCl！ できる塩は『塩化ナトリウム』だよ。"
-  },
-  {
-    id: "FM-017", block: "E", title: "保湿剤（グリセリン・プロピレングリコール）",
-    exp: "保湿剤（湿潤剤）は吸湿性が高い水溶性物質で、肌に水分を与えて蒸発を防ぎます。多価アルコールのグリセリンやPGが代表的です。",
-    q: "角質層に水分を与えて柔軟性を保ち、化粧水自体の水分蒸発も防ぐ目的で配合される成分はどっち？",
-    choices: ["グリセリン", "流動パラフィン"], answer: 0,
-    hintCorrect: "大正解！+2pt！ グリセリンは水分を抱え込む水溶性保湿剤の代表選手だね！",
-    hintWrong: "流動パラフィンは油分でフタをする油性原料。水を引き寄せて保つ水溶性成分は『グリセリン』だよ。"
-  },
-  {
-    id: "FM-018", block: "E", title: "天然保湿因子（NMF）とアミノ酸",
-    exp: "人の角質細胞の中にある天然保湿因子（NMF）の約40%は「アミノ酸（セリン、グリシン等）」で構成されています！",
-    q: "皮膚の角質層に存在し、肌の水分を強力につなぎ止めている天然保湿因子（NMF）の主成分（約40%）は何？",
-    choices: ["無機顔料", "アミノ酸類"], answer: 1,
-    hintCorrect: "見事！+2pt！ NMFの約4割はアミノ酸！ スキンケアにアミノ酸が重宝される理由だね！",
-    hintWrong: "顔料はメイクの粉体。肌の潤いを守るNMFの約40%は『アミノ酸類』でできているよ。"
-  },
-
-  // F. 紫外線（UV-A/B）・収れん剤・ビタミン
-  {
-    id: "FM-019", block: "F", title: "UV-AとUV-Bの波長と影響【国試最頻出】",
-    exp: "UV-A（320〜400nm：長波長）は真皮まで届きシワ・たるみ（光老化）と即時黒化を起こす！ UV-B（280〜320nm：中波長）は赤く腫れる日焼け（サンバーン）を起こします！",
-    q: "皮膚の深部（真皮）まで到達してコラーゲンを破壊し、シワやたるみなどの光老化を引き起こす紫外線はどっち？",
-    choices: ["長波長紫外線（UV-A）", "中波長紫外線（UV-B）"], answer: 0,
-    hintCorrect: "完璧！+2pt！ UV-Aは真皮まで届いてじわじわ老化を進める！ PAでしっかり防御しよう！",
-    hintWrong: "赤くヒリヒリ焼けるのはUV-B。奥深くの真皮まで届いてシワの原因になるのは『UV-A』だよ。"
-  },
-  {
-    id: "FM-020", block: "F", title: "サンケア指標（SPFとPAの意味）【国試超定番】",
-    exp: "SPFは「UV-B（赤くなる日焼け）」の防止効果を表す数値。PAは「UV-A（黒化・光老化）」の防止効果を＋の数（PA++++等）で表します！",
-    q: "サンスクリーン製品において、真皮まで届く「UV-A」の防御効果の高さを表す表示はどっち？",
-    choices: ["SPF値", "PA表示（＋の数）"], answer: 1,
-    hintCorrect: "その通り！+2pt！ UV-Aを防ぐのが『PA』、UV-Bを防ぐのが『SPF』！ 国試の超頻出事項だね！",
-    hintWrong: "SPFはUV-B（赤くなる炎症）を防ぐ数値。UV-Aの防御力を表すのは『PA（＋の数）』だよ。"
-  },
-  {
-    id: "FM-021", block: "F", title: "紫外線散乱剤と紫外線吸収剤の違い【第45回国試】",
-    exp: "散乱剤（微粒子酸化チタン・微粒子酸化亜鉛）は紫外線を物理的に跳ね返す！ 吸収剤（有機化合物）は紫外線を吸収して熱に変えて放出します。",
-    q: "「微粒子酸化チタンは、紫外線を吸収して熱エネルギーに変換することで肌を守る紫外線吸収剤である。」この記述は正しい？",
-    choices: ["正しい（○）", "誤り（×）"], answer: 1,
-    hintCorrect: "見事！+2pt！ 酸化チタンは紫外線を跳ね返す『紫外線散乱剤』！ 吸収剤と混同しないように！",
-    hintWrong: "熱に変えるのは紫外線吸収剤。微粒子酸化チタンは紫外線を物理的に反射する『紫外線散乱剤』だよ。"
-  },
-  {
-    id: "FM-022", block: "F", title: "収れん剤の作用と陰イオン・陽イオン【第45回国試】",
-    exp: "収れん剤は皮膚タンパク質を引き締めて汗や皮脂を抑えます。クエン酸等の有機酸は「陰イオン型（緩和）」、アルミニウム塩や亜鉛塩は「陽イオン型（強力・制汗剤）」です。",
-    q: "制汗剤や防臭剤に配合され、汗腺や毛穴のタンパク質を強力に凝固・収縮させて発汗を抑える金属塩はどっち？",
-    choices: ["陽イオン型収れん剤（アルミニウム塩等）", "陰イオン型収れん剤（クエン酸等）"], answer: 0,
-    hintCorrect: "正解！+2pt！ 金属イオンがタンパク質をギュッと固めるのが陽イオン型収れん剤だね！",
-    hintWrong: "クエン酸などの有機酸は緩和な陰イオン型。強力に毛穴を塞ぐ制汗成分は『陽イオン型収れん剤』だよ。"
-  },
-  {
-    id: "FM-023", block: "F", title: "ビタミンCとビタミンEの相乗効果",
-    exp: "ビタミンC（アスコルビン酸）はメラニン色素沈着防止や美白に働き、ビタミンE（トコフェロール）は血行促進に働きます。ともに製品の抗酸化剤にもなります。",
-    q: "香粧品において、日焼けによるシミ・ソバカスの色素沈着を防ぐ美白効果と製品の酸化防止を兼ねるビタミンはどっち？",
-    choices: ["ビタミンA", "ビタミンC（アスコルビン酸）"], answer: 1,
-    hintCorrect: "その通り！+2pt！ メラニン生成を抑えて透明感を守る美白ビタミンの代表がビタミンCだね！",
-    hintWrong: "ビタミンAは肌あれ防止。シミの色素沈着を防いで還元するのは『ビタミンC』だよ。"
-  },
-  {
-    id: "FM-024", block: "F", title: "女性ホルモン（卵胞ホルモン）の配合規制",
-    exp: "ホルモンは微量で強力に作用するため副作用の危険があります。化粧品基準で配合が認められているのは「エストラジオールなどの卵胞ホルモン」のみで、男性ホルモンは全面禁止です。",
-    q: "化粧品基準において、配合成分の種類と最大配合量が厳格に定められているホルモンはどっち？",
-    choices: ["卵胞ホルモン（エストラジオール等）", "男性ホルモン（テストステロン等）"], answer: 0,
-    hintCorrect: "素晴らしい！+2pt！ 認められているのは一部の女性ホルモンだけ！ 男性ホルモンは一切使えないよ！",
-    hintWrong: "男性ホルモンは配合全面禁止。規定量内で厳しく制限されているのは『卵胞ホルモン』だよ。"
-  },
-
-  // G. 雑貨原料（ネイル・まつ毛エクステ）
-  {
-    id: "FM-025", block: "G", title: "雑貨品としての位置づけ【重要法規】",
-    exp: "ネイル用グルーやまつ毛エクステ用接着剤、つけ爪は化粧品ではなく『雑貨品（日用雑貨）』扱いのため、医薬品医療機器等法の安全基準規制を受けていません！",
-    q: "まつ毛エクステンション用の人工毛や接着剤（グルー）は、法律上どの扱いに分類される？",
-    choices: ["医薬部外品", "雑貨品（日用雑貨）"], answer: 1,
-    hintCorrect: "大正解！+2pt！ 化粧品ではなく雑貨品！ だからこそプロとして安全管理・自主基準の厳守が命なんだ！",
-    hintWrong: "医薬部外品ではないよ！ 法的な安全基準のない『雑貨品』だからこそ慎重な取扱いが必要なんだ。"
-  },
-  {
-    id: "FM-026", block: "G", title: "シアノアクリレート系接着剤とホルムアルデヒド",
-    exp: "まつエクやネイルのグルーは空気中の水分で重合硬化する『シアノアクリレート系』です。硬化時に有毒ガスである「ホルムアルデヒド」が発生するため換気と保護が必須です！",
-    q: "まつ毛エクステ用グルーが硬化する際、副産物として発生しアレルギーや目の痛みの原因となる物質は何？",
-    choices: ["ホルムアルデヒド", "酸素ガス"], answer: 0,
-    hintCorrect: "完璧！+2pt！ シアノアクリレートから出るホルムアルデヒドガス！ サロンの換気が絶対義務だよ！",
-    hintWrong: "酸素は無害だね。グルーの重合時に発生して粘膜を刺激するのは有害な『ホルムアルデヒド』だよ。"
-  },
-  {
-    id: "FM-027", block: "G", title: "カラーエナメルの主原料（ニトロセルロース）",
-    exp: "マニキュア（カラーエナメル）の爪への密着性と光沢を作る主成分は、半合成高分子である『ニトロセルロース』です。引火性があるため火気厳禁です！",
-    q: "ネイルエナメル（マニキュア）の主原料であり、爪の表面に強靭で光沢のある皮膜を形成する成分はどっち？",
-    choices: ["流動パラフィン", "ニトロセルロース"], answer: 1,
-    hintCorrect: "見事！+2pt！ マニキュアの膜といえばニトロセルロース！ 除光液のアセトンでスッキリ落とせるね！",
-    hintWrong: "流動パラフィンは鉱物油。乾いて固いカラーの膜を作るのは『ニトロセルロース』だよ。"
-  },
-  {
-    id: "FM-028", block: "G", title: "除光液（エナメルリムーバー）と爪の脱脂",
-    exp: "エナメルリムーバーの主成分であるアセトンや酢酸エチルは、カラーエナメルを素早く溶かしますが、爪の油分や水分まで奪って爪を乾燥・白化させます。",
-    q: "エナメルリムーバー（除光液）を頻繁に使用した爪を保護するために塗布する油性化粧品は何？",
-    choices: ["ネイルトリートメント（ネイルクリーム）", "キューティクルリムーバー"], answer: 0,
-    hintCorrect: "素晴らしい！+2pt！ 全28問完全制覇！ リムーバーで奪われた水分・油分を補うのがネイルクリームだね！",
-    hintWrong: "キューティクルリムーバーは甘皮を溶かすアルカリ剤。失われた油分を補うのは『ネイルトリートメント』だよ。"
-  }
+  { id: "FM-001", block: "A", title: "染料と顔料の決定的な違い【国試最頻出】", exp: "染料は水や溶媒に溶けて光を【透過】して発色します。顔料は水や溶媒に溶けず、光を【反射】して発色し、カバー力があります！", q: "水や油などの溶媒に溶けず、光を「反射」して発色する粉体の色材はどっち？", choices: ["顔料", "染料"], answer: 0, hintCorrect: "大正解！+2pt！ 溶けない粉末で光を反射するのが顔料！ 溶けて光を通すのが染料だね！", hintWrong: "溶媒に溶けて光を透過させるのが染料。溶けずに光を反射するのは『顔料』だよ。" },
+  { id: "FM-002", block: "A", title: "白色顔料（酸化チタン）の特徴【国試超定番】", exp: "酸化チタンは無機顔料の中で屈折率・被覆力（隠蔽力）が最大！ しみやそばかすを隠すファンデーションやおしろいに不可欠です。", q: "白色顔料の中で最も被覆力（カバー力）が大きく、肌の色むらやシミを覆い隠す目的で使われる成分はどっち？", choices: ["タルク", "酸化チタン"], answer: 1, hintCorrect: "その通り！+2pt！ 白さとカバー力の王様は酸化チタン！ タルクは透明感のある体質顔料だね！", hintWrong: "タルクは肌を透かす体質顔料。圧倒的なカバー力（隠蔽力）をもつ白色顔料は『酸化チタン』だよ。" },
+  { id: "FM-003", block: "A", title: "体質顔料（タルク・カオリン）の役割", exp: "体質顔料は見た目は白いですが、肌に塗ると透明〜半透明でカバー力はありません。粉末ののび（展延性）を良くし、色を薄める基剤になります。", q: "滑石を粉砕して得られ、滑りがよく展延性に優れるためベビーパウダーやおしろいの主基剤となる体質顔料はどっち？", choices: ["タルク", "カーボンブラック"], answer: 0, hintCorrect: "見事！+2pt！ 滑石（タルク）はサラサラした滑りと透明感を与える体質顔料の代表だね！", hintWrong: "カーボンブラックは黒い着色顔料。おしろいのベースになる滑らかな体質顔料は『タルク』だよ。" },
+  { id: "FM-004", block: "A", title: "光輝性顔料（雲母チタン）の原理【国試頻出】", exp: "薄片状の雲母（マイカ）の表面に酸化チタンをコーティングしたもので、光の干渉作用によってパールのような真珠光沢を発します。", q: "雲母チタンがパールのような美しい虹色・真珠様光沢を発する物理的な仕組みは何？", choices: ["顔料の化学燃焼", "光の干渉作用"], answer: 1, hintCorrect: "バッチリ！+2pt！ シャボン玉と同じ『光の干渉』によってキラキラしたパール光沢が出るんだ！", hintWrong: "化学反応ではないよ。屈折率の異なる層が光を乱反射・強め合う『光の干渉作用』だね。" },
+  { id: "FM-005", block: "B", title: "動物性天然香料の4種とワシントン条約", exp: "動物性香料はムスク（ジャコウジカ）、シベット（ジャコウネコ）、カストリウム（ビーバー）、アンバーグリス（マッコウクジラ）の4種。現在は保護のため合成品が主流です。", q: "ジャコウジカの雄の生殖腺分泌物から採取される、代表的な動物性香料の名称はどっち？", choices: ["ムスク（麝香）", "ベルガモット油"], answer: 0, hintCorrect: "正解！+2pt！ ジャコウジカから採れるのがムスク！ ベルガモットは柑橘系の植物性香料だね！", hintWrong: "ベルガモットは柑橘類の果皮油。ジャコウジカから得られる動物性香料は『ムスク』だよ。" },
+  { id: "FM-006", block: "B", title: "香水の溶媒規制【国試直球ひっかけ】", exp: "香水やオーデコロンなどの芳香製品は、調合香料を『エタノール』に溶かして作られます。失明の危険がある猛毒のメタノールは絶対禁止です！", q: "「香水は、メタノールに十数種以上の調合香料を高濃度に溶解した製品である。」この記述は正しい？", choices: ["正しい（○）", "誤り（×）"], answer: 1, hintCorrect: "完璧！+2pt！ 第36回国試クリア！ メタノールは失明毒性があるため化粧品への配合は全面禁止！", hintWrong: "過去問頻出の罠！ 香水の溶媒は絶対に『エタノール』！ メタノールは配合厳禁だよ。" },
+  { id: "FM-007", block: "B", title: "調合香料の保留剤（ラストノート）", exp: "調合香料は基調剤・調和剤・変調剤・保留剤から成ります。保留剤は揮発速度を抑え、香りを長持ちさせる（残香性を調節する）役目を持ちます。", q: "調合香料において、香気成分の急激な蒸発を防ぎ、香りを長く保たせる目的で配合されるものはどっち？", choices: ["保留剤", "起泡剤"], answer: 0, hintCorrect: "その通り！+2pt！ 香りを長持ちさせて余韻を残すのが『保留剤』の重要な役目だね！", hintWrong: "起泡剤は泡立てる成分。香りを留めて持続させる成分は『保留剤』だよ。" },
+  { id: "FM-008", block: "B", title: "ベルロック皮膚炎（光アレルギー）", exp: "ベルガモット油などの柑橘系香料に含まれる成分（ベルガプテン）が肌についた状態で日光を浴びると、光接触皮膚炎（ベルロック皮膚炎）を起こします。", q: "香水をつけた皮膚が太陽光（紫外線）にさらされることで生じる、色素沈着を伴う皮膚炎を何という？", choices: ["接触感染症", "ベルロック皮膚炎（光接触皮膚炎）"], answer: 1, hintCorrect: "素晴らしい！+2pt！ 柑橘系オイル＋紫外線で起こるのがベルロック皮膚炎だね！", hintWrong: "感染症ではないよ。光毒性・アレルギーによってシミや炎症が残る『ベルロック皮膚炎』だよ。" },
+  { id: "FM-009", block: "C", title: "香粧品の代表的防腐剤（パラベン）【国試超頻出】", exp: "化粧品や食品に最も広く使われる防腐剤は『パラオキシ安息香酸エステル（パラベン）』です。配合上限が化粧品基準で定められています。", q: "香粧品を微生物による腐敗から守るために最も汎用される防腐剤はどっち？", choices: ["パラオキシ安息香酸エステル（パラベン）", "ジブチルヒドロキシトルエン（BHT）"], answer: 0, hintCorrect: "大正解！+2pt！ 防腐剤といえばパラベン！ BHTは油の酸化を防ぐ酸化防止剤だよ！", hintWrong: "BHTは酸化防止剤。微生物の繁殖やカビを防ぐ代表的な防腐剤は『パラベン』だね。" },
+  { id: "FM-010", block: "C", title: "一次汚染と二次汚染の定義【衛生管理連動】", exp: "工場の製造段階で混入するのが「一次汚染」、消費者が指で直接クリームを触ったりフタを開けっぱなしにして混入するのが「二次汚染」です。", q: "消費者が使用中に、汚れた手指を直接クリーム容器に入れて微生物を混入させてしまう現象はどっち？", choices: ["一次汚染", "二次汚染"], answer: 1, hintCorrect: "その通り！+2pt！ 使う人の手や空気中から菌が入るのが『二次汚染』だね！", hintWrong: "メーカーの製造ラインで起こるのが一次汚染。家庭で使用中に起きるのは『二次汚染』だよ。" },
+  { id: "FM-011", block: "C", title: "殺菌剤の役割（薬用石けん・デオドラント）", exp: "防腐剤が長期間の品質保持（静菌）を目的とするのに対し、殺菌剤（クロルヘキシジン、イソプロピルメチルフェノール等）は病原菌やニキビ菌を短時間で死滅させます。", q: "薬用石けんやニキビ用化粧品に配合され、原因細菌を積極的に死滅させる目的の成分はどっち？", choices: ["殺菌剤", "保湿剤"], answer: 0, hintCorrect: "正解！+2pt！ 菌を殺して清潔を保つのが殺菌剤！ 防腐剤との目的の違いも押さえよう！", hintWrong: "肌を潤すのは保湿剤。細菌を積極的に殺してトラブルを防ぐのは『殺菌剤』だね。" },
+  { id: "FM-012", block: "D", title: "酸化防止剤（抗酸化剤）の代表成分【国試最頻出】", exp: "油脂や香料の自動酸化（酸敗）を防ぐ成分です。トコフェロール（ビタミンE）、ジブチルヒドロキシトルエン（BHT）、BHAが代表例です！", q: "香粧品中の油脂類が空気中の酸素で酸化（酸敗）するのを防ぐために配合される成分はどっち？", choices: ["エチレンジアミン四酢酸（EDTA）", "トコフェロール（ビタミンE）"], answer: 1, hintCorrect: "バッチリ！+2pt！ ビタミンEやBHTは代表的な酸化防止剤！ EDTAはキレート剤だよ！", hintWrong: "EDTAは金属イオン封鎖剤。油の酸化そのものを止める抗酸化剤は『トコフェロール』だね。" },
+  { id: "FM-013", block: "D", title: "金属イオン封鎖剤（キレート剤）の原理【国試最頻出】", exp: "エチレンジアミン四酢酸（EDTA・エデト酸）は、酸化を促す触媒となる微量金属イオンをカニのはさみのように挟み込んで不活性化します！", q: "原料中に含まれる微量金属イオンを捕捉して酸化反応の促進を防ぎ、沈殿や濁りを防止する成分はどっち？", choices: ["エチレンジアミン四酢酸（EDTA）", "パラオキシ安息香酸メチル"], answer: 0, hintCorrect: "見事！+2pt！ キレート（カニのはさみ）の名の通り、金属を捕まえるのがEDTAだね！", hintWrong: "パラベンは防腐剤。金属イオンを包み込んで酸化触媒作用を封じるのが『EDTA』だよ。" },
+  { id: "FM-014", block: "D", title: "酸化防止剤と防腐剤の混同防止【第42回・44回国試】", exp: "BHTやBHAは『酸化防止剤』であり、菌を殺す防腐剤ではありません！ 国試で「BHTは防腐剤である」という引っかけが非常に多いです！", q: "「ジブチルヒドロキシトルエン（BHT）は、化粧品にカビが生えるのを防ぐ防腐剤として用いられる。」この記述は正しい？", choices: ["正しい（○）", "誤り（×）"], answer: 1, hintCorrect: "完璧！+2pt！ 国試最大の引っかけクリア！ BHTは油の酸化を防ぐ『酸化防止剤』だよ！", hintWrong: "過去問で頻出の嘘！ カビを防ぐのはパラベン等の防腐剤。BHTは『酸化防止剤』だよ。" },
+  { id: "FM-015", block: "E", title: "緩衝作用（バッファー作用）の定義【第47回国試】", exp: "弱酸とその塩（クエン酸＋クエン酸ナトリウム等）を混合した水溶液は、少量の酸やアルカリを加えても化学平衡の働きでpHが変化しません。", q: "少量の酸やアルカリが加わっても、溶液のpHがほとんど変化しないように保つ作用を何という？", choices: ["緩衝作用（バッファー作用）", "けん化作用"], answer: 0, hintCorrect: "その通り！+2pt！ 肌を健康な弱酸性に安定して保つために緩衝作用が活躍しているよ！", hintWrong: "けん化は石けんを作る反応。pHを一定にキープする働きを『緩衝作用』というよ。" },
+  { id: "FM-016", block: "E", title: "中和反応と塩の生成【化学基礎】", exp: "酸の水素イオン（H+）と塩基の水酸化物イオン（OH-）が結合して水（H2O）になり、残りのイオン同士が結合して「塩（えん）」ができます。", q: "塩酸（酸）と水酸化ナトリウム（塩基）を混ぜ合わせたときに水とともに生じる塩はどれ？", choices: ["炭酸カルシウム", "塩化ナトリウム（食塩）"], answer: 1, hintCorrect: "正解！+2pt！ 酸とアルカリが打ち消し合って水と塩（NaCl）ができる中和の基本だね！", hintWrong: "HCl + NaOH ➔ H2O + NaCl！ できる塩は『塩化ナトリウム』だよ。" },
+  { id: "FM-017", block: "E", title: "保湿剤（グリセリン・プロピレングリコール）", exp: "保湿剤（湿潤剤）は吸湿性が高い水溶性物質で、肌に水分を与えて蒸発を防ぎます。多価アルコールのグリセリンやPGが代表的です。", q: "角質層に水分を与えて柔軟性を保ち、化粧水自体の水分蒸発も防ぐ目的で配合される成分はどっち？", choices: ["グリセリン", "流動パラフィン"], answer: 0, hintCorrect: "大正解！+2pt！ グリセリンは水分を抱え込む水溶性保湿剤の代表選手だね！", hintWrong: "流動パラフィンは油分でフタをする油性原料。水を引き寄せて保つ水溶性成分は『グリセリン』だよ。" },
+  { id: "FM-018", block: "E", title: "天然保湿因子（NMF）とアミノ酸", exp: "人の角質細胞の中にある天然保湿因子（NMF）の約40%は「アミノ酸（セリン、グリシン等）」で構成されています！", q: "皮膚の角質層に存在し、肌の水分を強力につなぎ止めている天然保湿因子（NMF）の主成分（約40%）は何？", choices: ["無機顔料", "アミノ酸類"], answer: 1, hintCorrect: "見事！+2pt！ NMFの約4割はアミノ酸！ スキンケアにアミノ酸が重宝される理由だね！", hintWrong: "顔料はメイクの粉体。肌の潤いを守るNMFの約40%は『アミノ酸類』でできているよ。" },
+  { id: "FM-019", block: "F", title: "UV-AとUV-Bの波長と影響【国試最頻出】", exp: "UV-A（320〜400nm：長波長）は真皮まで届きシワ・たるみ（光老化）と即時黒化を起こす！ UV-B（280〜320nm：中波長）は赤く腫れる日焼け（サンバーン）を起こします！", q: "皮膚の深部（真皮）まで到達してコラーゲンを破壊し、シワやたるみなどの光老化を引き起こす紫外線はどっち？", choices: ["長波長紫外線（UV-A）", "中波長紫外線（UV-B）"], answer: 0, hintCorrect: "完璧！+2pt！ UV-Aは真皮まで届いてじわじわ老化を進める！ PAでしっかり防御しよう！", hintWrong: "赤くヒリヒリ焼けるのはUV-B。奥深くの真皮まで届いてシワの原因になるのは『UV-A』だよ。" },
+  { id: "FM-020", block: "F", title: "サンケア指標（SPFとPAの意味）【国試超定番】", exp: "SPFは「UV-B（赤くなる日焼け）」の防止効果を表す数値。PAは「UV-A（黒化・光老化）」の防止効果を＋の数（PA++++等）で表します！", q: "サンスクリーン製品において、真皮まで届く「UV-A」の防御効果の高さを表す表示はどっち？", choices: ["SPF値", "PA表示（＋の数）"], answer: 1, hintCorrect: "その通り！+2pt！ UV-Aを防ぐのが『PA』、UV-Bを防ぐのが『SPF』！ 国試の超頻出事項だね！", hintWrong: "SPFはUV-B（赤くなる炎症）を防ぐ数値。UV-Aの防御力を表すのは『PA（＋の数）』だよ。" },
+  { id: "FM-021", block: "F", title: "紫外線散乱剤と紫外線吸収剤の違い【第45回国試】", exp: "散乱剤（微粒子酸化チタン・微粒子酸化亜鉛）は紫外線を物理的に跳ね返す！ 吸収剤（有機化合物）は紫外線を吸収して熱に変えて放出します。", q: "「微粒子酸化チタンは、紫外線を吸収して熱エネルギーに変換することで肌を守る紫外線吸収剤である。」この記述は正しい？", choices: ["正しい（○）", "誤り（×）"], answer: 1, hintCorrect: "見事！+2pt！ 酸化チタンは紫外線を跳ね返す『紫外線散乱剤』！ 吸収剤と混同しないように！", hintWrong: "熱に変えるのは紫外線吸収剤。微粒子酸化チタンは紫外線を物理的に反射する『紫外線散乱剤』だよ。" },
+  { id: "FM-022", block: "F", title: "収れん剤の作用と陰イオン・陽イオン【第45回国試】", exp: "収れん剤は皮膚タンパク質を引き締めて汗や皮脂を抑えます。クエン酸等の有機酸は「陰イオン型（緩和）」、アルミニウム塩や亜鉛塩は「陽イオン型（強力・制汗剤）」です。", q: "制汗剤や防臭剤に配合され、汗腺や毛穴のタンパク質を強力に凝固・収縮させて発汗を抑える金属塩はどっち？", choices: ["陽イオン型収れん剤（アルミニウム塩等）", "陰イオン型収れん剤（クエン酸等）"], answer: 0, hintCorrect: "正解！+2pt！ 金属イオンがタンパク質をギュッと固めるのが陽イオン型収れん剤だね！", hintWrong: "クエン酸などの有機酸は緩和な陰イオン型。強力に毛穴を塞ぐ制汗成分は『陽イオン型収れん剤』だよ。" },
+  { id: "FM-023", block: "F", title: "ビタミンCとビタミンEの相乗効果", exp: "ビタミンC（アスコルビン酸）はメラニン色素沈着防止や美白に働き、ビタミンE（トコフェロール）は血行促進に働きます。ともに製品の抗酸化剤にもなります。", q: "香粧品において、日焼けによるシミ・ソバカスの色素沈着を防ぐ美白効果と製品の酸化防止を兼ねるビタミンはどっち？", choices: ["ビタミンA", "ビタミンC（アスコルビン酸）"], answer: 1, hintCorrect: "その通り！+2pt！ メラニン生成を抑えて透明感を守る美白ビタミンの代表がビタミンCだね！", hintWrong: "ビタミンAは肌あれ防止。シミの色素沈着を防いで還元するのは『ビタミンC』だよ。" },
+  { id: "FM-024", block: "F", title: "女性ホルモン（卵胞ホルモン）の配合規制", exp: "ホルモンは微量で強力に作用するため副作用の危険があります。化粧品基準で配合が認められているのは「エストラジオールなどの卵胞ホルモン」のみで、男性ホルモンは全面禁止です。", q: "化粧品基準において、配合成分の種類と最大配合量が厳格に定められているホルモンはどっち？", choices: ["卵胞ホルモン（エストラジオール等）", "男性ホルモン（テストステロン等）"], answer: 0, hintCorrect: "素晴らしい！+2pt！ 認められているのは一部の女性ホルモンだけ！ 男性ホルモンは一切使えないよ！", hintWrong: "男性ホルモンは配合全面禁止。規定量内で厳しく制限されているのは『卵胞ホルモン』だよ。" },
+  { id: "FM-025", block: "G", title: "雑貨品としての位置づけ【重要法規】", exp: "ネイル用グルーやまつ毛エクステ用接着剤、つけ爪は化粧品ではなく『雑貨品（日用雑貨）』扱いのため、医薬品医療機器等法の安全基準規制を受けていません！", q: "まつ毛エクステンション用の人工毛や接着剤（グルー）は、法律上どの扱いに分類される？", choices: ["医薬部外品", "雑貨品（日用雑貨）"], answer: 1, hintCorrect: "大正解！+2pt！ 化粧品ではなく雑貨品！ だからこそプロとして安全管理・自主基準の厳守が命なんだ！", hintWrong: "医薬部外品ではないよ！ 法的な安全基準のない『雑貨品』だからこそ慎重な取扱いが必要なんだ。" },
+  { id: "FM-026", block: "G", title: "シアノアクリレート系接着剤とホルムアルデヒド", exp: "まつエクやネイルのグルーは空気中の水分で重合硬化する『シアノアクリレート系』です。硬化時に有毒ガスである「ホルムアルデヒド」が発生するため換気と保護が必須です！", q: "まつ毛エクステ用グルーが硬化する際、副産物として発生しアレルギーや目の痛みの原因となる物質は何？", choices: ["ホルムアルデヒド", "酸素ガス"], answer: 0, hintCorrect: "完璧！+2pt！ シアノアクリレートから出るホルムアルデヒドガス！ サロンの換気が絶対義務だよ！", hintWrong: "酸素は無害だね。グルーの重合時に発生して粘膜を刺激するのは有害な『ホルムアルデヒド』だよ。" },
+  { id: "FM-027", block: "G", title: "カラーエナメルの主原料（ニトロセルロース）", exp: "マニキュア（カラーエナメル）の爪への密着性と光沢を作る主成分は、半合成高分子である『ニトロセルロース』です。引火性があるため火気厳禁です！", q: "ネイルエナメル（マニキュア）の主原料であり、爪の表面に強靭で光沢のある皮膜を形成する成分はどっち？", choices: ["流動パラフィン", "ニトロセルロース"], answer: 1, hintCorrect: "見事！+2pt！ マニキュアの膜といえばニトロセルロース！ 除光液のアセトンでスッキリ落とせるね！", hintWrong: "流動パラフィンは鉱物油。乾いて固いカラーの膜を作るのは『ニトロセルロース』だよ。" },
+  { id: "FM-028", block: "G", title: "除光液（エナメルリムーバー）と爪の脱脂", exp: "エナメルリムーバーの主成分であるアセトンや酢酸エチルは、カラーエナメルを素早く溶かしますが、爪の油分や水分まで奪って爪を乾燥・白化させます。", q: "エナメルリムーバー（除光液）を頻繁に使用した爪を保護するために塗布する油性化粧品は何？", choices: ["ネイルトリートメント（ネイルクリーム）", "キューティクルリムーバー"], answer: 0, hintCorrect: "素晴らしい！+2pt！ 全28問完全制覇！ リムーバーで奪われた水分・油分を補うのがネイルクリームだね！", hintWrong: "キューティクルリムーバーは甘皮を溶かすアルカリ剤。失われた油分を補うのは『ネイルトリートメント』だよ。" }
 ];
 
-// 【国試対策・本番4択問題 現行教科書完全準拠20題（差し替え更新完了）】
 const examQuestions = [
-  {
-    id: "EX-01", block: "EXAM", title: "第36回 国家試験本番問題（色材）",
-    q: "香粧品に用いられる色材に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）ベンガラは酸化鉄顔料である。",
-      "（2）タール色素は法定色素ともいわれる。",
-      "（3）雲母チタンは光輝性顔料である。",
-      "（4）β-カロチンは有機合成色素である。"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ β-カロチンはニンジンなどに含まれる「天然色素」です！",
-    hintWrong: "誤りは「（4）」です。β-カロチンはタール色素ではなく植物から得られる『天然色素』です。"
-  },
-  {
-    id: "EX-02", block: "EXAM", title: "第36回 国家試験本番問題（芳香製品）",
-    q: "芳香製品に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）香水は、メタノールに調合香料を溶解したものである。",
-      "（2）香水は、賦香率によりパルファン、オードパルファンなどに分類される。",
-      "（3）植物性天然香料として、ムスクがある。",
-      "（4）香水に用いられる調合香料は、２〜３種類の単一香料からできている。"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ 香水は香料の濃度（賦香率）によってパルファン等に分類されます！",
-    hintWrong: "正しいのは「（2）」です。メタノールは配合禁止、ムスクは動物性、調合香料は十数種以上を混ぜます。"
-  },
-  {
-    id: "EX-03", block: "EXAM", title: "第37回 国家試験本番問題（色材）",
-    q: "香粧品用の色材に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）カーボンブラックは、着色顔料である。",
-      "（2）酸化チタンは、白色顔料である。",
-      "（3）タール色素の有機顔料は、水に溶けない。",
-      "（4）染料は、光を反射させて色を出す。"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ 光を反射させて色を出すのは顔料！ 染料は光を「透過」して発色します！",
-    hintWrong: "誤りは「（4）」です。染料は光を透過して発色し、顔料は光を反射して色を出します。"
-  },
-  {
-    id: "EX-04", block: "EXAM", title: "第37回 国家試験本番問題（配合目的）",
-    q: "香粧品に使われる成分とその目的に関する次の文章の組合せのうち、正しいものはどれか。",
-    choices: [
-      "（1）クロルヘキシジン ───────── 酸化防止剤",
-      "（2）ジブチルヒドロキシトルエン ── 防腐剤",
-      "（3）クエン酸 ──────────── 紫外線吸収剤",
-      "（4）エチレンジアミン四酢酸 ──── 金属イオン封鎖剤"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ エチレンジアミン四酢酸（EDTA）は金属イオン封鎖剤（キレート剤）です！",
-    hintWrong: "正しいのは「（4）」です。クロルヘキシジンは殺菌剤、BHTは酸化防止剤、クエン酸はpH調整・緩衝剤です。"
-  },
-  {
-    id: "EX-05", block: "EXAM", title: "第37回 国家試験本番問題（サンケア）",
-    q: "紫外線とサンケア製品に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）長波長紫外線はメラニンを徐々に増加させ、肌の色を濃くする。",
-      "（2）中波長紫外線は、皮膚に紅斑（赤み）を起こす。",
-      "（3）紫外線散乱剤は、紫外線を熱エネルギーに変える。",
-      "（4）サンケア製品のSPFは、中波長紫外線の防止効果を表す指標である。"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ 熱に変えるのは吸収剤！ 散乱剤は紫外線を物理的に「反射・散乱」させます！",
-    hintWrong: "誤りは「（3）」です。紫外線を熱エネルギーに変換するのは『紫外線吸収剤』の働きです。"
-  },
-  {
-    id: "EX-06", block: "EXAM", title: "第38回 国家試験本番問題",
-    q: "化粧液に配合される成分と効果に関する次の組合せのうち、正しいものはどれか。",
-    choices: [
-      "（1）パラオキシ安息香酸エステル ─ 保湿効果",
-      "（2）クエン酸 ────────── ｐＨ調整",
-      "（3）グリセリン ───────── 紫外線防御効果",
-      "（4）ジブチルヒドロキシトルエン ─ 殺菌効果"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ クエン酸はpH調整や緩衝液として働きます！",
-    hintWrong: "正しいのは「（2）」です。パラベンは防腐剤、グリセリンは保湿剤、BHTは酸化防止剤です。"
-  },
-  {
-    id: "EX-07", block: "EXAM", title: "第39回 国家試験本番問題（色材）",
-    q: "色材に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）染料は、水や溶媒に溶けない色材である。",
-      "（2）雲母チタンは、光の干渉作用により真珠のような光沢をあたえる。",
-      "（3）顔料は、水や溶媒に溶ける色材である。",
-      "（4）無機顔料は、有機顔料よりも耐光性や耐熱性に劣る。"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ 雲母チタンは光の干渉によってパール様光沢を放ちます！",
-    hintWrong: "正しいのは「（2）」です。染料は可溶、顔料は不溶、無機顔料は耐光性・耐熱性に優れます。"
-  },
-  {
-    id: "EX-08", block: "EXAM", title: "第39回 国家試験本番問題（配合効果）",
-    q: "香粧品に使われる成分とその効果に関する次の組合せのうち、誤っているものはどれか。",
-    choices: [
-      "（1）パラオキシ安息香酸エステル ─ 防腐効果",
-      "（2）トコフェロール ─────── 酸化防止効果",
-      "（3）クエン酸 ────────── 殺菌効果",
-      "（4）エチレンジアミン四酢酸塩 ── 金属イオン封鎖効果"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ クエン酸は殺菌剤ではなく、pH調整剤・緩衝剤です！",
-    hintWrong: "誤りは「（3）」です。クエン酸は弱酸としてpH調整や緩衝作用、キレート作用を担います。"
-  },
-  {
-    id: "EX-09", block: "EXAM", title: "第40回 国家試験本番問題",
-    q: "香粧品に配合される成分に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）パラフィンは植物から得られる油脂である。",
-      "（2）ジブチルヒドロキシトルエン（BHT）は防腐剤として使用される。",
-      "（3）微粒子酸化チタンは紫外線吸収剤として使用される。",
-      "（4）トコフェロールは酸化防止剤として使用される。"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ トコフェロール（ビタミンE）は製品の酸化防止剤として配合されます！",
-    hintWrong: "正しいのは「（4）」です。パラフィンは石油炭化水素、BHTは酸化防止剤、微粒子酸化チタンは紫外線散乱剤です。"
-  },
-  {
-    id: "EX-10", block: "EXAM", title: "第41回 国家試験本番問題",
-    q: "香粧品に用いられる色材とその分類に関する次の組合せのうち、誤っているものはどれか。",
-    choices: [
-      "（1）酸化チタン ── 白色顔料",
-      "（2）ベンガラ ──── 着色顔料",
-      "（3）タルク ───── 有機合成色素",
-      "（4）雲母チタン ── 光輝性顔料"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ タルク（滑石）は無機化合物の「体質顔料」です！",
-    hintWrong: "誤りは「（3）」です。タルクはタール色素（有機合成色素）ではなく無機の『体質顔料』です。"
-  },
-  {
-    id: "EX-11", block: "EXAM", title: "第42回 国家試験本番問題（配合目的）",
-    q: "香粧品に配合される成分とその配合目的に関する次の組合せのうち、正しいものはどれか。",
-    choices: [
-      "（1）パラオキシ安息香酸エステル ─ 酸化防止剤",
-      "（2）エデト酸（EDTA） ────── 防腐剤",
-      "（3）トコフェロール ─────── 酸化防止剤",
-      "（4）ジブチルヒドロキシトルエン ─ 金属イオン封鎖剤"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ トコフェロールは油脂の酸敗を防ぐ酸化防止剤です！",
-    hintWrong: "正しいのは「（3）」です。パラベンは防腐剤、EDTAはキレート剤、BHTは酸化防止剤です。"
-  },
-  {
-    id: "EX-12", block: "EXAM", title: "第42回 国家試験本番問題（紫外線防御）",
-    q: "紫外線とその防御に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）UV-Aは、真皮に達し光老化を引き起こす。",
-      "（2）SPF値は、UV-B防御効果の目安となる。",
-      "（3）紫外線散乱剤は、紫外線を反射・散乱させて防御する。",
-      "（4）サンスクリーン剤に用いられる微粒子酸化チタンは、紫外線吸収剤である。"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ 微粒子酸化チタンは紫外線「散乱剤」です！",
-    hintWrong: "誤りは「（4）」です。微粒子酸化チタンは紫外線を物理的に跳ね返す『紫外線散乱剤』です。"
-  },
-  {
-    id: "EX-13", block: "EXAM", title: "第44回 国家試験本番問題",
-    q: "香粧品に用いられる成分とその配合目的に関する次の組み合わせのうち、誤っているものはどれか。",
-    choices: [
-      "（1）パラオキシ安息香酸エステル ─ 防腐剤",
-      "（2）ジブチルヒドロキシトルエン ─ 紫外線吸収剤",
-      "（3）エデト酸塩 ───────── 金属イオン封鎖剤",
-      "（4）グリセリン ───────── 保湿剤"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ ジブチルヒドロキシトルエン（BHT）は酸化防止剤です！",
-    hintWrong: "誤りは「（2）」です。BHTは紫外線吸収剤ではなく、油分の酸敗を防ぐ『酸化防止剤』です。"
-  },
-  {
-    id: "EX-14", block: "EXAM", title: "第45回 国家試験本番問題（配合目的）",
-    q: "香粧品に用いられる成分とその配合目的に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）グリチルリチン酸ジカリウムは、抗炎症の目的で配合される。",
-      "（2）パラフェノールスルホン酸亜鉛は、保湿の目的で配合される。",
-      "（3）パラオキシ安息香酸エステルは、酸化防止の目的で配合される。",
-      "（4）トコフェロールは、防腐の目的で配合される。"
-    ],
-    answer: 0,
-    hintCorrect: "正解！+3pt！ 甘草由来のグリチルリチン酸は優れた抗炎症剤です！",
-    hintWrong: "正しいのは「（1）」です。スルホン酸亜鉛は収れん剤、パラベンは防腐剤、トコフェロールは酸化防止剤です。"
-  },
-  {
-    id: "EX-15", block: "EXAM", title: "第45回 国家試験本番問題（サンケア製品）",
-    q: "サンケア製品に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）サンタン製品は、ＵＶ－Ａを透過させる。",
-      "（2）ＳＰＦ値は、ＵＶ－Ｂを防御する程度を示す値である。",
-      "（3）酸化チタンは、紫外線を散乱させる。",
-      "（4）サンスクリーン製品は、ＵＶ－Ｂのみを防御する。"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ サンスクリーン製品はUV-BだけでなくUV-Aも防御します！",
-    hintWrong: "誤りは「（4）」です。日焼け止めはUV-B（SPF）とUV-A（PA）の両方を防ぐよう作られます。"
-  },
-  {
-    id: "EX-16", block: "EXAM", title: "第46回 国家試験本番問題",
-    q: "香粧品に含まれる成分とその配合目的に関する次の組み合わせのうち、誤っているものはどれか。",
-    choices: [
-      "（1）パラアミノ安息香酸エステル ────── 紫外線吸収剤",
-      "（2）パラオキシ安息香酸エステル（パラベン） ─ 防腐剤",
-      "（3）パラフィン ────────────── 水性原料",
-      "（4）パラフェノールスルホン酸亜鉛 ───── 収れん剤"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ パラフィンは石油から得られる「油性原料（炭化水素）」です！",
-    hintWrong: "誤りは「（3）」です。パラフィンは水性原料ではなく、代表的な炭化水素（油性原料）です。"
-  },
-  {
-    id: "EX-17", block: "EXAM", title: "第48回 国家試験本番問題",
-    q: "香粧品に用いられる成分とその配合目的に関する次の組合せのうち、誤っているものはどれか。",
-    choices: [
-      "（1）パラオキシ安息香酸エステル（パラベン） ─ 防腐剤",
-      "（2）パラアミノ安息香酸エステル ────── 金属イオン封鎖剤（キレート剤）",
-      "（3）グリセリン ────────────── 保湿剤",
-      "（4）ジブチルヒドロキシトルエン（BHT） ── 酸化防止剤"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ パラアミノ安息香酸エステルはキレート剤ではなく「紫外線吸収剤」です！",
-    hintWrong: "誤りは「（2）」です。キレート剤はエデト酸（EDTA）。パラアミノ安息香酸は紫外線吸収剤です。"
-  },
-  {
-    id: "EX-18", block: "EXAM", title: "第49回 国家試験本番問題（色材）",
-    q: "香粧品に用いられる色材に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）染料は水や溶媒に溶け、特定の色味の光を透過または反射する。",
-      "（2）顔料は水や溶媒に溶けない粉体で、特定の色味の光を反射する。",
-      "（3）タール色素の染料は、無機顔料に比べて耐光性に優れている。",
-      "（4）メイクアップ用香粧品には、色材として無機顔料が広く用いられる。"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ タール色素は光に弱く、無機顔料のほうが耐光性に優れています！",
-    hintWrong: "誤りは「（3）」です。タール色素は日光で変退色しやすく、無機顔料のほうが耐光性に優れます。"
-  },
-  {
-    id: "EX-19", block: "EXAM", title: "第49回 国家試験本番問題（穴埋め）",
-    q: "香粧品の品質保持に用いられる配合成分に関する次の文章の（   ）内に入る語句の組み合わせのうち、正しいものはどれか。\n\n「香粧品に含まれる油分が、空気中の酸素により自動酸化して起こる品質低下を防ぐために（ Ａ ）が配合される。また、容器や原料由来の微量な金属イオンによる酸化促進や沈殿を防ぐために（ Ｂ ）が配合される。」",
-    choices: [
-      "（1） Ａ：防腐剤 ───── Ｂ：酸化防止剤",
-      "（2） Ａ：酸化防止剤 ─── Ｂ：金属イオン封鎖剤",
-      "（3） Ａ：金属イオン封鎖剤 ─ Ｂ：酸化防止剤",
-      "（4） Ａ：酸化防止剤 ─── Ｂ：防腐剤"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ Ａ＝酸化防止剤、Ｂ＝金属イオン封鎖剤（キレート剤）の完璧な組合せです！",
-    hintWrong: "正解は「（2）」です。自動酸化を防ぐのが酸化防止剤、金属を封じるのが金属イオン封鎖剤です。"
-  },
-  {
-    id: "EX-20", block: "EXAM", title: "第53回 国家試験本番問題（品質保持）",
-    q: "香粧品の品質保持に用いられる配合成分に関する次の文章の（  ）内に入る語句の組合せのうち、正しいものはどれか。\n\n「微生物の繁殖による香粧品の変質を防ぐために（ Ａ ）としてパラオキシ安息香酸エステルなどが配合される。また、油性成分の自動酸化による酸敗を防ぐために（ Ｂ ）としてトコフェロールなどが配合される。」",
-    choices: [
-      "（1） Ａ：酸化防止剤 ─── Ｂ：防腐剤",
-      "（2） Ａ：防腐剤 ───── Ｂ：酸化防止剤",
-      "（3） Ａ：金属イオン封鎖剤 ─ Ｂ：防腐剤",
-      "（4） Ａ：防腐剤 ───── Ｂ：金属イオン封鎖剤"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ Ａ＝防腐剤（パラベン）、Ｂ＝酸化防止剤（トコフェロール）の直球問題クリア！",
-    hintWrong: "正解は「（2）」です。微生物を防ぐのが防腐剤、油の自動酸化を防ぐのが酸化防止剤です。"
-  }
+  { id: "EX-01", block: "EXAM", title: "第36回 国家試験本番問題（色材）", q: "香粧品に用いられる色材に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）ベンガラは酸化鉄顔料である。", "（2）タール色素は法定色素ともいわれる。", "（3）雲母チタンは光輝性顔料である。", "（4）β-カロチンは有機合成色素である。"], answer: 3, hintCorrect: "正解！+3pt！ β-カロチンはニンジンなどに含まれる「天然色素」です！", hintWrong: "誤りは「（4）」です。β-カロチンはタール色素ではなく植物から得られる『天然色素』です。" },
+  { id: "EX-02", block: "EXAM", title: "第36回 国家試験本番問題（芳香製品）", q: "芳香製品に関する次の記述のうち、正しいものはどれか。", choices: ["（1）香水は、メタノールに調合香料を溶解したものである。", "（2）香水は、賦香率によりパルファン、オードパルファンなどに分類される。", "（3）植物性天然香料として、ムスクがある。", "（4）香水に用いられる調合香料は、２〜３種類の単一香料からできている。"], answer: 1, hintCorrect: "正解！+3pt！ 香水は香料の濃度（賦香率）によってパルファン等に分類されます！", hintWrong: "正しいのは「（2）」です。メタノールは配合禁止、ムスクは動物性、調合香料は十数種以上を混ぜます。" },
+  { id: "EX-03", block: "EXAM", title: "第37回 国家試験本番問題（色材）", q: "香粧品用の色材に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）カーボンブラックは、着色顔料である。", "（2）酸化チタンは、白色顔料である。", "（3）タール色素の有機顔料は、水に溶けない。", "（4）染料は、光を反射させて色を出す。"], answer: 3, hintCorrect: "正解！+3pt！ 光を反射させて色を出すのは顔料！ 染料は光を「透過」して発色します！", hintWrong: "誤りは「（4）」です。染料は光を透過して発色し、顔料は光を反射して色を出します。" },
+  { id: "EX-04", block: "EXAM", title: "第37回 国家試験本番問題（配合目的）", q: "香粧品に使われる成分とその目的に関する次の文章の組合せのうち、正しいものはどれか。", choices: ["（1）クロルヘキシジン ───────── 酸化防止剤", "（2）ジブチルヒドロキシトルエン ── 防腐剤", "（3）クエン酸 ──────────── 紫外線吸収剤", "（4）エチレンジアミン四酢酸 ──── 金属イオン封鎖剤"], answer: 3, hintCorrect: "正解！+3pt！ エチレンジアミン四酢酸（EDTA）は金属イオン封鎖剤（キレート剤）です！", hintWrong: "正しいのは「（4）」です。クロルヘキシジンは殺菌剤、BHTは酸化防止剤、クエン酸はpH調整・緩衝剤です。" },
+  { id: "EX-05", block: "EXAM", title: "第37回 国家試験本番問題（サンケア）", q: "紫外線とサンケア製品に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）長波長紫外線はメラニンを徐々に増加させ、肌の色を濃くする。", "（2）中波長紫外線は、皮膚に紅斑（赤み）を起こす。", "（3）紫外線散乱剤は、紫外線を熱エネルギーに変える。", "（4）サンケア製品のSPFは、中波長紫外線の防止効果を表す指標である。"], answer: 2, hintCorrect: "正解！+3pt！ 熱に変えるのは吸収剤！ 散乱剤は紫外線を物理的に「反射・散乱」させます！", hintWrong: "誤りは「（3）」です。紫外線を熱エネルギーに変換するのは『紫外線吸収剤』の働きです。" },
+  { id: "EX-06", block: "EXAM", title: "第38回 国家試験本番問題", q: "化粧液に配合される成分と効果に関する次の組合せのうち、正しいものはどれか。", choices: ["（1）パラオキシ安息香酸エステル ─ 保湿効果", "（2）クエン酸 ────────── ｐＨ調整", "（3）グリセリン ───────── 紫外線防御効果", "（4）ジブチルヒドロキシトルエン ─ 殺菌効果"], answer: 1, hintCorrect: "正解！+3pt！ クエン酸はpH調整や緩衝液として働きます！", hintWrong: "正しいのは「（2）」です。パラベンは防腐剤、グリセリンは保湿剤、BHTは酸化防止剤です。" },
+  { id: "EX-07", block: "EXAM", title: "第39回 国家試験本番問題（色材）", q: "色材に関する次の記述のうち、正しいものはどれか。", choices: ["（1）染料は、水や溶媒に溶けない色材である。", "（2）雲母チタンは、光の干渉作用により真珠のような光沢をあたえる。", "（3）顔料は、水や溶媒に溶ける色材である。", "（4）無機顔料は、有機顔料よりも耐光性や耐熱性に劣る。"], answer: 1, hintCorrect: "正解！+3pt！ 雲母チタンは光の干渉によってパール様光沢を放ちます！", hintWrong: "正しいのは「（2）」です。染料は可溶、顔料は不溶、無機顔料は耐光性・耐熱性に優れます。" },
+  { id: "EX-08", block: "EXAM", title: "第39回 国家試験本番問題（配合効果）", q: "香粧品に使われる成分とその効果に関する次の組合せのうち、誤っているものはどれか。", choices: ["（1）パラオキシ安息香酸エステル ─ 防腐効果", "（2）トコフェロール ─────── 酸化防止効果", "（3）クエン酸 ────────── 殺菌効果", "（4）エチレンジアミン四酢酸塩 ── 金属イオン封鎖効果"], answer: 2, hintCorrect: "正解！+3pt！ クエン酸は殺菌剤ではなく、pH調整剤・緩衝剤です！", hintWrong: "誤りは「（3）」です。クエン酸は弱酸としてpH調整や緩衝作用、キレート作用を担います。" },
+  { id: "EX-09", block: "EXAM", title: "第40回 国家試験本番問題", q: "香粧品に配合される成分に関する次の記述のうち、正しいものはどれか。", choices: ["（1）パラフィンは植物から得られる油脂である。", "（2）ジブチルヒドロキシトルエン（BHT）は防腐剤として使用される。", "（3）微粒子酸化チタンは紫外線吸収剤として使用される。", "（4）トコフェロールは酸化防止剤として使用される。"], answer: 3, hintCorrect: "正解！+3pt！ トコフェロール（ビタミンE）は製品の酸化防止剤として配合されます！", hintWrong: "正しいのは「（4）」です。パラフィンは石油炭化水素、BHTは酸化防止剤、微粒子酸化チタンは紫外線散乱剤です。" },
+  { id: "EX-10", block: "EXAM", title: "第41回 国家試験本番問題", q: "香粧品に用いられる色材とその分類に関する次の組合せのうち、誤っているものはどれか。", choices: ["（1）酸化チタン ── 白色顔料", "（2）ベンガラ ──── 着色顔料", "（3）タルク ───── 有機合成色素", "（4）雲母チタン ── 光輝性顔料"], answer: 2, hintCorrect: "正解！+3pt！ タルク（滑石）は無機化合物の「体質顔料」です！", hintWrong: "誤りは「（3）」です。タルクはタール色素（有機合成色素）ではなく無機の『体質顔料』です。" },
+  { id: "EX-11", block: "EXAM", title: "第42回 国家試験本番問題（配合目的）", q: "香粧品に配合される成分とその配合目的に関する次の組合せのうち、正しいものはどれか。", choices: ["（1）パラオキシ安息香酸エステル ─ 酸化防止剤", "（2）エデト酸（EDTA） ────── 防腐剤", "（3）トコフェロール ─────── 酸化防止剤", "（4）ジブチルヒドロキシトルエン ─ 金属イオン封鎖剤"], answer: 2, hintCorrect: "正解！+3pt！ トコフェロールは油脂の酸敗を防ぐ酸化防止剤です！", hintWrong: "正しいのは「（3）」です。パラベンは防腐剤、EDTAはキレート剤、BHTは酸化防止剤です。" },
+  { id: "EX-12", block: "EXAM", title: "第42回 国家試験本番問題（紫外線防御）", q: "紫外線とその防御に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）UV-Aは、真皮に達し光老化を引き起こす。", "（2）SPF値は、UV-B防御効果の目安となる。", "（3）紫外線散乱剤は、紫外線を反射・散乱させて防御する。", "（4）サンスクリーン剤に用いられる微粒子酸化チタンは、紫外線吸収剤である。"], answer: 3, hintCorrect: "正解！+3pt！ 微粒子酸化チタンは紫外線「散乱剤」です！", hintWrong: "誤りは「（4）」です。微粒子酸化チタンは紫外線を物理的に跳ね返す『紫外線散乱剤』です。" },
+  { id: "EX-13", block: "EXAM", title: "第44回 国家試験本番問題", q: "香粧品に用いられる成分とその配合目的に関する次の組み合わせのうち、誤っているものはどれか。", choices: ["（1）パラオキシ安息香酸エステル ─ 防腐剤", "（2）ジブチルヒドロキシトルエン ─ 紫外線吸収剤", "（3）エデト酸塩 ───────── 金属イオン封鎖剤", "（4）グリセリン ───────── 保湿剤"], answer: 1, hintCorrect: "正解！+3pt！ ジブチルヒドロキシトルエン（BHT）は酸化防止剤です！", hintWrong: "誤りは「（2）」です。BHTは紫外線吸収剤ではなく、油分の酸敗を防ぐ『酸化防止剤』です。" },
+  { id: "EX-14", block: "EXAM", title: "第45回 国家試験本番問題（配合目的）", q: "香粧品に用いられる成分とその配合目的に関する次の記述のうち、正しいものはどれか。", choices: ["（1）グリチルリチン酸ジカリウムは、抗炎症の目的で配合される。", "（2）パラフェノールスルホン酸亜鉛は、保湿の目的で配合される。", "（3）パラオキシ安息香酸エステルは、酸化防止の目的で配合される。", "（4）トコフェロールは、防腐の目的で配合される。"], answer: 0, hintCorrect: "正解！+3pt！ 甘草由来のグリチルリチン酸は優れた抗炎症剤です！", hintWrong: "正しいのは「（1）」です。スルホン酸亜鉛は収れん剤、パラベンは防腐剤、トコフェロールは酸化防止剤です。" },
+  { id: "EX-15", block: "EXAM", title: "第45回 国家試験本番問題（サンケア製品）", q: "サンケア製品に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）サンタン製品は、ＵＶ－Ａを透過させる。", "（2）ＳＰＦ値は、ＵＶ－Ｂを防御する程度を示す値である。", "（3）酸化チタンは、紫外線を散乱させる。", "（4）サンスクリーン製品は、ＵＶ－Ｂのみを防御する。"], answer: 3, hintCorrect: "正解！+3pt！ サンスクリーン製品はUV-BだけでなくUV-Aも防御します！", hintWrong: "誤りは「（4）」です。日焼け止めはUV-B（SPF）とUV-A（PA）の両方を防ぐよう作られます。" },
+  { id: "EX-16", block: "EXAM", title: "第46回 国家試験本番問題", q: "香粧品に含まれる成分とその配合目的に関する次の組み合わせのうち、誤っているものはどれか。", choices: ["（1）パラアミノ安息香酸エステル ────── 紫外線吸収剤", "（2）パラオキシ安息香酸エステル（パラベン） ─ 防腐剤", "（3）パラフィン ────────────── 水性原料", "（4）パラフェノールスルホン酸亜鉛 ───── 収れん剤"], answer: 2, hintCorrect: "正解！+3pt！ パラフィンは石油から得られる「油性原料（炭化水素）」です！", hintWrong: "誤りは「（3）」です。パラフィンは水性原料ではなく、代表的な炭化水素（油性原料）です。" },
+  { id: "EX-17", block: "EXAM", title: "第48回 国家試験本番問題", q: "香粧品に用いられる成分とその配合目的に関する次の組合せのうち、誤っているものはどれか。", choices: ["（1）パラオキシ安息香酸エステル（パラベン） ─ 防腐剤", "（2）パラアミノ安息香酸エステル ────── 金属イオン封鎖剤（キレート剤）", "（3）グリセリン ────────────── 保湿剤", "（4）ジブチルヒドロキシトルエン（BHT） ── 酸化防止剤"], answer: 1, hintCorrect: "正解！+3pt！ パラアミノ安息香酸エステルはキレート剤ではなく「紫外線吸収剤」です！", hintWrong: "誤りは「（2）」です。キレート剤はエデト酸（EDTA）。パラアミノ安息香酸は紫外線吸収剤です。" },
+  { id: "EX-18", block: "EXAM", title: "第49回 国家試験本番問題（色材）", q: "香粧品に用いられる色材に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）染料は水や溶媒に溶け、特定の色味の光を透過または反射する。", "（2）顔料は水や溶媒に溶けない粉体で、特定の色味の光を反射する。", "（3）タール色素の染料は、無機顔料に比べて耐光性に優れている。", "（4）メイクアップ用香粧品には、色材として無機顔料が広く用いられる。"], answer: 2, hintCorrect: "正解！+3pt！ タール色素は光に弱く、無機顔料のほうが耐光性に優れています！", hintWrong: "誤りは「（3）」です。タール色素は日光で変退色しやすく、無機顔料のほうが耐光性に優れます。" },
+  { id: "EX-19", block: "EXAM", title: "第49回 国家試験本番問題（穴埋め）", q: "香粧品の品質保持に用いられる配合成分に関する次の文章の（   ）内に入る語句の組み合わせのうち、正しいものはどれか。\n\n「香粧品に含まれる油分が、空気中の酸素により自動酸化して起こる品質低下を防ぐために（ Ａ ）が配合される。また、容器や原料由来の微量な金属イオンによる酸化促進や沈殿を防ぐために（ Ｂ ）が配合される。」", choices: ["（1） Ａ：防腐剤 ───── Ｂ：酸化防止剤", "（2） Ａ：酸化防止剤 ─── Ｂ：金属イオン封鎖剤", "（3） Ａ：金属イオン封鎖剤 ─ Ｂ：酸化防止剤", "（4） Ａ：酸化防止剤 ─── Ｂ：防腐剤"], answer: 1, hintCorrect: "正解！+3pt！ Ａ＝酸化防止剤、Ｂ＝金属イオン封鎖剤（キレート剤）の完璧な組合せです！", hintWrong: "正解は「（2）」です。自動酸化を防ぐのが酸化防止剤、金属を封じるのが金属イオン封鎖剤です。" },
+  { id: "EX-20", block: "EXAM", title: "第53回 国家試験本番問題（品質保持）", q: "香粧品の品質保持に用いられる配合成分に関する次の文章の（  ）内に入る語句の組合せのうち、正しいものはどれか。\n\n「微生物の繁殖による香粧品の変質を防ぐために（ Ａ ）としてパラオキシ安息香酸エステルなどが配合される。また、油性成分の自動酸化による酸敗を防ぐために（ Ｂ ）としてトコフェロールなどが配合される。」", choices: ["（1） Ａ：酸化防止剤 ─── Ｂ：防腐剤", "（2） Ａ：防腐剤 ───── Ｂ：酸化防止剤", "（3） Ａ：金属イオン封鎖剤 ─ Ｂ：防腐剤", "（4） Ａ：防腐剤 ───── Ｂ：金属イオン封鎖剤"], answer: 1, hintCorrect: "正解！+3pt！ Ａ＝防腐剤（パラベン）、Ｂ＝酸化防止剤（トコフェロール）の直球問題クリア！", hintWrong: "正解は「（2）」です。微生物を防ぐのが防腐剤、油の自動酸化を防ぐのが酸化防止剤です。" }
 ];
 
-// 状態管理
-const STORAGE_KEY = "functional_materials_save_data_v3";
-let state = {
-  mode: "BASE", // "BASE" または "EXAM"
-  currentQuestionIndex: 0,
-  answers: {},
-  wrongQuestionIds: [],
-  isRetryMode: false,
-  isFinished: false
-};
+const STORAGE_KEY = "functional_materials_save_data_v4";
+let state = { mode: "BASE", currentQuestionIndex: 0, answers: {}, wrongQuestionIds: [], isRetryMode: false, isFinished: false };
 
-function getActiveQuestions() {
-  if (state.mode === "EXAM") {
-    return examQuestions;
-  }
-  return baseQuestions;
-}
-
-function getBlockStartIndex(blockCode) {
-  const qs = getActiveQuestions();
-  return qs.findIndex(q => q.block === blockCode);
-}
+function getActiveQuestions() { return (state.mode === "EXAM") ? examQuestions : baseQuestions; }
+function getBlockStartIndex(blockCode) { return getActiveQuestions().findIndex(q => q.block === blockCode); }
 
 function loadProgress() {
   const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    try {
-      state = JSON.parse(saved);
-    } catch(e) {
-      console.error(e);
-    }
-  }
+  if (saved) { try { state = JSON.parse(saved); } catch(e) {} }
 }
+function saveProgress() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
-function saveProgress() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-// 得点と正解率の計算
 function calculateScore(mode) {
   const qs = (mode === "EXAM") ? examQuestions : baseQuestions;
   const pointPerQ = (mode === "EXAM") ? 3 : 2;
@@ -1011,25 +282,17 @@ function updateSpineMap() {
   const blocks = ["A", "B", "C", "D", "E", "F", "G"];
   const currentQ = getCurrentQuestion();
   const currentBlock = currentQ ? currentQ.block : null;
-
   blocks.forEach(b => {
     const node = document.getElementById(`node-${b}`);
     if (!node) return;
     node.className = "spine-node";
-
-    const blockQuestions = baseQuestions.filter(q => q.block === b);
-    const isAllCorrect = blockQuestions.every(q => state.answers[q.id] === true);
-
-    if (isAllCorrect) node.classList.add("cleared");
+    const bQs = baseQuestions.filter(q => q.block === b);
+    if (bQs.every(q => state.answers[q.id] === true)) node.classList.add("cleared");
     if (b === currentBlock && state.mode === "BASE" && !state.isFinished) node.classList.add("active");
   });
-
   const examNode = document.getElementById("node-EXAM");
-  if (state.mode === "EXAM" && !state.isFinished) {
-    examNode.classList.add("active");
-  } else {
-    examNode.classList.remove("active");
-  }
+  if (state.mode === "EXAM" && !state.isFinished) examNode.classList.add("active");
+  else examNode.classList.remove("active");
 }
 
 function getCurrentQuestion() {
@@ -1044,11 +307,7 @@ function getCurrentQuestion() {
 function renderQuestion() {
   state.isFinished = false;
   const item = getCurrentQuestion();
-  if (!item) {
-    showResultScreen();
-    return;
-  }
-
+  if (!item) { showResultScreen(); return; }
   updateSpineMap();
 
   const scoreData = calculateScore(state.mode);
@@ -1057,20 +316,12 @@ function renderQuestion() {
   if (state.mode === "EXAM") {
     expBox.style.display = "none";
     document.getElementById("status-field").innerText = "🎯 国試本番20題演習";
-    if (state.isRetryMode) {
-      document.getElementById("progress-text").innerText = `🔥 弱点集中特訓：${state.currentQuestionIndex + 1} / ${state.wrongQuestionIds.length}`;
-    } else {
-      document.getElementById("progress-text").innerText = `国試問 ${state.currentQuestionIndex + 1} / ${examQuestions.length}`;
-    }
+    document.getElementById("progress-text").innerText = state.isRetryMode ? `🔥 弱点特訓：${state.currentQuestionIndex + 1}/${state.wrongQuestionIds.length}` : `国試問 ${state.currentQuestionIndex + 1} / ${examQuestions.length}`;
   } else {
     expBox.style.display = "block";
     document.getElementById("status-field").innerText = fieldNames[item.block] || "配合原料と色材";
     document.getElementById("lesson-exp").innerText = item.exp;
-    if (state.isRetryMode) {
-      document.getElementById("progress-text").innerText = `🔥 弱点集中特訓：${state.currentQuestionIndex + 1} / ${state.wrongQuestionIds.length}`;
-    } else {
-      document.getElementById("progress-text").innerText = `問 ${state.currentQuestionIndex + 1} / ${baseQuestions.length}`;
-    }
+    document.getElementById("progress-text").innerText = state.isRetryMode ? `🔥 弱点特訓：${state.currentQuestionIndex + 1}/${state.wrongQuestionIds.length}` : `問 ${state.currentQuestionIndex + 1} / ${baseQuestions.length}`;
   }
 
   document.getElementById("status-score").innerText = `正解率: ${scoreData.rate}% (${scoreData.currentPoints}/${scoreData.maxPoints}点)`;
@@ -1097,30 +348,22 @@ function selectAnswer(selectedIndex) {
   const feedback = document.getElementById("feedback-area");
   const feedbackDesc = document.getElementById("feedback-desc");
   const buttons = document.querySelectorAll(".btn-choice");
-
   buttons.forEach(b => b.disabled = true);
 
   const isCorrect = (selectedIndex === item.answer);
-
   if (isCorrect) {
     buttons[selectedIndex].classList.add("correct-highlight");
     feedback.className = "feedback-box feedback-correct";
     feedbackDesc.innerText = item.hintCorrect;
     state.answers[item.id] = true;
-
-    if (state.isRetryMode) {
-      state.wrongQuestionIds = state.wrongQuestionIds.filter(id => id !== item.id);
-    }
+    if (state.isRetryMode) state.wrongQuestionIds = state.wrongQuestionIds.filter(id => id !== item.id);
   } else {
     buttons[selectedIndex].classList.add("wrong-highlight");
     buttons[item.answer].classList.add("correct-highlight");
     feedback.className = "feedback-box feedback-wrong";
     feedbackDesc.innerText = item.hintWrong;
     state.answers[item.id] = false;
-
-    if (!state.wrongQuestionIds.includes(item.id)) {
-      state.wrongQuestionIds.push(item.id);
-    }
+    if (!state.wrongQuestionIds.includes(item.id)) state.wrongQuestionIds.push(item.id);
   }
 
   saveProgress();
@@ -1132,15 +375,12 @@ function selectAnswer(selectedIndex) {
 }
 
 function nextQuestion() {
-  const qs = getActiveQuestions();
-  const total = state.isRetryMode ? state.wrongQuestionIds.length : qs.length;
+  const total = state.isRetryMode ? state.wrongQuestionIds.length : getActiveQuestions().length;
   if (state.currentQuestionIndex < total - 1) {
     state.currentQuestionIndex++;
     saveProgress();
     renderQuestion();
-  } else {
-    showResultScreen();
-  }
+  } else { showResultScreen(); }
 }
 
 function prevQuestion() {
@@ -1152,13 +392,9 @@ function prevQuestion() {
 }
 
 function jumpToBlock(blockCode) {
-  if (state.mode === "EXAM") {
-    state.mode = "BASE";
-    state.isRetryMode = false;
-  } else if (state.isRetryMode) {
-    if (!confirm("弱点リトライを中断して通常問題へ戻りますか？")) return;
-    state.isRetryMode = false;
-  }
+  if (state.mode === "EXAM") { state.mode = "BASE"; state.isRetryMode = false; }
+  else if (state.isRetryMode && !confirm("弱点リトライを中断して戻りますか？")) return;
+  state.isRetryMode = false;
   const targetIndex = getBlockStartIndex(blockCode);
   if (targetIndex !== -1) {
     restoreCardStructure();
@@ -1169,10 +405,8 @@ function jumpToBlock(blockCode) {
 }
 
 function startExamMode() {
-  if (state.isRetryMode) {
-    if (!confirm("弱点リトライを終了して国試20題演習へ移動しますか？")) return;
-    state.isRetryMode = false;
-  }
+  if (state.isRetryMode && !confirm("弱点リトライを終了して国試演習へ移動しますか？")) return;
+  state.isRetryMode = false;
   state.mode = "EXAM";
   state.currentQuestionIndex = 0;
   saveProgress();
@@ -1189,43 +423,34 @@ function startBaseMode() {
   renderQuestion();
 }
 
+function pauseQuiz() {
+  saveProgress();
+  alert("⏸️ 学習を一時中断し、進捗を保存しました。\n次回もこの問題から再開できます。");
+  document.getElementById("btn-resume").style.display = "inline-block";
+}
+function resumeQuiz() {
+  document.getElementById("btn-resume").style.display = "none";
+  alert("▶️ 学習を再開します。");
+}
+function quitQuiz() {
+  if (confirm("学習を終了しますか？\n\n[OK]：成績結果を表示する\n[キャンセル]：そのまま続ける")) showResultScreen();
+}
+
 function generateStatsHtml() {
   const blocks = ["A", "B", "C", "D", "E", "F", "G"];
-  let lowestRate = 101;
-  let lowestBlock = "";
-  let graphHtml = "";
-
+  let lowestRate = 101, lowestBlock = "", graphHtml = "";
   blocks.forEach(b => {
     const questions = baseQuestions.filter(q => q.block === b);
-    const total = questions.length;
     const correctCount = questions.filter(q => state.answers[q.id] === true).length;
-    const rate = Math.round((correctCount / total) * 100);
-
-    if (rate < lowestRate) {
-      lowestRate = rate;
-      lowestBlock = fieldNames[b];
-    }
-
-    let barClass = "bar-high";
-    if (rate < 50) {
-      barClass = "bar-low";
-    } else if (rate < 80) {
-      barClass = "bar-mid";
-    }
-
+    const rate = Math.round((correctCount / questions.length) * 100);
+    if (rate < lowestRate) { lowestRate = rate; lowestBlock = fieldNames[b]; }
+    let barClass = (rate < 50) ? "bar-low" : (rate < 80) ? "bar-mid" : "bar-high";
     graphHtml += `
       <div class="graph-item" onclick="jumpToBlock('${b}')" title="クリックしてこの分野を復習">
-        <div class="graph-label-row">
-          <span>${fieldNames[b]}</span>
-          <span>${correctCount}/${total}問 (${rate}%)</span>
-        </div>
-        <div class="graph-bar-bg">
-          <div class="graph-bar-fill ${barClass}" style="width: ${rate}%;"></div>
-        </div>
-      </div>
-    `;
+        <div class="graph-label-row"><span>${fieldNames[b]}</span><span>${correctCount}/${questions.length}問 (${rate}%)</span></div>
+        <div class="graph-bar-bg"><div class="graph-bar-fill ${barClass}" style="width: ${rate}%;"></div></div>
+      </div>`;
   });
-
   return { graphHtml, lowestBlock, lowestRate };
 }
 
@@ -1237,7 +462,6 @@ function showResultScreen() {
   const scoreData = calculateScore(state.mode);
   const currentWrongCount = scoreData.total - scoreData.correctCount;
   const isPerfect = (currentWrongCount === 0);
-
   let resultHtml = "";
 
   if (state.mode === "EXAM") {
@@ -1250,40 +474,23 @@ function showResultScreen() {
           <div style="background:var(--primary-light); color:var(--primary); font-size:1.1rem; font-weight:bold; padding:10px 20px; border-radius:16px; display:inline-block; margin:8px 0; border:1px solid #f5d0fe;">
             正解率: ${scoreData.rate}% （獲得 ${scoreData.currentPoints}点 / 満点 ${scoreData.maxPoints}点）
           </div>
-          <div style="font-size:0.85rem; color:#64748b;">
-            正解数: ${scoreData.correctCount} / ${scoreData.total} 問
-          </div>
+          <div style="font-size:0.85rem; color:#64748b;">正解数: ${scoreData.correctCount} / ${scoreData.total} 問</div>
         </div>
         <div class="advice-box">
           💡 <strong>AI先生の国試診断：</strong><br>
-          ${isPerfect 
-            ? '素晴らしい！現行教科書完全準拠の過去問20題を完全制覇しました！酸化防止剤と防腐剤、紫外線散乱剤と吸収剤の区別など、国試のあらゆる引っかけパターンを完全に見抜けています！' 
-            : `間違えた問題が ${currentWrongCount} 問あります。「酸化防止剤（BHT・ビタミンE）vs 防腐剤（パラベン）」「散乱剤（酸化チタン・亜鉛）vs 吸収剤」の役割仕分けを再確認しましょう。`}
+          ${isPerfect ? '素晴らしい！現行教科書完全準拠の過去問20題を完全制覇しました！酸化防止剤と防腐剤、紫外線散乱剤と吸収剤の区別など、国試のあらゆる引っかけパターンを完全に見抜けています！' : `間違えた問題が ${currentWrongCount} 問あります。「酸化防止剤（BHT・ビタミンE）vs 防腐剤（パラベン）」「散乱剤（酸化チタン・亜鉛）vs 吸収剤」の役割仕分けを再確認しましょう。`}
         </div>
-        ${!isPerfect ? `
-          <button class="btn-action btn-retry" onclick="startRetryMode()">
-            🔥 間違えた問題だけを集中リトライする
-          </button>
-        ` : ''}
-        <button class="btn-action btn-restart" onclick="startExamMode()">
-          🔄 国試20題演習をもう一度解く
-        </button>
-        <button class="btn-action btn-switch-exam" onclick="startBaseMode()">
-          📚 基礎演習（2択・28問）へ戻る
-        </button>
-      </div>
-    `;
+        ${!isPerfect ? `<button class="btn-action btn-retry" onclick="startRetryMode()">🔥 間違えた問題だけを集中リトライする</button>` : ''}
+        <button class="btn-action btn-restart" onclick="startExamMode()">🔄 国試20題演習をもう一度解く</button>
+        <button class="btn-action btn-switch-exam" onclick="startBaseMode()">📚 基礎演習（2択・28問）へ戻る</button>
+
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <a href="index.html#units" class="btn-action" style="background:#0284c7; color:white; text-decoration:none; text-align:center; flex:1;">📚 単元メニューへ</a>
+          <a href="index.html" class="btn-action" style="background:#475569; color:white; text-decoration:none; text-align:center; flex:1;">🏠 ポータルトップへ</a>
+        </div>
+      </div>`;
   } else {
     const stats = generateStatsHtml();
-    let adviceText = "";
-    if (isPerfect) {
-      adviceText = "全分野で100%達成！次は下の「国試20題演習」ボタンを押して、本番形式の4択問題にチャレンジしてみましょう！";
-    } else if (stats.lowestRate < 80) {
-      adviceText = `特に<strong>「${stats.lowestBlock}」</strong>の正答率が低めです。下のグラフをタップして集中的に再学習してみましょう！`;
-    } else {
-      adviceText = "全体的によく理解できています。間違えた問題だけをリトライして満点を目指しましょう！";
-    }
-
     resultHtml = `
       <div class="result-card">
         <div class="result-header">
@@ -1293,39 +500,20 @@ function showResultScreen() {
           <div style="background:var(--primary-light); color:var(--primary); font-size:1.1rem; font-weight:bold; padding:10px 20px; border-radius:16px; display:inline-block; margin:8px 0; border:1px solid #f5d0fe;">
             正解率: ${scoreData.rate}% （獲得 ${scoreData.currentPoints}点 / 満点 ${scoreData.maxPoints}点）
           </div>
-          <div style="font-size:0.85rem; color:#64748b;">
-            正解数: ${scoreData.correctCount} / ${scoreData.total} 問
-          </div>
+          <div style="font-size:0.85rem; color:#64748b;">正解数: ${scoreData.correctCount} / ${scoreData.total} 問</div>
         </div>
+        <div class="graph-container"><div class="graph-title"><span>📊 分野別 正答率</span><span style="font-size:0.75rem; color:#64748b; font-weight:normal;">タップで各分野へ移動</span></div>${stats.graphHtml}</div>
+        <div class="advice-box">💡 <strong>AI先生の分析診断：</strong><br>${isPerfect ? '全分野で100%達成！次は下の「国試20題演習」ボタンを押して、本番形式の4択問題にチャレンジしてみましょう！' : `特に<strong>「${stats.lowestBlock}」</strong>の正答率が低めです。上のグラフをタップして集中的に復習しましょう！`}</div>
+        <button class="btn-action btn-switch-exam" onclick="startExamMode()">🎯 本番力試し！「国試20題演習」へ進む</button>
+        ${!isPerfect ? `<button class="btn-action btn-retry" onclick="startRetryMode()">🔥 間違えた問題だけを集中特訓する</button>` : ''}
+        <button class="btn-action btn-restart" onclick="confirmResetAll()">🔄 最初からやり直す</button>
 
-        <div class="graph-container">
-          <div class="graph-title">
-            <span>📊 分野別 正答率</span>
-            <span style="font-size:0.75rem; color:#64748b; font-weight:normal;">タップで各分野へ移動</span>
-          </div>
-          ${stats.graphHtml}
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <a href="index.html#units" class="btn-action" style="background:#0284c7; color:white; text-decoration:none; text-align:center; flex:1;">📚 単元メニューへ</a>
+          <a href="index.html" class="btn-action" style="background:#475569; color:white; text-decoration:none; text-align:center; flex:1;">🏠 ポータルトップへ</a>
         </div>
-
-        <div class="advice-box">
-          💡 <strong>AI先生の分析診断：</strong><br>
-          ${adviceText}
-        </div>
-
-        <button class="btn-action btn-switch-exam" onclick="startExamMode()">
-          🎯 本番力試し！「国試20題演習」へ進む
-        </button>
-        ${!isPerfect ? `
-          <button class="btn-action btn-retry" onclick="startRetryMode()">
-            🔥 間違えた問題だけを集中特訓する
-          </button>
-        ` : ''}
-        <button class="btn-action btn-restart" onclick="confirmResetAll()">
-          🔄 最初からやり直す
-        </button>
-      </div>
-    `;
+      </div>`;
   }
-
   document.getElementById("main-card").innerHTML = resultHtml;
 }
 
@@ -1342,14 +530,7 @@ function startRetryMode() {
 function confirmResetAll() {
   if (confirm("学習記録をリセットして最初からやり直しますか？")) {
     localStorage.removeItem(STORAGE_KEY);
-    state = {
-      mode: "BASE",
-      currentQuestionIndex: 0,
-      answers: {},
-      wrongQuestionIds: [],
-      isRetryMode: false,
-      isFinished: false
-    };
+    state = { mode: "BASE", currentQuestionIndex: 0, answers: {}, wrongQuestionIds: [], isRetryMode: false, isFinished: false };
     restoreCardStructure();
     renderQuestion();
   }
@@ -1359,30 +540,16 @@ function restoreCardStructure() {
   document.getElementById("main-card").innerHTML = `
     <div class="q-progress" id="progress-text"></div>
     <h2 id="lesson-title"></h2>
-    <div class="exp-box" id="exp-container">
-      <span class="exp-tag">💡 香粧品AI先生のポイント</span>
-      <div id="lesson-exp"></div>
-    </div>
+    <div class="exp-box" id="exp-container"><span class="exp-tag">💡 香粧品AI先生のポイント</span><div id="lesson-exp"></div></div>
     <div class="question-box" id="question-text"></div>
     <div class="btn-group" id="choices-container"></div>
-    <div class="feedback-box" id="feedback-area">
-      <div class="feedback-header">🧑‍🏫 AI先生の個別指導</div>
-      <div id="feedback-desc"></div>
-    </div>
-    <div class="nav-controls">
-      <button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button>
-      <button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button>
-    </div>
-  `;
+    <div class="feedback-box" id="feedback-area"><div class="feedback-header">🧑‍🏫 AI先生の個別指導</div><div id="feedback-desc"></div></div>
+    <div class="nav-controls"><button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button><button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button></div>`;
 }
 
-// 起動
 loadProgress();
-if (state.isFinished) {
-  showResultScreen();
-} else {
-  renderQuestion();
-}
+if (state.isFinished) showResultScreen();
+else renderQuestion();
 </script>
 
 </body>

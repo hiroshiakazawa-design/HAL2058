@@ -59,7 +59,7 @@
     margin: 0;
   }
 
-  /* メインメニュー選択カード（第1層） */
+  /* メインメニュー選択カード */
   .menu-grid {
     display: flex;
     flex-direction: column;
@@ -105,7 +105,7 @@
   }
   .menu-sub { font-size: 0.8rem; color: #64748b; }
 
-  /* 単元別メニュー（第2層） */
+  /* 単元別メニュー */
   #sub-menu-view {
     display: none;
     animation: fadeIn 0.25s ease;
@@ -177,16 +177,14 @@
 <body>
 
 <div class="container">
-  <!-- ポータルヘッダー -->
   <div class="portal-header">
     <span class="portal-badge">理容師・美容師 国家試験対策</span>
     <h1>香粧品化学 ラーニングポータル</h1>
     <p class="portal-desc">学習したいコースを選択してください</p>
   </div>
 
-  <!-- 【第1層】メインメニュー選択画面 -->
+  <!-- 【第1層】メインメニュー -->
   <div id="main-menu-view" class="menu-grid">
-    <!-- コースA：新・単元別マスター問題集（全7単元） -->
     <div class="main-menu-card" onclick="openSubMenu()">
       <div class="menu-icon">📚</div>
       <div class="menu-text-wrap">
@@ -197,7 +195,6 @@
       <div class="unit-arrow">▶</div>
     </div>
 
-    <!-- コースB：以前の国試対策問題集 -->
     <a href="0kokusi_taisaku.html" class="main-menu-card">
       <div class="menu-icon">🎯</div>
       <div class="menu-text-wrap">
@@ -209,14 +206,14 @@
     </a>
   </div>
 
-  <!-- 【第2層】単元別マスター問題集の選択画面（全7単元・教科書順） -->
+  <!-- 【第2層】単元別マスター問題集（全7単元） -->
   <div id="sub-menu-view">
     <div class="sub-header-bar">
       <button class="btn-back" onclick="closeSubMenu()">◀ メニューに戻る</button>
       <span class="sub-header-title">単元を選択（全7単元）</span>
     </div>
 
-    <!-- ① 第1単元：総論・法規・安全 -->
+    <!-- ① 第1単元 -->
     <a href="1gairon_tutor.html" class="unit-card border-1">
       <div class="unit-info-left">
         <div class="unit-badge">第1編 第1・2章／第3章 1節</div>
@@ -226,7 +223,7 @@
       <div class="unit-arrow">▶</div>
     </a>
 
-    <!-- ② 第2単元：水性原料・油性原料 -->
+    <!-- ② 第2単元 -->
     <a href="2Water&Oil_tutor.html" class="unit-card border-2">
       <div class="unit-info-left">
         <div class="unit-badge">第1編 第3章 2・3節</div>
@@ -236,7 +233,7 @@
       <div class="unit-arrow">▶</div>
     </a>
 
-    <!-- ③ 第3単元：界面活性剤・高分子化合物 -->
+    <!-- ③ 第3単元 -->
     <a href="3surfactant.html" class="unit-card border-3">
       <div class="unit-info-left">
         <div class="unit-badge">第1編 第3章 4・5節</div>
@@ -246,7 +243,7 @@
       <div class="unit-arrow">▶</div>
     </a>
 
-    <!-- ④ 第4単元：色材・香料・配合原料・雑貨原料 -->
+    <!-- ④ 第4単元 -->
     <a href="4hokanogenryou_tutor.html" class="unit-card border-4">
       <div class="unit-info-left">
         <div class="unit-badge">第1編 第3章 6〜10節</div>
@@ -256,7 +253,7 @@
       <div class="unit-arrow">▶</div>
     </a>
 
-    <!-- ⑤ 第5単元：スキンケア・メイク・ヘアケア -->
+    <!-- ⑤ 第5単元 -->
     <a href="5salonseihin_tutor.html" class="unit-card border-5">
       <div class="unit-info-left">
         <div class="unit-badge">第2編 第1・2章／第3章 1〜3節</div>
@@ -266,7 +263,7 @@
       <div class="unit-arrow">▶</div>
     </a>
 
-    <!-- ⑥ 第6単元：パーマ剤・縮毛矯正 -->
+    <!-- ⑥ 第6単元 -->
     <a href="6parma_tutor.html" class="unit-card border-6">
       <div class="unit-info-left">
         <div class="unit-badge">第2編 第3章 4節</div>
@@ -276,7 +273,7 @@
       <div class="unit-arrow">▶</div>
     </a>
 
-    <!-- ⑦ 第7単元：ヘアカラー・スキャルプケア -->
+    <!-- ⑦ 第7単元 -->
     <a href="7haircolor_tutor.html" class="unit-card border-7">
       <div class="unit-info-left">
         <div class="unit-badge">第2編 第3章 5・6節</div>
@@ -300,6 +297,12 @@ function closeSubMenu() {
   document.getElementById("main-menu-view").style.display = "flex";
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+window.addEventListener("DOMContentLoaded", function() {
+  if (window.location.hash === "#units") {
+    openSubMenu();
+  }
+});
 </script>
 
 </body>

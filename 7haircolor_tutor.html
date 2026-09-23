@@ -6,7 +6,7 @@
 <title>香粧品化学 AI個別指導チューター - ヘアカラー・育毛編</title>
 <style>
   :root {
-    --primary: #9333ea;
+    --primary: #9333ea; /* パープル（ヘアカラーのイメージ） */
     --primary-light: #faf5ff;
     --primary-hover: #7e22ce;
     --accent: #f59e0b;
@@ -29,10 +29,7 @@
     padding: 8px 10px;
     line-height: 1.5;
   }
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-  }
+  .container { max-width: 600px; margin: 0 auto; }
 
   /* 上部ステータス（3点表示） */
   .top-status-bar {
@@ -40,40 +37,24 @@
     border-radius: 8px;
     padding: 8px 12px;
     border: 1px solid var(--border);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04);
   }
-  .status-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .status-student {
-    font-size: 0.85rem;
-    font-weight: bold;
-    color: #475569;
-  }
-  .status-field {
-    font-size: 0.8rem;
-    font-weight: bold;
-    background: #f3e8ff;
-    color: #6b21a8;
-    padding: 2px 8px;
-    border-radius: 4px;
-  }
-  .status-score {
-    font-size: 0.82rem;
-    font-weight: bold;
-    background: var(--primary-light);
-    color: var(--primary);
-    padding: 3px 10px;
-    border-radius: 12px;
-    border: 1px solid #e9d5ff;
-    white-space: nowrap;
-  }
+  .status-left { display: flex; align-items: center; gap: 8px; }
+  .status-student { font-size: 0.85rem; font-weight: bold; color: #475569; }
+  .status-field { font-size: 0.8rem; font-weight: bold; background: #f3e8ff; color: #6b21a8; padding: 2px 8px; border-radius: 4px; }
+  .status-score { font-size: 0.82rem; font-weight: bold; background: var(--primary-light); color: var(--primary); padding: 3px 10px; border-radius: 12px; border: 1px solid #e9d5ff; white-space: nowrap; }
+
+  /* 操作バー（中断・再開・終了） */
+  .action-bar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 8px; }
+  .btn-action-sm { padding: 5px 12px; font-size: 0.78rem; font-weight: bold; border-radius: 6px; border: 1px solid var(--border); cursor: pointer; background: #ffffff; color: var(--text); transition: all 0.15s; }
+  .btn-action-sm:hover { background: #f1f5f9; }
+  .btn-pause { border-color: #f59e0b; color: #b45309; }
+  .btn-resume { border-color: #10b981; color: #047857; background: #ecfdf5; }
+  .btn-quit { border-color: #ef4444; color: #b91c1c; }
 
   /* メイン問題カード */
   .card {
@@ -84,55 +65,16 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.03);
     margin-bottom: 14px;
   }
-  .q-progress {
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: #64748b;
-    margin-bottom: 4px;
-  }
-  h2 {
-    font-size: 1.12rem;
-    margin: 0 0 12px 0;
-    line-height: 1.35;
-    color: #0f172a;
-  }
+  .q-progress { font-size: 0.8rem; font-weight: bold; color: #64748b; margin-bottom: 4px; }
+  h2 { font-size: 1.12rem; margin: 0 0 12px 0; line-height: 1.35; color: #0f172a; }
 
   /* 解説枠 */
-  .exp-box {
-    background: var(--accent-bg);
-    border-left: 4px solid var(--accent);
-    padding: 10px 12px;
-    border-radius: 4px;
-    margin-bottom: 14px;
-    font-size: 0.92rem;
-  }
-  .exp-tag {
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #b45309;
-    display: block;
-    margin-bottom: 3px;
-  }
-
-  /* 設問枠 */
-  .question-box {
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    padding: 14px;
-    border-radius: 8px;
-    margin-bottom: 14px;
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.5;
-    white-space: pre-wrap;
-  }
+  .exp-box { background: var(--accent-bg); border-left: 4px solid var(--accent); padding: 10px 12px; border-radius: 4px; margin-bottom: 14px; font-size: 0.92rem; }
+  .exp-tag { font-size: 0.75rem; font-weight: bold; color: #b45309; display: block; margin-bottom: 3px; }
+  .question-box { background: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 8px; margin-bottom: 14px; font-weight: 600; font-size: 1rem; line-height: 1.5; white-space: pre-wrap; }
 
   /* 選択肢ボタン */
-  .btn-group {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-  }
+  .btn-group { display: flex; flex-direction: column; gap: 9px; }
   .btn-choice {
     background: #ffffff;
     border: 2px solid #cbd5e1;
@@ -149,293 +91,108 @@
     -webkit-tap-highlight-color: transparent;
   }
   .btn-choice:active { transform: scale(0.98); }
-  .btn-choice:hover:not(:disabled) {
-    border-color: var(--primary);
-    background: var(--primary-light);
-  }
+  .btn-choice:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-light); }
   .btn-choice:disabled { cursor: default; }
-
-  .btn-choice.correct-highlight {
-    background: var(--success-bg) !important;
-    border-color: var(--success) !important;
-    color: var(--success) !important;
-  }
-  .btn-choice.wrong-highlight {
-    background: var(--danger-bg) !important;
-    border-color: var(--danger) !important;
-    color: var(--danger) !important;
-  }
+  .btn-choice.correct-highlight { background: var(--success-bg) !important; border-color: var(--success) !important; color: var(--success) !important; }
+  .btn-choice.wrong-highlight { background: var(--danger-bg) !important; border-color: var(--danger) !important; color: var(--danger) !important; }
 
   /* AIフィードバック */
-  .feedback-box {
-    display: none;
-    margin-top: 14px;
-    padding: 12px 14px;
-    border-radius: 8px;
-    animation: fadeIn 0.25s ease;
-  }
-  .feedback-correct {
-    background: var(--success-bg);
-    border: 1px solid #86efac;
-    color: var(--success);
-  }
-  .feedback-wrong {
-    background: var(--danger-bg);
-    border: 1px solid #fca5a5;
-    color: var(--danger);
-  }
-  .feedback-header {
-    font-weight: bold;
-    font-size: 0.9rem;
-    margin-bottom: 4px;
-  }
+  .feedback-box { display: none; margin-top: 14px; padding: 12px 14px; border-radius: 8px; animation: fadeIn 0.25s ease; }
+  .feedback-correct { background: var(--success-bg); border: 1px solid #86efac; color: var(--success); }
+  .feedback-wrong { background: var(--danger-bg); border: 1px solid #fca5a5; color: var(--danger); }
+  .feedback-header { font-weight: bold; font-size: 0.9rem; margin-bottom: 4px; }
 
   /* 操作ボタン */
-  .nav-controls {
-    display: flex;
-    gap: 8px;
-    margin-top: 14px;
-  }
-  .btn-prev {
-    flex: 1;
-    padding: 12px;
-    background: #ffffff;
-    color: #475569;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 0.92rem;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  .btn-prev:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-  }
-  .btn-next {
-    flex: 2;
-    padding: 12px;
-    background: var(--primary);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.98rem;
-    font-weight: bold;
-    cursor: pointer;
-    display: none;
-  }
+  .nav-controls { display: flex; gap: 8px; margin-top: 14px; }
+  .btn-prev { flex: 1; padding: 12px; background: #ffffff; color: #475569; border: 1px solid var(--border); border-radius: 8px; font-size: 0.92rem; font-weight: bold; cursor: pointer; }
+  .btn-prev:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-next { flex: 2; padding: 12px; background: var(--primary); color: #ffffff; border: none; border-radius: 8px; font-size: 0.98rem; font-weight: bold; cursor: pointer; display: none; }
   .btn-next:hover { background: var(--primary-hover); }
 
   /* 下部メニュー */
-  .bottom-menu-box {
-    background: var(--card);
-    border-radius: 10px;
-    padding: 12px;
-    border: 1px solid var(--border);
-    margin-bottom: 20px;
-  }
-  .bottom-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .bottom-title {
-    font-size: 0.78rem;
-    font-weight: bold;
-    color: #64748b;
-  }
-  .btn-reset {
-    font-size: 0.74rem;
-    color: #dc2626;
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-decoration: underline;
-    padding: 0;
-  }
-  .spine-steps {
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-  }
-  .spine-node {
-    flex: 1;
-    min-width: 58px;
-    text-align: center;
-    padding: 6px 2px;
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.72rem;
-    font-weight: bold;
-    color: #64748b;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .spine-node.active {
-    background: var(--primary);
-    color: #ffffff !important;
-    border-color: var(--primary);
-  }
-  .spine-node.cleared {
-    background: var(--success-bg);
-    color: var(--success);
-    border-color: #86efac;
-  }
-  .spine-node.exam-node {
-    background: #fef3c7;
-    border-color: #f59e0b;
-    color: #b45309;
-  }
-  .spine-node.exam-node.active {
-    background: #d97706 !important;
-    color: white !important;
-  }
+  .bottom-menu-box { background: var(--card); border-radius: 10px; padding: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
+  .bottom-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .bottom-title { font-size: 0.78rem; font-weight: bold; color: #64748b; }
+  .btn-reset { font-size: 0.74rem; color: #dc2626; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
+  .spine-steps { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 4px; }
+  .spine-node { flex: 1; min-width: 58px; text-align: center; padding: 6px 2px; background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; font-size: 0.72rem; font-weight: bold; color: #64748b; cursor: pointer; white-space: nowrap; }
+  .spine-node.active { background: var(--primary); color: #ffffff !important; border-color: var(--primary); }
+  .spine-node.cleared { background: var(--success-bg); color: var(--success); border-color: #86efac; }
+  .spine-node.exam-node { background: #fef3c7; border-color: #f59e0b; color: #b45309; }
+  .spine-node.exam-node.active { background: #d97706 !important; color: white !important; }
 
-  /* 成績グラフ表示用スタイル */
-  .result-card {
-    padding: 10px 4px;
-  }
-  .result-header {
-    text-align: center;
-    margin-bottom: 16px;
-  }
-  .graph-container {
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 12px;
-    margin: 16px 0;
-  }
-  .graph-title {
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #334155;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-  }
-  .graph-item {
-    margin-bottom: 10px;
-    cursor: pointer;
-    padding: 4px 6px;
-    border-radius: 6px;
-    transition: background 0.15s;
-  }
-  .graph-item:hover {
-    background: #e2e8f0;
-  }
-  .graph-label-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-bottom: 3px;
-  }
-  .graph-bar-bg {
-    background: #e2e8f0;
-    height: 12px;
-    border-radius: 6px;
-    overflow: hidden;
-  }
-  .graph-bar-fill {
-    height: 100%;
-    border-radius: 6px;
-    transition: width 0.6s ease;
-  }
+  /* 成績グラフ表示スタイル */
+  .result-card { padding: 10px 4px; }
+  .result-header { text-align: center; margin-bottom: 16px; }
+  .graph-container { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px 12px; margin: 16px 0; }
+  .graph-title { font-size: 0.9rem; font-weight: bold; color: #334155; margin-bottom: 12px; display: flex; justify-content: space-between; }
+  .graph-item { margin-bottom: 10px; cursor: pointer; padding: 4px 6px; border-radius: 6px; transition: background 0.15s; }
+  .graph-item:hover { background: #e2e8f0; }
+  .graph-label-row { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 3px; }
+  .graph-bar-bg { background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden; }
+  .graph-bar-fill { height: 100%; border-radius: 6px; transition: width 0.6s ease; }
   .bar-high { background-color: #22c55e; }
   .bar-mid  { background-color: #eab308; }
   .bar-low  { background-color: #ef4444; }
 
-  .advice-box {
-    background: #faf5ff;
-    border-left: 4px solid var(--primary);
-    padding: 10px 12px;
-    border-radius: 4px;
-    font-size: 0.88rem;
-    margin-bottom: 16px;
-    text-align: left;
-  }
-
-  .btn-action {
-    width: 100%;
-    padding: 13px;
-    border-radius: 8px;
-    font-size: 0.98rem;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    margin-top: 8px;
-  }
+  .advice-box { background: #faf5ff; border-left: 4px solid var(--primary); padding: 10px 12px; border-radius: 4px; font-size: 0.88rem; margin-bottom: 16px; text-align: left; }
+  .btn-action { width: 100%; padding: 13px; border-radius: 8px; font-size: 0.98rem; font-weight: bold; cursor: pointer; border: none; margin-top: 8px; box-sizing: border-box; display: block; }
   .btn-retry { background: #d97706; color: white; }
   .btn-restart { background: var(--primary); color: white; }
   .btn-switch-exam { background: #0284c7; color: white; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(3px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- 上部ステータス（3点表示） -->
   <div class="top-status-bar">
     <div class="status-left">
       <span class="status-student">出席：12番</span>
-      <span class="status-field" id="status-field">大分類と法規</span>
+      <span class="status-field" id="status-field">ヘアカラーの分類</span>
     </div>
     <div class="status-score" id="status-score">正解率: 0% (0/56点)</div>
   </div>
 
-  <!-- メイン問題カード -->
+  <div class="action-bar">
+    <button class="btn-action-sm btn-pause" onclick="pauseQuiz()">⏸️ 中断</button>
+    <button class="btn-action-sm btn-resume" id="btn-resume" onclick="resumeQuiz()" style="display:none;">▶️ 再開</button>
+    <button class="btn-action-sm btn-quit" onclick="quitQuiz()">⏹️ 終了</button>
+  </div>
+
   <div class="card" id="main-card">
     <div class="q-progress" id="progress-text">問 1 / 28</div>
     <h2 id="lesson-title">問題タイトル</h2>
-
-    <!-- 解説（国試4択モードでは非表示） -->
     <div class="exp-box" id="exp-container">
       <span class="exp-tag">💡 香粧品AI先生のポイント</span>
       <div id="lesson-exp">解説</div>
     </div>
-
-    <!-- 設問 -->
-    <div class="question-box" id="question-text">
-      設問
-    </div>
-
-    <!-- 選択肢 -->
+    <div class="question-box" id="question-text">設問</div>
     <div class="btn-group" id="choices-container"></div>
-
-    <!-- フィードバック -->
     <div class="feedback-box" id="feedback-area">
       <div class="feedback-header">🧑‍🏫 AI先生の個別指導</div>
       <div id="feedback-desc"></div>
     </div>
-
-    <!-- 操作ボタン -->
     <div class="nav-controls">
       <button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button>
       <button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button>
     </div>
   </div>
 
-  <!-- 下部：分野ジャンプメニュー -->
   <div class="bottom-menu-box">
     <div class="bottom-header">
       <span class="bottom-title">🗺️ 分野・モード切替（タップで移動）</span>
       <button class="btn-reset" onclick="confirmResetAll()">履歴リセット</button>
     </div>
     <div class="spine-steps">
-      <div class="spine-node" id="node-A" onclick="jumpToBlock('A')">製品分類</div>
-      <div class="spine-node" id="node-B" onclick="jumpToBlock('B')">染毛料</div>
+      <div class="spine-node" id="node-A" onclick="jumpToBlock('A')">分類法規</div>
+      <div class="spine-node" id="node-B" onclick="jumpToBlock('B')">酸化染毛</div>
       <div class="spine-node" id="node-C" onclick="jumpToBlock('C')">脱色脱染</div>
-      <div class="spine-node" id="node-D" onclick="jumpToBlock('D')">酸化成分</div>
-      <div class="spine-node" id="node-E" onclick="jumpToBlock('E')">発色機構</div>
-      <div class="spine-node" id="node-F" onclick="jumpToBlock('F')">テスト安全</div>
-      <div class="spine-node" id="node-G" onclick="jumpToBlock('G')">育毛ケア</div>
+      <div class="spine-node" id="node-D" onclick="jumpToBlock('D')">半永久染</div>
+      <div class="spine-node" id="node-E" onclick="jumpToBlock('E')">一時着色</div>
+      <div class="spine-node" id="node-F" onclick="jumpToBlock('F')">安全パッチ</div>
+      <div class="spine-node" id="node-G" onclick="jumpToBlock('G')">スキャルプ</div>
       <div class="spine-node exam-node" id="node-EXAM" onclick="startExamMode()">🎯 国試4択</div>
     </div>
   </div>
@@ -443,430 +200,72 @@
 
 <script>
 const fieldNames = {
-  "A": "製品の大分類と法規",
-  "B": "一時・半永久染毛料",
-  "C": "脱色剤・脱染剤の化学",
-  "D": "酸化染毛剤の成分",
-  "E": "染毛メカニズムと特殊染毛",
-  "F": "パッチテストと安全管理",
-  "G": "スキャルプケアと育毛剤",
+  "A": "染毛料・染毛剤の分類と法規",
+  "B": "永久染毛剤（酸化染毛剤の化学）",
+  "C": "脱色剤・脱染剤の仕組み",
+  "D": "半永久染毛料（ヘアマニキュア・塩基性HC）",
+  "E": "一時染毛料（カラースプレー・マスカラ）",
+  "F": "安全管理と皮膚アレルギー試験（パッチテスト）",
+  "G": "スキャルプケア・育毛剤の化学",
   "EXAM": "国試本番実戦演習（4択）"
 };
 
-// 基礎28問マスターデータ（正解位置をランダム均等に分散：上14問 / 下14問）
 const baseQuestions = [
-  // A. 製品の大分類と法規
-  {
-    id: "HC-001", block: "A", title: "染毛料と染毛剤の法的区分【国試最頻出】",
-    exp: "色の粉を表面にくっつけるだけなら化粧品（染毛料）、薬の力で中まで染めたり色を抜くのは医薬部外品（染毛剤）です！",
-    q: "白髪染めやおしゃれ染めとして広く使われる「酸化染毛剤（ヘアダイ）」は、法律上どちらに分類される？",
-    choices: ["化粧品", "医薬部外品"], answer: 1,
-    hintCorrect: "大正解！+2pt！ 酸化染毛剤やブリーチ剤は、化学反応を利用するため『医薬部外品』だよ！",
-    hintWrong: "手軽に見えるけれど、化学反応で中までしっかり染める酸化染毛剤は『医薬部外品』だよ。"
-  },
-  {
-    id: "HC-002", block: "A", title: "酸化染毛剤の持続性【国試超定番】",
-    exp: "マスカラのように1回で落ちるのが一時染毛料、毛髪の中で大きくなって出られなくなるのが酸化染毛剤です。",
-    q: "酸化染毛剤で染めた毛髪は、シャンプーを1回するとどうなる？",
-    choices: ["1回のシャンプーで洗い落とされる", "ほとんど色落ちせず長期間持続する"], answer: 1,
-    hintCorrect: "その通り！+2pt！ 国試定番の引っかけクリア！ 1回洗ったくらいでは絶対に落ちないよ！",
-    hintWrong: "過去問で超頻出の誤り肢！ 1回のシャンプーで落ちるのは一時染毛料。酸化染毛剤は何ヶ月も持つよ。"
-  },
-  {
-    id: "HC-003", block: "A", title: "脱色剤と脱染剤の目的の違い",
-    exp: "地毛の黒い色素（メラニン）を抜くのが『脱色』、前に黒染めなどで染めた人工のカラー染料を抜くのが『脱染』です。",
-    q: "過去に黒く染めた髪を明るく染め直すために、毛髪内の「染まっている染料」を分解する製品はどっち？",
-    choices: ["脱色剤", "脱染剤"], answer: 1,
-    hintCorrect: "見事！+2pt！ メラニンを抜くのが脱色、人工染料を抜くのが『脱染剤』だね！",
-    hintWrong: "普通の脱色剤（ブリーチ）では一度染めた染料は分解しにくいよ。染料を抜くのは『脱染剤』だね。"
-  },
-  {
-    id: "HC-004", block: "A", title: "絵の具の三原色と補色の関係",
-    exp: "ヘアカラーは絵の具と同じで、混ぜるほど暗い黒に近づきます。嫌な黄色味を打ち消すには反対側の「補色」を使います。",
-    q: "ヘアカラー製品で色合いを調整する際に利用されるのは、どっちの色彩理論？",
-    choices: ["光の三原色（赤・緑・青紫）", "絵の具の三原色（青緑・赤紫・黄）"], answer: 1,
-    hintCorrect: "完璧！+2pt！ 絵の具の三原色が基本！ 補色同士を混ぜると互いの色を打ち消し合って黒に近づくよ！",
-    hintWrong: "光は混ぜると白くなるけれど、ヘアカラーは絵の具と同じで混ぜると暗くなる『絵の具の三原色』だよ。"
-  },
-
-  // B. 一時・半永久染毛料
-  {
-    id: "HC-005", block: "B", title: "一時染毛料の着色機構",
-    exp: "カラースプレーやヘアマスカラは、着色成分を樹脂などで毛髪の『表面』に付着させているだけです。",
-    q: "カラースプレーやヘアマスカラなどの一時染毛料は、着色成分が毛髪のどこに作用している？",
-    choices: ["毛皮質の奥深くまで浸透している", "毛髪の表面に単に付着している"], answer: 1,
-    hintCorrect: "大正解！+2pt！ 髪の表面にペンキを塗っただけだから、シャンプー1回できれいに落ちるんだ！",
-    hintWrong: "奥深くには入らないよ！ 表面にペタッとくっついているだけだから『一時』染毛料なんだ。"
-  },
-  {
-    id: "HC-006", block: "B", title: "酸性染料の電気的結合【国試最大の罠】",
-    exp: "酸性染料は水に溶かすとマイナス（−）！酸性環境で毛髪のケラチンがプラス（＋）になり、磁石のように引き合います。",
-    q: "ヘアマニキュアに使われる「酸性染料」は、水に溶かすとプラス・マイナスのどっちの電気を帯びる？",
-    choices: ["マイナス（陰イオン）", "プラス（陽イオン）"], answer: 0,
-    hintCorrect: "素晴らしい！+2pt！ 国試最大の引っかけクリア！ 『酸性染料はマイナス』は超頻出事項だよ！",
-    hintWrong: "ここが国試で一番狙われる！ 酸性染料は『マイナス（−）』！プラスの髪とイオン結合するよ。"
-  },
-  {
-    id: "HC-007", block: "B", title: "HC染料の特徴と浸透性",
-    exp: "HC染料は電気を帯びない（中性）超小粒の染料！分子が非常に小さいためキューティクルの隙間から入り込めます。",
-    q: "電気的に中性で分子が非常に小さいため、キューティクルの隙間から物理的に毛皮質へ浸透できる直接染料はどっち？",
-    choices: ["HC染料", "酸性染料"], answer: 0,
-    hintCorrect: "バッチリ！+2pt！ HC染料は中性で極小！ カラートリートメントなどにも大活躍しているよ！",
-    hintWrong: "酸性染料はマイナスに帯電しているよ。電気を持たない中性で超小粒なのは『HC染料』だね。"
-  },
-  {
-    id: "HC-008", block: "B", title: "酸性染毛料の退色とトリートメント",
-    exp: "強いプラスの電気を持つトリートメント（第4級アンモニウム塩）を使うと、マイナスの酸性染料が奪われて退色が早まります。",
-    q: "ヘアマニキュア（酸性染毛料）をした髪に、強いプラスの電気をもつトリートメントを使うと色落ちはどうなる？",
-    choices: ["色持ちが良くなる", "退色（色落ち）が早くなる"], answer: 1,
-    hintCorrect: "その通り！+2pt！ 強いプラスの成分にマイナスの染料が引っ張られて抜け出してしまうんだ！",
-    hintWrong: "トリートメントなら何でも良いわけじゃないよ。強いプラス成分は染料を奪って退色を早めちゃうよ。"
-  },
-
-  // C. 脱色剤・脱染剤の化学
-  {
-    id: "HC-009", block: "C", title: "脱色剤の反応機構【国試最頻出】",
-    exp: "アルカリ剤に背中を押された過酸化水素水が『酸素』を放出し、その酸素が毛髪のメラニン色素を酸化分解します！",
-    q: "ヘアブリーチ（脱色剤）において、毛髪のメラニン色素を分解して髪を明るくするのは、何という気体の酸化作用？",
-    choices: ["水素", "酸素"], answer: 1,
-    hintCorrect: "完璧！+2pt！ 過酸化水素から出る『酸素』の酸化パワーで黒いメラニンを分解するんだ！",
-    hintWrong: "パーマの還元は水素だったけれど、ブリーチの酸化分解は『酸素』の働きだよ！"
-  },
-  {
-    id: "HC-010", block: "C", title: "過酸化水素水の濃度上限基準",
-    exp: "日本の法律（医薬部外品承認基準）により、ヘアカラー製品に配合できる過酸化水素水の濃度は厳格に決められています。",
-    q: "医薬部外品のヘアカラー製品において、第2剤に配合される過酸化水素水の濃度上限は何%以下？",
-    choices: ["6%以下", "12%以下"], answer: 0,
-    hintCorrect: "大正解！+2pt！ 日本のルールでは上限『6%以下』！ 海外製品の高濃度には要注意だよ！",
-    hintWrong: "12%なんて使ったら頭皮も髪も大惨事になっちゃうよ！ 正しい法定上限は『6%以下』だね。"
-  },
-  {
-    id: "HC-011", block: "C", title: "脱染剤の強力成分（過硫酸塩）【第46回・50回国試】",
-    exp: "毛髪の中でカチカチに重合した染料を粉砕するため、パウダーブリーチ（脱染剤）には『過硫酸塩』という強力な酸化助剤が入っています。",
-    q: "脱染剤において、毛髪内で酸化重合した頑固な染料を強力に分解するために配合される酸化剤は何？",
-    choices: ["過硫酸塩", "チオグリコール酸"], answer: 0,
-    hintCorrect: "見事！+2pt！ 過硫酸アンモニウムなどの『過硫酸塩』が強力な酸化助剤として働くんだ！",
-    hintWrong: "チオグリコール酸はパーマの還元剤だよ。染料を壊す超強力な酸化助剤は『過硫酸塩』だね。"
-  },
-  {
-    id: "HC-012", block: "C", title: "混合液の密閉保存禁止（破裂事故防止）",
-    exp: "1剤と2剤を混ぜると酸素ガスがどんどん発生します。フタをして密閉すると容器がパンパンに膨らんで爆発・破裂します！",
-    q: "脱色剤やヘアカラーの混合液の残りを、フタをして密閉容器に入れて保存してはならない理由はどっち？",
-    choices: ["発生した酸素ガスで容器が破裂する危険があるから", "液がカチカチに凍りついてしまうから"], answer: 0,
-    hintCorrect: "その通り！+2pt！ 発生し続ける酸素で容器が爆発する！ 作り置きや密閉保存は絶対厳禁だよ！",
-    hintWrong: "凍るのではなく、発生する酸素ガスで容器内の圧力が急上昇して『破裂』する危険があるからだよ。"
-  },
-
-  // D. 酸化染毛剤の成分
-  {
-    id: "HC-013", block: "D", title: "第1剤と第2剤の成分役割【国試直球】",
-    exp: "第1剤＝酸化染料＋アルカリ剤（アンモニア等）、第2剤＝酸化剤（過酸化水素水）。この組み合わせは国試の絶対得点源！",
-    q: "酸化染毛剤において、毛髪を膨潤させてキューティクルを開く「アルカリ剤（アンモニア等）」が含まれるのはどっち？",
-    choices: ["第1剤", "第2剤"], answer: 0,
-    hintCorrect: "正解！+2pt！ 1剤に染料とアルカリ剤、2剤に過酸化水素水（酸化剤）が入っているよ！",
-    hintWrong: "2剤は酸化剤（過酸化水素水）のお部屋だよ。アルカリ剤が入っているのは『第1剤』だね。"
-  },
-  {
-    id: "HC-014", block: "D", title: "染料中間体の性質【国試最頻出・重複強化】",
-    exp: "パラフェニレンジアミンなどの染料中間体は『もともと無色』で『低分子』！毛髪に入ってから酸化されて色が出ます！",
-    q: "酸化染毛剤の主役であるパラフェニレンジアミンなどの「染料中間体」は、酸化される前は何色をしている？",
-    choices: ["真っ黒な色", "本来は無色"], answer: 1,
-    hintCorrect: "完璧！+2pt！ 国試頻出の罠クリア！ チューブの中では無色透明の小粒なんだよ！",
-    hintWrong: "黒い色がついていると勘違いしやすいけれど、酸化される前は『無色』の低分子だよ！"
-  },
-  {
-    id: "HC-015", block: "D", title: "調色剤（レゾルシン等）の役割【国試最頻出】",
-    exp: "レゾルシンなどの調色剤（カップラー）は、単独では発色しませんが、染料中間体と一緒に酸化されると色調をお洒落に変えてくれます。",
-    q: "酸化染毛剤に配合される「レゾルシン」は、成分の役割としてどっちに分類される？",
-    choices: ["調色剤（カップラー）", "アルカリ剤"], answer: 0,
-    hintCorrect: "大正解！+2pt！ レゾルシンは調色剤！ 染料中間体と手をつないで色合いを豊かにする名相棒だよ！",
-    hintWrong: "レゾルシンはアルカリ剤じゃないよ！ 染料中間体の色調を変える『調色剤（カップラー）』だね。"
-  },
-  {
-    id: "HC-016", block: "D", title: "直接染料（ニトロ化合物）の罠【第37回・51回国試】",
-    exp: "名前に『ニトロ』と付いたら直接染料！染料中間体と違って、最初から赤色などの色を持っています！",
-    q: "「ニトロパラフェニレンジアミン」は、酸化される前から色がついている？それとも無色？",
-    choices: ["もともと色がついている（有色）", "本来は無色"], answer: 0,
-    hintCorrect: "見事！+2pt！ 国試直球ひっかけクリア！ 『ニトロ』がついたら最初から有色の直接染料だよ！",
-    hintWrong: "過去問で超頻出の引っかけ！ ニトロパラフェニレンジアミンは無色ではなく『最初から有色』だよ。"
-  },
-  {
-    id: "HC-017", block: "D", title: "代表的な染料中間体の仲間",
-    exp: "パラフェニレンジアミンだけでなく、トルエン-2,5-ジアミンやパラアミノフェノールも大切な染料中間体です。",
-    q: "「パラアミノフェノール」や「トルエン-2,5-ジアミン」は、酸化染毛剤の中で何の成分として配合される？",
-    choices: ["染料中間体", "酸化剤"], answer: 0,
-    hintCorrect: "その通り！+2pt！ ジアミン系やアミノフェノール系は、毛染めの主役となる『染料中間体』だよ！",
-    hintWrong: "酸化剤は2剤の過酸化水素水だよ。これらは酸化されて色を出す『染料中間体』の仲間だね。"
-  },
-
-  // E. 染毛メカニズムと特殊染毛
-  {
-    id: "HC-018", block: "E", title: "酸化重合と発色の仕組み【第50回国試】",
-    exp: "小さく入って毛皮質の中で合体（酸化重合）！巨大な分子になるため、シャンプーしても外に出られなくなって色が定着します。",
-    q: "毛髪内部に入った染料中間体が、過酸化水素によって次々と結びついて大きな分子になる化学反応を何という？",
-    choices: ["加水分解", "酸化重合"], answer: 1,
-    hintCorrect: "バッチリ！+2pt！ 第50回国試完全的中！ 酸化重合して巨大化するから色が長持ちするんだ！",
-    hintWrong: "加水分解はバラバラに壊す反応だよ。分子同士が手をつないで大きくなるのは『酸化重合』だね。"
-  },
-  {
-    id: "HC-019", block: "E", title: "脱色と発色の同時進行",
-    exp: "ヘアカラーはおしゃれ染めも白髪染めも原理は同じ！メラニンを脱色しながら、同時に酸化染料を発色させています。",
-    q: "酸化染毛剤で黒髪を明るい茶髪に染めるとき、毛髪内部では何と何が同時に起こっている？",
-    choices: ["メラニンの脱色と酸化染料の発色", "毛髪の縮毛矯正とコーティング"], answer: 0,
-    hintCorrect: "正解！+2pt！ 黒板の黒を消しながら（脱色）、同時にチョークで色を塗る（発色）のがヘアカラーだよ！",
-    hintWrong: "縮毛矯正はパーマの分野だね。カラーはメラニンを抜く脱色と、染料が色づく発色が同時に進むよ。"
-  },
-  {
-    id: "HC-020", block: "E", title: "非酸化染毛剤（オハグロ式・鉄塩）",
-    exp: "オハグロ式は過酸化水素を使わず、鉄イオン（硫酸第一鉄）とポリフェノールを結合させて黒く染めます。ジアミンアレルギーでも使えますが、パーマを弾きます。",
-    q: "オハグロ式白髪染め（非酸化染毛剤）において、過酸化水素の代わりに染毛反応に利用される金属イオンは何？",
-    choices: ["鉄イオン（硫酸第一鉄）", "銅イオン"], answer: 0,
-    hintCorrect: "完璧！+2pt！ 鉄イオンで染めるから金属性染毛剤とも呼ばれるよ。ただしパーマがかかりにくくなる点に注意！",
-    hintWrong: "銅ではなく『鉄イオン（硫酸第一鉄）』だよ。昔のお歯黒と同じ原理の白髪染めだね。"
-  },
-  {
-    id: "HC-021", block: "E", title: "ヘナのパッチテストと銀塩の緑色変色",
-    exp: "天然ヘナでもパッチテストは法律上義務！また、光で染める銀塩カラーをしている髪にブリーチやカラーをすると『緑色』に変色して大惨事になります！",
-    q: "光で徐々に染まる「銀塩（硫酸銀）」を用いた白髪染めを使っている髪に、酸化染毛剤を使うと何色に変色する危険がある？",
-    choices: ["真っ赤", "緑色"], answer: 1,
-    hintCorrect: "素晴らしい！+2pt！ 髪が緑色に変色して直らなくなるよ！ カウンセリングでの履歴確認が命だね！",
-    hintWrong: "赤ではなく『緑色』に変色してしまう重大な化学トラブルになるよ。事前の確認が超重要！"
-  },
-
-  // F. パッチテストと安全管理
-  {
-    id: "HC-022", block: "F", title: "パッチテストの実施時期と頻度【国試最頻出】",
-    exp: "アレルギーはある日突然やってきます！だから『染毛の48時間前』に『毎回必ず』行うのが理美容師の鉄則です！",
-    q: "酸化染毛剤を使用する際に行う皮膚アレルギー試験（パッチテスト）は、どのタイミングで行うのが正しい？",
-    choices: ["染毛の48時間前に、毎回必ず行う", "初めて染める時だけ行えば、次回からは不要"], answer: 0,
-    hintCorrect: "大正解！+2pt！ 国試直球！ 初めての人だけでなく、常連さんでも『毎回必ず・48時間前』だよ！",
-    hintWrong: "前回大丈夫でも今回はかぶれることがあるよ。だから『毎回必ず・染毛の48時間前』が正解だね。"
-  },
-  {
-    id: "HC-023", block: "F", title: "パッチテストの塗布方法（絆創膏禁止）【第40回国試】",
-    exp: "1剤と2剤を混ぜたテスト液を腕の内側に塗り、自然乾燥させます。絆創膏などで覆うと密閉刺激で正常な皮膚まで赤くなってしまいます！",
-    q: "腕の内側にパッチテスト液を10円硬貨大に薄く塗った後、正しい取り扱いはどっち？",
-    choices: ["薬液が服につかないよう絆創膏で密閉する", "絆創膏などで覆わずに自然乾燥させる"], answer: 1,
-    hintCorrect: "その通り！+2pt！ 第40回国試的中！ 絆創膏で覆うのは絶対禁止！ 自然乾燥で48時間観察するよ！",
-    hintWrong: "親切心で絆創膏を貼りたくなっちゃうけれど、蒸れて刺激で赤くなるから『絆創膏で覆わない』のが鉄則だよ。"
-  },
-  {
-    id: "HC-024", block: "F", title: "アレルギー重篤化と永久使用禁止",
-    exp: "かぶれを放置して染め続けると、呼吸困難や全身蕁麻疹（アナフィラキシー）を起こして命に関わります。一度でもかぶれたら二度と染めてはいけません！",
-    q: "過去にヘアカラーで頭皮にかゆみや腫れ（かぶれ）が出たことのあるお客様に対して、プロとしてどう対応すべき？",
-    choices: ["別のメーカーの優しい酸化染毛剤に変えて染めてあげる", "今後はすべての酸化染毛剤の使用を絶対にやめてもらう"], answer: 1,
-    hintCorrect: "見事！+2pt！ 命を守るプロの判断！ ジアミンアレルギーは重症化するから、二度と酸化染毛剤は使えないよ！",
-    hintWrong: "薬を変えてもダメ！ ジアミンによるアレルギーは繰り返すとアナフィラキシーを起こして非常に危険だよ。"
-  },
-  {
-    id: "HC-025", block: "F", title: "施術間隔（1週間ルール）と禁忌事項",
-    exp: "パーマとカラーの間は必ず『前後1週間』あけること！また、眉毛やまつ毛への使用は失明の危険があるため絶対禁止です。",
-    q: "医薬部外品のヘアカラーとパーマを行う場合、毛髪損傷や頭皮刺激を防ぐため施術の間隔はどれくらい空ける？",
-    choices: ["前後の1週間は空ける", "同じ日に連続して行う"], answer: 0,
-    hintCorrect: "完璧！+2pt！ パーマ編でもやった『前後1週間あける』ルール！ 眉毛やまつ毛に塗るのも絶対禁止だよ！",
-    hintWrong: "同じ日にやると髪がボロボロになって頭皮も荒れちゃうよ。必ず『前後1週間』お休みさせよう。"
-  },
-
-  // G. スキャルプケアと育毛剤
-  {
-    id: "HC-026", block: "G", title: "ヘアサイクルと脱毛の仕組み",
-    exp: "髪が生えて育つ周期は2〜6年。脱毛症は、太く長く育つはずの『成長期』が短くなり、細い産毛のまま抜けちゃう現象です。",
-    q: "脱毛症が起きている頭皮の毛髪では、ヘアサイクル（毛周期）にどのような変化が起きている？",
-    choices: ["成長期が10年以上に伸びる", "成長期が短くなり、休止期が長くなる"], answer: 1,
-    hintCorrect: "大正解！+2pt！ 成長期が短縮して、髪が育ちきる前に抜け落ちてしまうのが脱毛の本質だよ！",
-    hintWrong: "成長期が伸びるならフサフサになるね。脱毛は『成長期が短く』なって休止期が長くなるんだよ。"
-  },
-  {
-    id: "HC-027", block: "G", title: "育毛剤の3層法的区分【第38回国試】",
-    exp: "ふけ・かゆみ＝化粧品、抜け毛予防・発毛促進＝医薬部外品、ミノキシジルや飲むフィナステリドは本格的な『医薬品』です！",
-    q: "男性型脱毛症の治療に用いられる「ミノキシジル」や「フィナステリド」を有効成分とする製品は、法律上どれに分類される？",
-    choices: ["医薬部外品", "医薬品"], answer: 1,
-    hintCorrect: "バッチリ！+2pt！ 第38回国試完全的中！ ミノキシジルやフィナステリドは『医薬品』に分類されるよ！",
-    hintWrong: "過去問で狙われたポイント！ 発毛効果が認められたミノキシジルやフィナステリドは『医薬品』だよ。"
-  },
-  {
-    id: "HC-028", block: "G", title: "育毛剤の主な成分と基剤",
-    exp: "基剤はエタノール水溶液（30〜70%）。血行を良くして毛根に栄養を届けるのがセンブリエキスやビタミンE、スーッと刺激するのがメントールです！",
-    q: "育毛剤において、頭皮の毛細血管を広げて血行をよくする目的で配合される植物エキスはどっち？",
-    choices: ["センブリエキス", "カーボンブラック"], answer: 0,
-    hintCorrect: "素晴らしい！+2pt！ 全28問完全制覇！ センブリやビタミンE（トコフェロール）は血流促進の代表成分だね！",
-    hintWrong: "カーボンブラックは黒い顔料だよ。頭皮の血行を促進して毛乳頭を元気にするのは『センブリエキス』だね。"
-  }
+  { id: "HC-001", block: "A", title: "ヘアカラー製品の法的区分【国試最頻出】", exp: "毛髪内部で酸化重合させる『永久染毛剤（ヘアカラー・白髪染め）』や『脱色剤』は医薬部外品！ イオン吸着させる『染毛料（ヘアマニキュア等）』は化粧品です！", q: "パラフェニレンジアミン等の酸化染料を用いて毛髪を恒久的に染める「酸化染毛剤」は、法律上どちらに分類される？", choices: ["化粧品", "医薬部外品"], answer: 1, hintCorrect: "大正解！+2pt！ 医薬部外品！ 国の承認が必要な本格的な薬剤だよ！", hintWrong: "化粧品ではないよ。強い作用を持つ酸化染毛剤は『医薬部外品』に分類されるんだ。" },
+  { id: "HC-002", block: "A", title: "ヘアマニキュアの法的区分【国試最頻出】", exp: "酸性染料を用いて毛髪表面付近にイオン吸着させる「酸性染毛料（ヘアマニキュア）」は、医薬部外品ではなく『化粧品』です！", q: "サロンで一般に「ヘアマニキュア」と呼ばれる酸性染毛料の法的区分はどっち？", choices: ["化粧品", "医薬部外品"], answer: 0, hintCorrect: "その通り！+2pt！ 染毛料（マニキュア）は化粧品！ 染毛剤（カラー）は医薬部外品だね！", hintWrong: "マニキュアは脱色を伴わないおだやかな作用なので『化粧品』に分類されるよ。" },
+  { id: "HC-003", block: "A", title: "色持ち期間による4大分類", exp: "永久染毛剤は約2〜3ヶ月、半永久染毛料は約2〜4週間、一時染毛料はシャンプー1回で落ちます。", q: "シャンプーするたびに徐々に色落ちし、色持ちが「約2〜4週間」持続するカラー製品はどれ？", choices: ["一時染毛料", "半永久染毛料（ヘアマニキュア等）"], answer: 1, hintCorrect: "見事！+2pt！ 約1ヶ月ほど色が持つのが半永久染毛料の特徴だね！", hintWrong: "一時染毛料は1回のシャンプーで落ちるよ。数週間持つのは『半永久染毛料』だね。" },
+  { id: "HC-004", block: "A", title: "脱色作用の有無の決定的な違い", exp: "医薬部外品の酸化染毛剤は「脱色＋染色」を同時に行いますが、化粧品のヘアマニキュアにはメラニンを脱色する力はありません。", q: "「酸性染毛料（ヘアマニキュア）は、毛髪内部のメラニン色素を強力に脱色して明るく染める。」この記述は正しい？", choices: ["正しい（○）", "誤り（×）"], answer: 1, hintCorrect: "完璧！+2pt！ マニキュアには脱色力がないから、黒髪を明るい茶髪にはできないんだ！", hintWrong: "脱色力があるのは医薬部外品の酸化染毛剤。マニキュアは色を上乗せするだけだよ。" },
+  { id: "HC-005", block: "B", title: "酸化染毛剤の染色メカニズム【国試最頻出】", exp: "無色の低分子染料（中間体）が毛髪内部へ浸透し、第2剤の過酸化水素で酸化されて大きな有色ポリマー（巨大分子）となって閉じ込められます！", q: "酸化染毛剤が毛髪内部で発色し、シャンプーしても流れ出なくなる理由はどっち？", choices: ["小さな無色分子が酸化重合して巨大分子になるため", "毛髪のケラチンタンパク質が熱で溶けて固まるため"], answer: 0, hintCorrect: "その通り！+2pt！ 小さく入って中で大きく固まる！ これが色持ち抜群の秘密だね！", hintWrong: "髪が溶けるわけではないよ。染料分子同士が手をつないで巨大化（酸化重合）するんだ。" },
+  { id: "HC-006", block: "B", title: "染料中間体の代表成分【第48回国試】", exp: "酸化されることで色の核となる主役成分（酸化染料）です。パラフェニレンジアミンやパラアミノフェノールが代表的です。", q: "酸化染毛剤の第1剤に配合される、代表的な染料中間体（酸化染料）はどっち？", choices: ["パラフェニレンジアミン", "過酸化水素"], answer: 0, hintCorrect: "バッチリ！+2pt！ ジアミン系染料はヘアカラーの中心となる染料中間体だね！", hintWrong: "過酸化水素は2剤の酸化剤だよ。1剤に入る染料中間体は『パラフェニレンジアミン』だね。" },
+  { id: "HC-007", block: "B", title: "調色剤（カップラー）の役割【第48回国試】", exp: "レゾルシンやメタアミノフェノールなどの調色剤（カップラー）は、単独では発色しませんが、中間体と結合して多彩な色調を作ります！", q: "「レゾルシン」は単独では発色しないが、染料中間体と重合して様々な色調を生み出す。この成分を何という？", choices: ["調色剤（カップラー）", "アルカリ剤"], answer: 0, hintCorrect: "正解！+2pt！ 第48回国試的中！ 中間体とペアを組んで微妙なニュアンスを出すのが調色剤！", hintWrong: "アンモニアなどのアルカリ剤ではないよ。色を調整するパートナーが『調色剤（カップラー）』だよ。" },
+  { id: "HC-008", block: "B", title: "第1剤のアルカリ剤の役割", exp: "アンモニア水やモノエタノールアミンが配合され、毛髪を膨潤させて染料を浸透させるとともに、第2剤の過酸化水素水の酸化分解を促進します。", q: "酸化染毛剤第1剤に含まれるアルカリ剤の主なはたらきとして、正しいものはどっち？", choices: ["過酸化水素水の酸化作用を抑えて安定化させる", "毛髪を膨潤させ、過酸化水素の分解を促進する"], answer: 1, hintCorrect: "見事！+2pt！ 髪のドアを開き（膨潤）、過酸化水素のパワーを一気に引き出すんだ！", hintWrong: "過酸化水素を安定化させるのは酸性だよ。アルカリは過酸化水素を活性化・分解促進するんだ。" },
+  { id: "HC-009", block: "B", title: "第2剤の過酸化水素水の働き", exp: "第2剤の有効成分は過酸化水素水です。アルカリ性のもとで酸素を発生し、メラニン色素を脱色すると同時に、染料中間体を酸化重合させて発色させます。", q: "酸化染毛剤の第2剤に含まれる過酸化水素水が果たす「2つの重要機能」はどれ？", choices: ["毛髪の収れんと水分の蒸発", "メラニンの脱色と染料中間体の酸化発色"], answer: 1, hintCorrect: "完璧！+2pt！ 『黒髪を明るくする脱色』＋『色を発色させる酸化』を同時にやるのが過酸化水素！", hintWrong: "引き締めるのではないよ。メラニンを壊して明るくし、同時に染料を発色させる主役だね。" },
+  { id: "HC-010", block: "B", title: "過酸化水素水の濃度規制（6%ルール）", exp: "過酸化水素水は高濃度だと皮膚腐食や爆発の危険があるため、医薬部外品基準で濃度上限は「6%以下（毛髪塗布時）」と厳しく定められています。", q: "ヘアカラー製品の第2剤において、安全のために定められている過酸化水素の濃度上限はどれ？", choices: ["6%以下", "20%以下"], answer: 0, hintCorrect: "正解！+2pt！ サロンで使うオキシは最大でも6%！ お客様の頭皮を守る安全基準だね！", hintWrong: "20%は危険すぎて頭皮がやけど（化学損傷）を起こすよ！ 正しい上限は『6%以下』だよ。" },
+  { id: "HC-011", block: "C", title: "ブリーチ剤（脱色剤）の成分", exp: "染料を含まず、アルカリ剤（第1剤）と過酸化水素水（第2剤）でメラニン色素のみを酸化分解して髪を明るくする薬剤です。", q: "染料を含まず、毛髪中のメラニン色素だけを脱色して明るくする医薬部外品はどっち？", choices: ["脱色剤（ブリーチ剤）", "ヘアマニキュア"], answer: 0, hintCorrect: "その通り！+2pt！ 色を入れずにメラニンだけを抜くのが脱色剤（ブリーチ）だね！", hintWrong: "ヘアマニキュアは色をつけるもの。メラニンを抜いて金髪にするのは『脱色剤』だよ。" },
+  { id: "HC-012", block: "C", title: "過硫酸塩（ブリーチパウダーの助剤）", exp: "より強力に脱色するため、粉末ブリーチには過硫酸アンモニウムや過硫酸カリウムなどの「過硫酸塩（酸化助剤）」が配合されます。", q: "ハイブリーチ（パウダーブリーチ）に配合され、過酸化水素の脱色力を飛躍的に高める酸化助剤は何？", choices: ["過硫酸塩", "塩化ナトリウム"], answer: 0, hintCorrect: "バッチリ！+2pt！ 過硫酸塩の強力な酸化パワーで、頑固なメラニンをしっかり脱色できるんだ！", hintWrong: "塩化ナトリウムは食塩だね。ブリーチ力を一気に引き上げる強力な酸化助剤は『過硫酸塩』だよ。" },
+  { id: "HC-013", block: "C", title: "脱染剤の定義と働き", exp: "脱色剤がメラニンを壊すのに対し、脱染剤は「すでに染まっている酸化染料などの人工色素」を分解・除去するための薬剤です。", q: "過去に黒染めやヘアカラーで毛髪内部に入り込んだ「人工の染料」を分解・除去する薬剤を何という？", choices: ["脱色剤", "脱染剤"], answer: 1, hintCorrect: "大正解！+2pt！ メラニンを抜くのが脱色、人工の色素を抜くのが『脱染剤』！ 現場の重要用語だね！", hintWrong: "自然のメラニンを抜くのが脱色。髪に残ったカラーの人工染料を抜くのは『脱染剤』だよ。" },
+  { id: "HC-014", block: "D", title: "酸性染毛料（ヘアマニキュア）の染色原理", exp: "酸性条件下（pH2〜4）で、プラスに帯電した毛髪ケラチンに、マイナスの電荷をもつ「酸性染料（タール色素）」が電気的にイオン結合します！", q: "ヘアマニキュア（酸性染毛料）において、酸性染料が毛髪に吸着する結合力は何？", choices: ["静電的引力（イオン結合）", "金属結合"], answer: 0, hintCorrect: "見事！+2pt！ 髪がプラス（＋）、染料がマイナス（−）で磁石のように引き合うんだね！", hintWrong: "金属結合ではないよ。プラスとマイナスの電気的な引き合い（イオン結合）でくっつくんだ。" },
+  { id: "HC-015", block: "D", title: "ヘアマニキュアのベンジルアルコール（浸透促進剤）", exp: "酸性染料を髪の内側へ浸透させやすくするため、ベンジルアルコールなどの有機溶媒（浸透促進剤）が配合されます。頭皮につくと落ちにくいので注意！", q: "ヘアマニキュアに配合され、酸性染料の毛髪内部への浸透を助ける有機溶剤はどっち？", choices: ["精製水", "ベンジルアルコール"], answer: 1, hintCorrect: "完璧！+2pt！ ベンジルアルコールがキューティクルのすき間を広げて染料を運んでくれるよ！", hintWrong: "水だけでは弾かれてしまうよ。染料をしっかり髪へ引き込む浸透剤は『ベンジルアルコール』だね。" },
+  { id: "HC-016", block: "D", title: "塩基性カラー・HC染料のハイブリッド", exp: "最近のカラートリートメントには、毛髪表面にイオン吸着する『塩基性染料』と、分子が小さくキューティクルのすき間に入る『HC染料（中性染料）』が併用されます。", q: "分子サイズが非常に小さく、電気を持たないためキューティクルの隙間から内部へ浸透できる分子性染料はどっち？", choices: ["HC染料", "酸化染料中間体"], answer: 0, hintCorrect: "その通り！+2pt！ 小さな中性分子だからすっと髪のすき間に入り込めるのがHC染料の強み！", hintWrong: "酸化染料は過酸化水素が必要。単独で浸透して穏やかに染まる小分子は『HC染料』だよ。" },
+  { id: "HC-017", block: "E", title: "一時染毛料（カラースプレー・カラースティック）", exp: "顔料（カーボンブラックや酸化鉄など）をバインダー樹脂で毛髪の表面に物理的に付着させただけなので、シャンプーで簡単に洗い落とせます。", q: "カラースプレーやヘアマスカラなどの一時染毛料において、着色のために用いられる色材はどっち？", choices: ["水溶性酸性染料", "顔料（不溶性の着色粉体）"], answer: 1, hintCorrect: "正解！+2pt！ 水に溶けない顔料を髪の表面にペタッとくっつけているから、洗えばすぐ落ちるんだ！", hintWrong: "酸性染料は数週間色持ちするよ。シャンプーですぐ落とせる一時染毛料は『顔料』を使うんだ。" },
+  { id: "HC-018", block: "E", title: "一時染毛料の耐水性と雨の注意", exp: "一時染毛料は毛髪表面に付着しているだけなので、雨や汗に濡れると色が溶け出して衣服や肌を汚すおそれがあります。", q: "「一時染毛料は耐水性に優れているため、激しい雨に濡れても衣服を汚す心配は全くない。」この記述は正しい？", choices: ["正しい（○）", "誤り（×）"], answer: 1, hintCorrect: "その通り！+2pt！ 雨や汗で色落ちして白いシャツが汚れる事故が多いから、お客様への事前注意が必須！", hintWrong: "誤りだよ！ 表面に乗っているだけなので、雨や汗で簡単に落ちて服を汚してしまうよ。" },
+  { id: "HC-019", block: "F", title: "皮膚アレルギー試験（パッチテスト）の原則【国試最頻出】", exp: "酸化染毛剤（ジアミン配合）を使用する際は、毎回必ず施術の『48時間前』からテストを開始しなければなりません！", q: "酸化染毛剤を使用する際に行うパッチテストは、施術の何時間前に開始することが義務付けられている？", choices: ["2時間前", "48時間前"], answer: 1, hintCorrect: "大正解！+2pt！ 国試超定番！ 遅延型アレルギーを見極めるため、必ず『48時間前』だよ！", hintWrong: "2時間ではアレルギー反応は出ないよ。免疫の遅延型反応を確認するために『48時間前』から行うよ。" },
+  { id: "HC-020", block: "F", title: "パッチテストの観察タイミング（30分後と48時間後）", exp: "アレルギー反応は、塗布後『30分くらい』と『48時間後』の2回観察します。48時間以内に異常（かゆみ、赤み）が出たら即中止です！", q: "パッチテストの正しい判定観察のタイミングとして定められているのはどれ？", choices: ["塗布直後と1週間後", "塗布後30分位および48時間後"], answer: 1, hintCorrect: "完璧！+2pt！ 即時型を見る30分後と、遅延型を見る48時間後の2段構えで安全確認するんだ！", hintWrong: "直後だけでは見抜けないよ。『30分後』と『48時間後』の2回観察するのが正しい手順だよ。" },
+  { id: "HC-021", block: "F", title: "パッチテスト液の作り方", exp: "実際に施術で使用する第1剤と第2剤を使用直前に指定の割合（例: 1:1）で少量混合してテスト液を作ります。水で薄めてはいけません！", q: "パッチテストに使用するテスト液の調製方法として正しいものはどっち？", choices: ["第1剤と第2剤を施術時と同じ割合で混合したもの", "第1剤だけを水道水で10倍に薄めたもの"], answer: 0, hintCorrect: "見事！+2pt！ 本番とまったく同じ反応液を作るため、1剤と2剤を混ぜてテストするんだ！", hintWrong: "水で薄めては正確なテストにならないよ。本番と同じ比率で1剤と2剤を少量混合して使うよ。" },
+  { id: "HC-022", block: "F", title: "絆創膏（パッチ）で覆ってはいけない！", exp: "テスト液を腕の内側に10円硬貨大に塗り、自然乾燥させます。絆創膏などで密閉すると一次刺激を起こして誤判定になるため『覆ってはいけません』！", q: "腕の内側に塗布したパッチテスト液の取り扱いとして、正しいものはどっち？", choices: ["乾いた後、絆創膏やラップで密閉して覆う", "絆創膏等で覆わず、そのまま自然乾燥させる"], answer: 1, hintCorrect: "その通り！+2pt！ 絆創膏を貼るとムレてカブレてしまう！ 覆わずに乾かすのが絶対のルール！", hintWrong: "覆ってはダメ！ 密閉すると蒸れて肌が荒れ、正しいアレルギー判定ができなくなるよ。" },
+  { id: "HC-023", block: "F", title: "アレルギー既往者の施術絶対禁止", exp: "一度でもヘアカラーでかぶれた（アレルギーを起こした）経験がある人は、重篤なアナフィラキシーを起こす危険があるため、二度と酸化染毛剤を使ってはいけません！", q: "過去にヘアカラーで皮膚炎を起こしたことがあるお客様に対して、プロとしてとるべき正しい対応は？", choices: ["酸化染毛剤の使用を避け、ヘアマニキュア等に変更を提案する", "頭皮につかないように根元を空けて酸化染毛剤で染める"], answer: 0, hintCorrect: "素晴らしい！+2pt！ お客様の命を守る勇気ある判断！ ジアミンアレルギーには絶対使っちゃダメ！", hintWrong: "根元を空けても揮発成分やシャンプー時に触れてショックを起こす危険があるよ。絶対に使ってはダメ！" },
+  { id: "HC-024", block: "G", title: "毛周期（ヘアサイクル）と男性型脱毛症", exp: "毛周期は【成長期 ➔ 退行期 ➔ 休止期】。男性型脱毛症（AGA）は成長期が極端に短くなり、毛が細く短いうちに抜け落ちてしまう現象です。", q: "通常数年間続く毛髪の寿命サイクルのうち、髪が太く長く伸び続ける期間を何という？", choices: ["成長期", "休止期"], answer: 0, hintCorrect: "正解！+2pt！ ヘアサイクルの大半を占めるのが成長期！ ここを長く元気に保つのが育毛だね！", hintWrong: "休止期は抜ける準備の期間だよ。ぐんぐん毛が伸びて育つ期間は『成長期』だね。" },
+  { id: "HC-025", block: "G", title: "育毛剤の主要有効成分【血行促進】", exp: "頭皮の血流を良くして毛根に栄養を届ける成分として、センブリエキス、トコフェロール酢酸エステル（ビタミンE誘導体）、ニコチン酸ベンジル等があります。", q: "毛根の血流を改善し、毛乳頭への栄養補給を促す目的で育毛剤に配合される植物エキスはどれ？", choices: ["センブリエキス", "アセトン"], answer: 0, hintCorrect: "バッチリ！+2pt！ センブリの苦味成分（スウェルチアマリン等）が血行を促進してくれるよ！", hintWrong: "アセトンは除光液の溶剤だよ！ 頭皮の血行を良くする代表的な生薬エキスは『センブリエキス』だね。" },
+  { id: "HC-026", block: "G", title: "育毛剤の主要有効成分【毛母細胞活性化】", exp: "毛母細胞の細胞分裂を活発にする成分として、パントテニルエチルエーテル（ビタミンB群誘導体）や感光素301号などがあります。", q: "毛母細胞の代謝を促して細胞分裂を活性化させるビタミンB群関連成分はどっち？", choices: ["パントテニルエチルエーテル", "過酸化水素"], answer: 0, hintCorrect: "その通り！+2pt！ 毛母細胞にエネルギーを与えて分裂を応援するビタミン成分だね！", hintWrong: "過酸化水素は脱色剤だよ。毛母細胞を活性化させるのは『パントテニルエチルエーテル』だね。" },
+  { id: "HC-027", block: "G", title: "抗男性ホルモン成分と女性ホルモン配合", exp: "AGAの原因となる男性ホルモン（DHT）を抑える成分や、女性ホルモン（エストラジオール等：医薬部外品承認成分）が皮脂抑制・脱毛予防に使われます。", q: "育毛剤において、過剰な皮脂分泌を抑え、抜け毛を防ぐ目的で配合されることがあるホルモン成分はどっち？", choices: ["女性ホルモン（エストラジオール等）", "甲状腺ホルモン"], answer: 0, hintCorrect: "見事！+2pt！ 医薬部外品として認められている女性ホルモンが皮脂や脱毛をブロックするよ！", hintWrong: "甲状腺ホルモンは使えないよ。脱毛予防や頭皮ケアに配合されるのは『女性ホルモン』だね。" },
+  { id: "HC-028", block: "G", title: "頭皮のフケ・かゆみ防止有効成分", exp: "頭皮の炎症を抑える『グリチルリチン酸ジカリウム』や、常在菌を抑える『ピロクトンオラミン』『サリチル酸』が育毛トニックに配合されます。", q: "甘草（カンゾウ）の根から得られ、頭皮の赤みや炎症を強力に鎮める抗炎症成分はどっち？", choices: ["流動パラフィン", "グリチルリチン酸ジカリウム"], answer: 1, hintCorrect: "完璧！+2pt！ 全28問完全制覇！ 優れた抗炎症作用でフケやかゆみを予防する定番成分だね！", hintWrong: "流動パラフィンは鉱物油。頭皮の炎症を抑える生薬由来の抗炎症剤は『グリチルリチン酸ジカリウム』だよ。" }
 ];
 
-// 【国試対策・本番4択問題 厳選10問】
 const examQuestions = [
-  {
-    id: "EX-01", block: "EXAM", title: "第31回 国家試験本番問題",
-    q: "酸化染毛剤に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "１．酸化染毛剤は、染着の仕組みの違いによる分類では永久染毛剤に属する。",
-      "２．酸化染毛剤は、化粧品である。",
-      "３．パラフェニレンジアミンは、酸化染毛剤に使用される有効成分の一つである。",
-      "４．酸化染毛剤は、使用の都度パッチテスト（皮膚貼付試験）を行って使用する。"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ 酸化染毛剤は化学反応を利用するため『医薬部外品』に分類されます！",
-    hintWrong: "誤りは「２」です。酸化染毛剤は化粧品ではなく『医薬部外品』です。"
-  },
-  {
-    id: "EX-02", block: "EXAM", title: "第32回 国家試験本番問題",
-    q: "染毛剤に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "１．酸化染毛剤は、１回のシャンプーで除去される。",
-      "２．染料中間体をカップラーとともに用いると、様々な色調に染毛できる。",
-      "３．ヘアブリーチ剤は、毛髪に含まれるメラニンを酸化して分解する。",
-      "４．一時着色料は、法定色素等を毛髪の表面に付着させて着色する。"
-    ],
-    answer: 0,
-    hintCorrect: "正解！+3pt！ 酸化染毛剤は毛髪内部で酸化重合するため、1回のシャンプーでは落ちません！",
-    hintWrong: "誤りは「１」です。1回のシャンプーで落ちるのは一時着色料（染毛料）です。"
-  },
-  {
-    id: "EX-03", block: "EXAM", title: "第34回 国家試験本番問題",
-    q: "染毛剤や染毛料に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "１．一時着色料は、染料が髪の表層部に浸透し、シャンプーのたびに少しずつ除去される。",
-      "２．半永久染毛料は、メラニンの脱色と毛皮質内での染料の酸化重合を同時に行う。",
-      "３．永久染毛剤やヘアブリーチ剤は、医薬部外品である。",
-      "４．酸化染毛剤を用いるときのパッチテストは、始めて使用する時だけ行えばよい。"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ 永久染毛剤やヘアブリーチ剤（脱色剤）は医薬部外品です！",
-    hintWrong: "正しいのは「３」です。１は表面付着、２は酸化染毛剤の記述、４は毎回必ず実施が正解です。"
-  },
-  {
-    id: "EX-04", block: "EXAM", title: "第36回 国家試験本番問題",
-    q: "酸化染毛剤に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）酸化染毛剤は永久染毛剤に分類される。",
-      "（2）第１剤（１液）に含まれる染料中間体は、酸化されて発色する。",
-      "（3）第２剤（２液）に含まれる過酸化水素水には、メラニンに作用して髪を黒くする働きがある。",
-      "（4）妊娠中の人の髪に使用してはならない。"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ 過酸化水素水はメラニンを酸化分解して『脱色（明るく）』します！",
-    hintWrong: "誤りは「（3）」です。過酸化水素水はメラニンを分解して脱色します（黒くはしません）。"
-  },
-  {
-    id: "EX-05", block: "EXAM", title: "第38回 国家試験本番問題",
-    q: "育毛剤と医薬品医療機器等法に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）ふけやかゆみの抑制を効能の範囲とする育毛剤は、化粧品に分類される。",
-      "（2）脱毛予防・発毛促進などの育毛・養毛効果を効能の範囲とするものは、医薬部外品に分類される。",
-      "（3）フィナステリドを含む育毛剤は、医薬部外品に分類される。",
-      "（4）ミノキシジルを含む育毛剤は、医薬品に分類される。"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ フィナステリドは医師の処方が必要な『医薬品（内服薬）』です！",
-    hintWrong: "誤りは「（3）」です。フィナステリドやデュタステリドは『医薬品』に分類されます。"
-  },
-  {
-    id: "EX-06", block: "EXAM", title: "第40回 国家試験本番問題",
-    q: "酸化染毛剤を用いたヘアカラーリングの前に行う皮膚アレルギー試験（パッチテスト）に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）染毛の30分前に行う。",
-      "（2）第２剤を皮膚に塗る。",
-      "（3）塗った部分は絆創膏等で覆わない。",
-      "（4）かぶれが生じた場合、別の酸化染毛剤でもう一度試験を行う。"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ 絆創膏等で覆わず自然乾燥させるのが正しい手順です！",
-    hintWrong: "正しいのは「（3）」です。染毛48時間前・1剤と2剤を混合して塗布・かぶれたら永久使用禁止が原則です。"
-  },
-  {
-    id: "EX-07", block: "EXAM", title: "第41回 国家試験本番問題",
-    q: "ヘアマニキュアに関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）ヘアマニキュアは、酸性染毛料とも呼ばれる。",
-      "（2）酸性染料は、水に溶かすとプラスの電気を帯びる。",
-      "（3）毛髪内では、酸性染料とケラチンタンパク質とが電気的に引き合っている。",
-      "（4）ヘアマニキュアには、脱色作用がない。"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ 酸性染料は水に溶かすと『マイナス（陰イオン）』を帯びます！",
-    hintWrong: "誤りは「（2）」です。酸性染料はマイナス（−）の電気を帯び、酸性下でプラスのケラチンと結合します。"
-  },
-  {
-    id: "EX-08", block: "EXAM", title: "第46回 国家試験本番問題",
-    q: "ヘアカラー製品に関する次の記述のうち、正しいものの組み合わせはどれか。\n\nａ. 酸性染毛料は、医薬部外品に分類される。\nｂ. 脱染剤には、強い酸化剤である過硫酸塩が用いられる。\nｃ. 酸化染毛剤第２剤中の過酸化水素から放出される酸素により、メラニン色素の分解が起こる。\nｄ. パラフェニレンジアミンは、もともと色を有する直接染料である。",
-    choices: [
-      "（1） ａ と ｂ",
-      "（2） ｂ と ｃ",
-      "（3） ｃ と ｄ",
-      "（4） ａ と ｄ"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ ｂ（脱染剤の過硫酸塩）と ｃ（過酸化水素からの酸素放出）が正しい記述です！",
-    hintWrong: "正解は「（2）ｂとｃ」です。ａは化粧品、ｄは無色の染料中間体なので誤りです。"
-  },
-  {
-    id: "EX-09", block: "EXAM", title: "第50回 国家試験本番問題",
-    q: "２剤型の酸化染毛剤による染毛メカニズムに関する次の文章の（   ）内に入る語句の組み合わせのうち、正しいものはどれか。\n\n「第２剤の（ Ａ ）が第１剤の影響で分解して酸素を放出する。この酸素が毛髪中の（ Ｂ ）を分解し、さらに第１剤の染料中間体を酸化して重合させ、発色させる。このとき、第１剤に配合された（ Ｃ ）が染料中間体と共に酸化されると、染料中間体単独とは異なった色調に発色する。」",
-    choices: [
-      "（1） Ａ：過酸化水素 ── Ｂ：メラニン ── Ｃ：調色剤（カップラー）",
-      "（2） Ａ：過酸化水素 ── Ｂ：シスチン ── Ｃ：アルカリ剤",
-      "（3） Ａ：過硫酸塩 ──── Ｂ：メラニン ── Ｃ：アルカリ剤",
-      "（4） Ａ：過硫酸塩 ──── Ｂ：シスチン ── Ｃ：調色剤（カップラー）"
-    ],
-    answer: 0,
-    hintCorrect: "正解！+3pt！ Ａ＝過酸化水素、Ｂ＝メラニン、Ｃ＝調色剤（カップラー）の完璧な組み合わせです！",
-    hintWrong: "正解は「（1）」です。酸化剤（過酸化水素）が酸素を出し、メラニンを分解、カップラーと発色します。"
-  },
-  {
-    id: "EX-10", block: "EXAM", title: "第51回 国家試験本番問題",
-    q: "酸化染毛剤の成分とその性質に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）過酸化水素水は、染料中間体を酸化する。",
-      "（2）ニトロパラフェニレンジアミンは、無色である。",
-      "（3）レゾルシンは、染料中間体の発色の色調を変える。",
-      "（4）アンモニアは、液性をアルカリ性にする。"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ ニトロパラフェニレンジアミンは最初から赤色などを持つ『有色の直接染料』です！",
-    hintWrong: "誤りは「（2）」です。ニトロパラフェニレンジアミンは無色ではなく『有色』の直接染料です。"
-  }
+  { id: "EX-01", block: "EXAM", title: "第33回 国家試験本番問題", q: "染毛剤と染毛料に関する次の記述のうち、正しいものはどれか。", choices: ["（1）酸化染毛剤は、化粧品に分類される。", "（2）酸性染毛料（ヘアマニキュア）は、医薬部外品に分類される。", "（3）脱色剤は、医薬部外品に分類される。", "（4）一時染毛料は、毛髪内部のメラニン色素を脱色して着色する。"], answer: 2, hintCorrect: "正解！+3pt！ 脱色剤（ブリーチ剤）や酸化染毛剤は医薬部外品に分類されます！", hintWrong: "正しいのは「（3）」です。（1）酸化染毛剤＝医薬部外品、（2）酸性染毛料＝化粧品、（4）一時染毛料に脱色力はありません。" },
+  { id: "EX-02", block: "EXAM", title: "第36回 国家試験本番問題", q: "染毛剤（ヘアカラー）の皮膚アレルギー試験（パッチテスト）に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）テスト液は、第１剤と第２剤を使用直前に指定の割合で混合して調製する。", "（2）テスト部位は、腕の内側に10円硬貨大に塗り、自然乾燥させる。", "（3）テスト液を塗布した部位は、薬剤が衣服につかないよう絆創膏等でしっかり密閉して覆う。", "（4）テスト開始後、30分後と48時間後の２回、観察を行って判定する。"], answer: 2, hintCorrect: "正解！+3pt！ テスト部位を絆創膏等で覆うと蒸れて接触皮膚炎を起こすため、覆ってはなりません！", hintWrong: "誤りは「（3）」です。密閉すると蒸れて誤判定の原因になるため、絆創膏等で覆ってはいけません。" },
+  { id: "EX-03", block: "EXAM", title: "第39回 国家試験本番問題", q: "染毛剤の酸化染料に関する次の記述のうち、正しいものはどれか。", choices: ["（1）染料中間体は、それ自身が鮮やかな色をもつ高分子の化合物である。", "（2）パラフェニレンジアミンは、代表的な染料中間体（酸化染料）である。", "（3）調色剤（カップラー）は、過酸化水素と反応するだけで単独で黒色に発色する。", "（4）酸化染料は毛髪の表面だけに付着し、毛髪内部へは浸透しない。"], answer: 1, hintCorrect: "正解！+3pt！ パラフェニレンジアミンは代表的な染料中間体です！", hintWrong: "正しいのは「（2）」です。中間体は無色の低分子で、調色剤は単独では発色せず、内部へ浸透してから重合します。" },
+  { id: "EX-04", block: "EXAM", title: "第42回 国家試験本番問題", q: "ヘアマニキュア（酸性染毛料）に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）酸性染料は、毛髪ケラチンのプラスに帯電した部分とイオン結合して吸着する。", "（2）ベンジルアルコールなどの有機溶剤は、染料の毛髪への浸透を促進する目的で配合される。", "（3）酸性染毛料は、毛髪内部のメラニン色素を酸化分解して明るい色にする。", "（4）皮膚につくと落ちにくいため、頭皮につかないよう塗布する必要がある。"], answer: 2, hintCorrect: "正解！+3pt！ 酸性染毛料にはメラニンを脱色する作用はありません！", hintWrong: "誤りは「（3）」です。ヘアマニキュアには脱色力がないため、黒髪を明るくすることはできません。" },
+  { id: "EX-05", block: "EXAM", title: "第45回 国家試験本番問題", q: "ヘアカラー製品に関する次の記述のうち、正しいものはどれか。", choices: ["（1）一時染毛料は、シャンプーしても洗い落とすことができない。", "（2）酸化染毛剤は、染料中間体が過酸化水素によって酸化重合し、不溶性の色素を形成する。", "（3）脱染剤は、毛髪中のメラニン色素を分解して明るくする薬剤である。", "（4）一度ヘアカラーでアレルギー症状が出た人でも、体調が良ければ次回同じ薬剤で染めてよい。"], answer: 1, hintCorrect: "正解！+3pt！ 染料中間体が酸化重合して巨大化することで毛髪内部に留まります！", hintWrong: "正しいのは「（2）」です。（1）はすぐ落ちる、（3）は人工染料を抜くもの、（4）アレルギー既往者は使用厳禁です。" },
+  { id: "EX-06", block: "EXAM", title: "第47回 国家試験本番問題", q: "酸化染毛剤の第１剤と第２剤に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）第１剤には、染料中間体や調色剤、アルカリ剤などが配合される。", "（2）第２剤の主成分は過酸化水素水であり、酸化剤としてはたらく。", "（3）第１剤のアルカリ剤は、毛髪を膨潤させるとともに過酸化水素水の分解を促進する。", "（4）第２剤の過酸化水素水の濃度は、法律上20％まで配合することが認められている。"], answer: 3, hintCorrect: "正解！+3pt！ 過酸化水素の配合濃度上限は「6％以下」です！", hintWrong: "誤りは「（4）」です。安全のため、医薬部外品基準で過酸化水素濃度は6％以下と定められています。" },
+  { id: "EX-07", block: "EXAM", title: "第48回 国家試験本番問題", q: "香粧品の成分とその配合目的に関する次の組合せのうち、正しいものはどれか。", choices: ["（1）レゾルシン ───────── 還元剤", "（2）パラフェニレンジアミン ── 染料中間体（酸化染料）", "（3）過酸化水素 ───────── アルカリ剤", "（4）アンモニア水 ──────── 調色剤（カップラー）"], answer: 1, hintCorrect: "正解！+3pt！ 第48回国試的中！ パラフェニレンジアミンは染料中間体です！", hintWrong: "正しいのは「（2）」です。レゾルシン＝調色剤、過酸化水素＝酸化剤、アンモニア＝アルカリ剤です。" },
+  { id: "EX-08", block: "EXAM", title: "第50回 国家試験本番問題", q: "ヘアカラーの安全性とパッチテストに関する次の記述のうち、正しいものはどれか。", choices: ["（1）パッチテストは、お客様が過去に何度も染めたことがある場合は省略してよい。", "（2）パッチテストは、薬剤の塗布後48時間経過してからテスト液を洗い流して判定を完了する。", "（3）パッチテストで皮膚にかゆみや発赤などの異常が現れた場合は、直ちにテスト液を洗い流し染毛してはならない。", "（4）アレルギー反応は施術後数分以内に必ず現れるため、30分以上観察する必要はない。"], answer: 2, hintCorrect: "正解！+3pt！ テスト部位に異常が出たら直ちに洗い流し、絶対に染毛してはいけません！", hintWrong: "正しいのは「（3）」です。（1）毎回必ず実施、（2）48時間観察を継続、（4）遅延型アレルギーは48時間後に強く現れます。" },
+  { id: "EX-09", block: "EXAM", title: "第52回 国家試験本番問題", q: "育毛剤（養毛剤）に配合される成分とその作用に関する次の組合せのうち、誤っているものはどれか。", choices: ["（1）センブリエキス ─────── 局所血管拡張・血行促進作用", "（2）トコフェロール酢酸エステル ─ 末梢血管拡張・血行促進作用", "（3）グリチルリチン酸ジカリウム ─ メラニン色素の生成促進作用", "（4）パントテニルエチルエーテル ─ 毛母細胞の代謝活性化作用"], answer: 2, hintCorrect: "正解！+3pt！ グリチルリチン酸ジカリウムは「抗炎症作用（肌荒れ・フケ防止）」です！", hintWrong: "誤りは「（3）」です。グリチルリチン酸は甘草由来の抗炎症剤であり、メラニン生成促進作用はありません。" },
+  { id: "EX-10", block: "EXAM", title: "第53回 国家試験本番問題", q: "スキャルプケアおよび脱毛に関する次の記述のうち、正しいものはどれか。", choices: ["（1）毛周期（ヘアサイクル）において、毛髪が太く活発に成長する期間を退行期という。", "（2）男性型脱毛症（AGA）では、毛周期の成長期が短縮し、硬毛が軟毛化して脱落する。", "（3）育毛剤は医薬品であるため、理美容室で頭皮に塗布してマッサージすることは禁止されている。", "（4）頭皮の常在菌であるマラセチア菌は、フケやかゆみの発生とは一切関係がない。"], answer: 1, hintCorrect: "正解！+3pt！ 男性型脱毛症では成長期が極端に短くなり、細い毛のまま抜けてしまいます！", hintWrong: "正しいのは「（2）」です。（1）は成長期、（3）育毛剤は医薬部外品で施術可能、（4）マラセチア菌はフケの原因となります。" }
 ];
 
-// 状態管理
-const STORAGE_KEY = "haircolor_tutor_save_data_v7";
-let state = {
-  mode: "BASE", // "BASE" または "EXAM"
-  currentQuestionIndex: 0,
-  answers: {},
-  wrongQuestionIds: [],
-  isRetryMode: false,
-  isFinished: false
-};
+const STORAGE_KEY = "haircolor_tutor_save_data_v3";
+let state = { mode: "BASE", currentQuestionIndex: 0, answers: {}, wrongQuestionIds: [], isRetryMode: false, isFinished: false };
 
-function getActiveQuestions() {
-  if (state.mode === "EXAM") {
-    return examQuestions;
-  }
-  return baseQuestions;
-}
-
-function getBlockStartIndex(blockCode) {
-  const qs = getActiveQuestions();
-  return qs.findIndex(q => q.block === blockCode);
-}
+function getActiveQuestions() { return (state.mode === "EXAM") ? examQuestions : baseQuestions; }
+function getBlockStartIndex(blockCode) { return getActiveQuestions().findIndex(q => q.block === blockCode); }
 
 function loadProgress() {
   const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    try {
-      state = JSON.parse(saved);
-    } catch(e) {
-      console.error(e);
-    }
-  }
+  if (saved) { try { state = JSON.parse(saved); } catch(e) {} }
 }
+function saveProgress() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
-function saveProgress() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-// 得点と正解率の計算
 function calculateScore(mode) {
   const qs = (mode === "EXAM") ? examQuestions : baseQuestions;
   const pointPerQ = (mode === "EXAM") ? 3 : 2;
@@ -881,25 +280,17 @@ function updateSpineMap() {
   const blocks = ["A", "B", "C", "D", "E", "F", "G"];
   const currentQ = getCurrentQuestion();
   const currentBlock = currentQ ? currentQ.block : null;
-
   blocks.forEach(b => {
     const node = document.getElementById(`node-${b}`);
     if (!node) return;
     node.className = "spine-node";
-
-    const blockQuestions = baseQuestions.filter(q => q.block === b);
-    const isAllCorrect = blockQuestions.every(q => state.answers[q.id] === true);
-
-    if (isAllCorrect) node.classList.add("cleared");
+    const bQs = baseQuestions.filter(q => q.block === b);
+    if (bQs.every(q => state.answers[q.id] === true)) node.classList.add("cleared");
     if (b === currentBlock && state.mode === "BASE" && !state.isFinished) node.classList.add("active");
   });
-
   const examNode = document.getElementById("node-EXAM");
-  if (state.mode === "EXAM" && !state.isFinished) {
-    examNode.classList.add("active");
-  } else {
-    examNode.classList.remove("active");
-  }
+  if (state.mode === "EXAM" && !state.isFinished) examNode.classList.add("active");
+  else examNode.classList.remove("active");
 }
 
 function getCurrentQuestion() {
@@ -914,11 +305,7 @@ function getCurrentQuestion() {
 function renderQuestion() {
   state.isFinished = false;
   const item = getCurrentQuestion();
-  if (!item) {
-    showResultScreen();
-    return;
-  }
-
+  if (!item) { showResultScreen(); return; }
   updateSpineMap();
 
   const scoreData = calculateScore(state.mode);
@@ -927,20 +314,12 @@ function renderQuestion() {
   if (state.mode === "EXAM") {
     expBox.style.display = "none";
     document.getElementById("status-field").innerText = "🎯 国試本番4択演習";
-    if (state.isRetryMode) {
-      document.getElementById("progress-text").innerText = `🔥 弱点集中特訓：${state.currentQuestionIndex + 1} / ${state.wrongQuestionIds.length}`;
-    } else {
-      document.getElementById("progress-text").innerText = `国試問 ${state.currentQuestionIndex + 1} / ${examQuestions.length}`;
-    }
+    document.getElementById("progress-text").innerText = state.isRetryMode ? `🔥 弱点特訓：${state.currentQuestionIndex + 1}/${state.wrongQuestionIds.length}` : `国試問 ${state.currentQuestionIndex + 1} / ${examQuestions.length}`;
   } else {
     expBox.style.display = "block";
     document.getElementById("status-field").innerText = fieldNames[item.block] || "ヘアカラーの化学";
     document.getElementById("lesson-exp").innerText = item.exp;
-    if (state.isRetryMode) {
-      document.getElementById("progress-text").innerText = `🔥 弱点集中特訓：${state.currentQuestionIndex + 1} / ${state.wrongQuestionIds.length}`;
-    } else {
-      document.getElementById("progress-text").innerText = `問 ${state.currentQuestionIndex + 1} / ${baseQuestions.length}`;
-    }
+    document.getElementById("progress-text").innerText = state.isRetryMode ? `🔥 弱点特訓：${state.currentQuestionIndex + 1}/${state.wrongQuestionIds.length}` : `問 ${state.currentQuestionIndex + 1} / ${baseQuestions.length}`;
   }
 
   document.getElementById("status-score").innerText = `正解率: ${scoreData.rate}% (${scoreData.currentPoints}/${scoreData.maxPoints}点)`;
@@ -967,30 +346,22 @@ function selectAnswer(selectedIndex) {
   const feedback = document.getElementById("feedback-area");
   const feedbackDesc = document.getElementById("feedback-desc");
   const buttons = document.querySelectorAll(".btn-choice");
-
   buttons.forEach(b => b.disabled = true);
 
   const isCorrect = (selectedIndex === item.answer);
-
   if (isCorrect) {
     buttons[selectedIndex].classList.add("correct-highlight");
     feedback.className = "feedback-box feedback-correct";
     feedbackDesc.innerText = item.hintCorrect;
     state.answers[item.id] = true;
-
-    if (state.isRetryMode) {
-      state.wrongQuestionIds = state.wrongQuestionIds.filter(id => id !== item.id);
-    }
+    if (state.isRetryMode) state.wrongQuestionIds = state.wrongQuestionIds.filter(id => id !== item.id);
   } else {
     buttons[selectedIndex].classList.add("wrong-highlight");
     buttons[item.answer].classList.add("correct-highlight");
     feedback.className = "feedback-box feedback-wrong";
     feedbackDesc.innerText = item.hintWrong;
     state.answers[item.id] = false;
-
-    if (!state.wrongQuestionIds.includes(item.id)) {
-      state.wrongQuestionIds.push(item.id);
-    }
+    if (!state.wrongQuestionIds.includes(item.id)) state.wrongQuestionIds.push(item.id);
   }
 
   saveProgress();
@@ -1002,15 +373,12 @@ function selectAnswer(selectedIndex) {
 }
 
 function nextQuestion() {
-  const qs = getActiveQuestions();
-  const total = state.isRetryMode ? state.wrongQuestionIds.length : qs.length;
+  const total = state.isRetryMode ? state.wrongQuestionIds.length : getActiveQuestions().length;
   if (state.currentQuestionIndex < total - 1) {
     state.currentQuestionIndex++;
     saveProgress();
     renderQuestion();
-  } else {
-    showResultScreen();
-  }
+  } else { showResultScreen(); }
 }
 
 function prevQuestion() {
@@ -1022,13 +390,9 @@ function prevQuestion() {
 }
 
 function jumpToBlock(blockCode) {
-  if (state.mode === "EXAM") {
-    state.mode = "BASE";
-    state.isRetryMode = false;
-  } else if (state.isRetryMode) {
-    if (!confirm("弱点リトライを中断して通常問題へ戻りますか？")) return;
-    state.isRetryMode = false;
-  }
+  if (state.mode === "EXAM") { state.mode = "BASE"; state.isRetryMode = false; }
+  else if (state.isRetryMode && !confirm("弱点リトライを中断して戻りますか？")) return;
+  state.isRetryMode = false;
   const targetIndex = getBlockStartIndex(blockCode);
   if (targetIndex !== -1) {
     restoreCardStructure();
@@ -1039,10 +403,8 @@ function jumpToBlock(blockCode) {
 }
 
 function startExamMode() {
-  if (state.isRetryMode) {
-    if (!confirm("弱点リトライを終了して国試4択演習へ移動しますか？")) return;
-    state.isRetryMode = false;
-  }
+  if (state.isRetryMode && !confirm("弱点リトライを終了して国試演習へ移動しますか？")) return;
+  state.isRetryMode = false;
   state.mode = "EXAM";
   state.currentQuestionIndex = 0;
   saveProgress();
@@ -1059,43 +421,34 @@ function startBaseMode() {
   renderQuestion();
 }
 
+function pauseQuiz() {
+  saveProgress();
+  alert("⏸️ 学習を一時中断し、進捗を保存しました。\n次回もこの問題から再開できます。");
+  document.getElementById("btn-resume").style.display = "inline-block";
+}
+function resumeQuiz() {
+  document.getElementById("btn-resume").style.display = "none";
+  alert("▶️ 学習を再開します。");
+}
+function quitQuiz() {
+  if (confirm("学習を終了しますか？\n\n[OK]：成績結果を表示する\n[キャンセル]：そのまま続ける")) showResultScreen();
+}
+
 function generateStatsHtml() {
   const blocks = ["A", "B", "C", "D", "E", "F", "G"];
-  let lowestRate = 101;
-  let lowestBlock = "";
-  let graphHtml = "";
-
+  let lowestRate = 101, lowestBlock = "", graphHtml = "";
   blocks.forEach(b => {
     const questions = baseQuestions.filter(q => q.block === b);
-    const total = questions.length;
     const correctCount = questions.filter(q => state.answers[q.id] === true).length;
-    const rate = Math.round((correctCount / total) * 100);
-
-    if (rate < lowestRate) {
-      lowestRate = rate;
-      lowestBlock = fieldNames[b];
-    }
-
-    let barClass = "bar-high";
-    if (rate < 50) {
-      barClass = "bar-low";
-    } else if (rate < 80) {
-      barClass = "bar-mid";
-    }
-
+    const rate = Math.round((correctCount / questions.length) * 100);
+    if (rate < lowestRate) { lowestRate = rate; lowestBlock = fieldNames[b]; }
+    let barClass = (rate < 50) ? "bar-low" : (rate < 80) ? "bar-mid" : "bar-high";
     graphHtml += `
       <div class="graph-item" onclick="jumpToBlock('${b}')" title="クリックしてこの分野を復習">
-        <div class="graph-label-row">
-          <span>${fieldNames[b]}</span>
-          <span>${correctCount}/${total}問 (${rate}%)</span>
-        </div>
-        <div class="graph-bar-bg">
-          <div class="graph-bar-fill ${barClass}" style="width: ${rate}%;"></div>
-        </div>
-      </div>
-    `;
+        <div class="graph-label-row"><span>${fieldNames[b]}</span><span>${correctCount}/${questions.length}問 (${rate}%)</span></div>
+        <div class="graph-bar-bg"><div class="graph-bar-fill ${barClass}" style="width: ${rate}%;"></div></div>
+      </div>`;
   });
-
   return { graphHtml, lowestBlock, lowestRate };
 }
 
@@ -1107,7 +460,6 @@ function showResultScreen() {
   const scoreData = calculateScore(state.mode);
   const currentWrongCount = scoreData.total - scoreData.correctCount;
   const isPerfect = (currentWrongCount === 0);
-
   let resultHtml = "";
 
   if (state.mode === "EXAM") {
@@ -1115,45 +467,28 @@ function showResultScreen() {
       <div class="result-card">
         <div class="result-header">
           <h2 style="color:${isPerfect ? 'var(--success)' : '#d97706'}; font-size:1.3rem; margin-bottom:6px;">
-            ${isPerfect ? '🎉 国試本番レベル満点達成！' : '🏁 国試4択実戦演習が終了しました！'}
+            ${isPerfect ? '🎉 ヘアカラー・育毛 国試本番満点達成！' : '🏁 国試4択実戦演習が終了しました！'}
           </h2>
           <div style="background:var(--primary-light); color:var(--primary); font-size:1.1rem; font-weight:bold; padding:10px 20px; border-radius:16px; display:inline-block; margin:8px 0; border:1px solid #e9d5ff;">
             正解率: ${scoreData.rate}% （獲得 ${scoreData.currentPoints}点 / 満点 ${scoreData.maxPoints}点）
           </div>
-          <div style="font-size:0.85rem; color:#64748b;">
-            正解数: ${scoreData.correctCount} / ${scoreData.total} 問
-          </div>
+          <div style="font-size:0.85rem; color:#64748b;">正解数: ${scoreData.correctCount} / ${scoreData.total} 問</div>
         </div>
         <div class="advice-box">
           💡 <strong>AI先生の国試診断：</strong><br>
-          ${isPerfect 
-            ? '本番過去問10問を全問正解！引っかけ肢も完全に見破れています。国家試験の香粧品化学は自信を持って臨めます！' 
-            : `間違えた問題が ${currentWrongCount} 問あります。国試特有の言い回し（マイナス帯電、有色染料、過硫酸塩など）を再確認しましょう。`}
+          ${isPerfect ? '本番過去問10問を全問正解！パッチテストの48時間ルールや酸化染料中間体と調色剤の区別など、国試の重要ポイントを完全攻略しています！' : `間違えた問題が ${currentWrongCount} 問あります。「パッチテストは覆わず48時間」「中間体＝パラフェニレンジアミン」「過酸化水素＝6%以下」を再確認しましょう。`}
         </div>
-        ${!isPerfect ? `
-          <button class="btn-action btn-retry" onclick="startRetryMode()">
-            🔥 間違えた問題だけを集中リトライする
-          </button>
-        ` : ''}
-        <button class="btn-action btn-restart" onclick="startExamMode()">
-          🔄 国試4択演習をもう一度解く
-        </button>
-        <button class="btn-action btn-switch-exam" onclick="startBaseMode()">
-          📚 基礎演習（2択・28問）へ戻る
-        </button>
-      </div>
-    `;
+        ${!isPerfect ? `<button class="btn-action btn-retry" onclick="startRetryMode()">🔥 間違えた問題だけを集中リトライする</button>` : ''}
+        <button class="btn-action btn-restart" onclick="startExamMode()">🔄 国試4択演習をもう一度解く</button>
+        <button class="btn-action btn-switch-exam" onclick="startBaseMode()">📚 基礎演習（2択・28問）へ戻る</button>
+
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <a href="index.html#units" class="btn-action" style="background:#0284c7; color:white; text-decoration:none; text-align:center; flex:1;">📚 単元メニューへ</a>
+          <a href="index.html" class="btn-action" style="background:#475569; color:white; text-decoration:none; text-align:center; flex:1;">🏠 ポータルトップへ</a>
+        </div>
+      </div>`;
   } else {
     const stats = generateStatsHtml();
-    let adviceText = "";
-    if (isPerfect) {
-      adviceText = "全分野で100%達成！次は下の「国試4択演習」ボタンを押して本番形式にチャレンジしてみましょう！";
-    } else if (stats.lowestRate < 80) {
-      adviceText = `特に<strong>「${stats.lowestBlock}」</strong>の正答率が低めです。下のグラフをタップして集中的に再学習してみましょう！`;
-    } else {
-      adviceText = "全体的によく理解できています。間違えた問題だけをリトライして満点を目指しましょう！";
-    }
-
     resultHtml = `
       <div class="result-card">
         <div class="result-header">
@@ -1163,39 +498,20 @@ function showResultScreen() {
           <div style="background:var(--primary-light); color:var(--primary); font-size:1.1rem; font-weight:bold; padding:10px 20px; border-radius:16px; display:inline-block; margin:8px 0; border:1px solid #e9d5ff;">
             正解率: ${scoreData.rate}% （獲得 ${scoreData.currentPoints}点 / 満点 ${scoreData.maxPoints}点）
           </div>
-          <div style="font-size:0.85rem; color:#64748b;">
-            正解数: ${scoreData.correctCount} / ${scoreData.total} 問
-          </div>
+          <div style="font-size:0.85rem; color:#64748b;">正解数: ${scoreData.correctCount} / ${scoreData.total} 問</div>
         </div>
+        <div class="graph-container"><div class="graph-title"><span>📊 分野別 正答率</span><span style="font-size:0.75rem; color:#64748b; font-weight:normal;">タップで各分野へ移動</span></div>${stats.graphHtml}</div>
+        <div class="advice-box">💡 <strong>AI先生の分析診断：</strong><br>${isPerfect ? '全分野で100%達成！次は下の「国試4択演習」ボタンを押して本番形式にチャレンジしてみましょう！' : `特に<strong>「${stats.lowestBlock}」</strong>の正答率が低めです。上のグラフをタップして集中的に復習しましょう！`}</div>
+        <button class="btn-action btn-switch-exam" onclick="startExamMode()">🎯 本番力試し！「国試4択演習（10問）」へ進む</button>
+        ${!isPerfect ? `<button class="btn-action btn-retry" onclick="startRetryMode()">🔥 間違えた問題だけを集中特訓する</button>` : ''}
+        <button class="btn-action btn-restart" onclick="confirmResetAll()">🔄 最初からやり直す</button>
 
-        <div class="graph-container">
-          <div class="graph-title">
-            <span>📊 分野別 正答率</span>
-            <span style="font-size:0.75rem; color:#64748b; font-weight:normal;">タップで各分野へ移動</span>
-          </div>
-          ${stats.graphHtml}
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <a href="index.html#units" class="btn-action" style="background:#0284c7; color:white; text-decoration:none; text-align:center; flex:1;">📚 単元メニューへ</a>
+          <a href="index.html" class="btn-action" style="background:#475569; color:white; text-decoration:none; text-align:center; flex:1;">🏠 ポータルトップへ</a>
         </div>
-
-        <div class="advice-box">
-          💡 <strong>AI先生の分析診断：</strong><br>
-          ${adviceText}
-        </div>
-
-        <button class="btn-action btn-switch-exam" onclick="startExamMode()">
-          🎯 本番力試し！「国試4択演習（10問）」へ進む
-        </button>
-        ${!isPerfect ? `
-          <button class="btn-action btn-retry" onclick="startRetryMode()">
-            🔥 間違えた問題だけを集中特訓する
-          </button>
-        ` : ''}
-        <button class="btn-action btn-restart" onclick="confirmResetAll()">
-          🔄 最初からやり直す
-        </button>
-      </div>
-    `;
+      </div>`;
   }
-
   document.getElementById("main-card").innerHTML = resultHtml;
 }
 
@@ -1212,14 +528,7 @@ function startRetryMode() {
 function confirmResetAll() {
   if (confirm("学習記録をリセットして最初からやり直しますか？")) {
     localStorage.removeItem(STORAGE_KEY);
-    state = {
-      mode: "BASE",
-      currentQuestionIndex: 0,
-      answers: {},
-      wrongQuestionIds: [],
-      isRetryMode: false,
-      isFinished: false
-    };
+    state = { mode: "BASE", currentQuestionIndex: 0, answers: {}, wrongQuestionIds: [], isRetryMode: false, isFinished: false };
     restoreCardStructure();
     renderQuestion();
   }
@@ -1229,30 +538,16 @@ function restoreCardStructure() {
   document.getElementById("main-card").innerHTML = `
     <div class="q-progress" id="progress-text"></div>
     <h2 id="lesson-title"></h2>
-    <div class="exp-box" id="exp-container">
-      <span class="exp-tag">💡 香粧品AI先生のポイント</span>
-      <div id="lesson-exp"></div>
-    </div>
+    <div class="exp-box" id="exp-container"><span class="exp-tag">💡 香粧品AI先生のポイント</span><div id="lesson-exp"></div></div>
     <div class="question-box" id="question-text"></div>
     <div class="btn-group" id="choices-container"></div>
-    <div class="feedback-box" id="feedback-area">
-      <div class="feedback-header">🧑‍🏫 AI先生の個別指導</div>
-      <div id="feedback-desc"></div>
-    </div>
-    <div class="nav-controls">
-      <button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button>
-      <button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button>
-    </div>
-  `;
+    <div class="feedback-box" id="feedback-area"><div class="feedback-header">🧑‍🏫 AI先生の個別指導</div><div id="feedback-desc"></div></div>
+    <div class="nav-controls"><button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button><button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button></div>`;
 }
 
-// 起動
 loadProgress();
-if (state.isFinished) {
-  showResultScreen();
-} else {
-  renderQuestion();
-}
+if (state.isFinished) showResultScreen();
+else renderQuestion();
 </script>
 
 </body>

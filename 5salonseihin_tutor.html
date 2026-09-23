@@ -6,7 +6,7 @@
 <title>香粧品化学 AI個別指導チューター - スキンケア・メイク・ヘアケア編</title>
 <style>
   :root {
-    --primary: #0d9488; /* ティールグリーン（清潔・潤い・ヘアケアのイメージ） */
+    --primary: #0d9488;
     --primary-light: #f0fdfa;
     --primary-hover: #0f766e;
     --accent: #f59e0b;
@@ -29,53 +29,32 @@
     padding: 8px 10px;
     line-height: 1.5;
   }
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-  }
+  .container { max-width: 600px; margin: 0 auto; }
 
-  /* 上部ステータス（3点表示） */
   .top-status-bar {
     background: var(--card);
     border-radius: 8px;
     padding: 8px 12px;
     border: 1px solid var(--border);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04);
   }
-  .status-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .status-student {
-    font-size: 0.85rem;
-    font-weight: bold;
-    color: #475569;
-  }
-  .status-field {
-    font-size: 0.8rem;
-    font-weight: bold;
-    background: #ccfbf1;
-    color: #115e59;
-    padding: 2px 8px;
-    border-radius: 4px;
-  }
-  .status-score {
-    font-size: 0.82rem;
-    font-weight: bold;
-    background: var(--primary-light);
-    color: var(--primary);
-    padding: 3px 10px;
-    border-radius: 12px;
-    border: 1px solid #99f6e4;
-    white-space: nowrap;
-  }
+  .status-left { display: flex; align-items: center; gap: 8px; }
+  .status-student { font-size: 0.85rem; font-weight: bold; color: #475569; }
+  .status-field { font-size: 0.8rem; font-weight: bold; background: #ccfbf1; color: #115e59; padding: 2px 8px; border-radius: 4px; }
+  .status-score { font-size: 0.82rem; font-weight: bold; background: var(--primary-light); color: var(--primary); padding: 3px 10px; border-radius: 12px; border: 1px solid #99f6e4; white-space: nowrap; }
 
-  /* メイン問題カード */
+  /* 操作バー */
+  .action-bar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 8px; }
+  .btn-action-sm { padding: 5px 12px; font-size: 0.78rem; font-weight: bold; border-radius: 6px; border: 1px solid var(--border); cursor: pointer; background: #ffffff; color: var(--text); transition: all 0.15s; }
+  .btn-action-sm:hover { background: #f1f5f9; }
+  .btn-pause { border-color: #f59e0b; color: #b45309; }
+  .btn-resume { border-color: #10b981; color: #047857; background: #ecfdf5; }
+  .btn-quit { border-color: #ef4444; color: #b91c1c; }
+
   .card {
     background: var(--card);
     border-radius: 12px;
@@ -84,55 +63,14 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.03);
     margin-bottom: 14px;
   }
-  .q-progress {
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: #64748b;
-    margin-bottom: 4px;
-  }
-  h2 {
-    font-size: 1.12rem;
-    margin: 0 0 12px 0;
-    line-height: 1.35;
-    color: #0f172a;
-  }
+  .q-progress { font-size: 0.8rem; font-weight: bold; color: #64748b; margin-bottom: 4px; }
+  h2 { font-size: 1.12rem; margin: 0 0 12px 0; line-height: 1.35; color: #0f172a; }
 
-  /* 解説枠 */
-  .exp-box {
-    background: var(--accent-bg);
-    border-left: 4px solid var(--accent);
-    padding: 10px 12px;
-    border-radius: 4px;
-    margin-bottom: 14px;
-    font-size: 0.92rem;
-  }
-  .exp-tag {
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #b45309;
-    display: block;
-    margin-bottom: 3px;
-  }
+  .exp-box { background: var(--accent-bg); border-left: 4px solid var(--accent); padding: 10px 12px; border-radius: 4px; margin-bottom: 14px; font-size: 0.92rem; }
+  .exp-tag { font-size: 0.75rem; font-weight: bold; color: #b45309; display: block; margin-bottom: 3px; }
+  .question-box { background: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 8px; margin-bottom: 14px; font-weight: 600; font-size: 1rem; line-height: 1.5; white-space: pre-wrap; }
 
-  /* 設問枠 */
-  .question-box {
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    padding: 14px;
-    border-radius: 8px;
-    margin-bottom: 14px;
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.5;
-    white-space: pre-wrap;
-  }
-
-  /* 選択肢ボタン */
-  .btn-group {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-  }
+  .btn-group { display: flex; flex-direction: column; gap: 9px; }
   .btn-choice {
     background: #ffffff;
     border: 2px solid #cbd5e1;
@@ -149,239 +87,58 @@
     -webkit-tap-highlight-color: transparent;
   }
   .btn-choice:active { transform: scale(0.98); }
-  .btn-choice:hover:not(:disabled) {
-    border-color: var(--primary);
-    background: var(--primary-light);
-  }
+  .btn-choice:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-light); }
   .btn-choice:disabled { cursor: default; }
+  .btn-choice.correct-highlight { background: var(--success-bg) !important; border-color: var(--success) !important; color: var(--success) !important; }
+  .btn-choice.wrong-highlight { background: var(--danger-bg) !important; border-color: var(--danger) !important; color: var(--danger) !important; }
 
-  .btn-choice.correct-highlight {
-    background: var(--success-bg) !important;
-    border-color: var(--success) !important;
-    color: var(--success) !important;
-  }
-  .btn-choice.wrong-highlight {
-    background: var(--danger-bg) !important;
-    border-color: var(--danger) !important;
-    color: var(--danger) !important;
-  }
+  .feedback-box { display: none; margin-top: 14px; padding: 12px 14px; border-radius: 8px; animation: fadeIn 0.25s ease; }
+  .feedback-correct { background: var(--success-bg); border: 1px solid #86efac; color: var(--success); }
+  .feedback-wrong { background: var(--danger-bg); border: 1px solid #fca5a5; color: var(--danger); }
+  .feedback-header { font-weight: bold; font-size: 0.9rem; margin-bottom: 4px; }
 
-  /* AIフィードバック */
-  .feedback-box {
-    display: none;
-    margin-top: 14px;
-    padding: 12px 14px;
-    border-radius: 8px;
-    animation: fadeIn 0.25s ease;
-  }
-  .feedback-correct {
-    background: var(--success-bg);
-    border: 1px solid #86efac;
-    color: var(--success);
-  }
-  .feedback-wrong {
-    background: var(--danger-bg);
-    border: 1px solid #fca5a5;
-    color: var(--danger);
-  }
-  .feedback-header {
-    font-weight: bold;
-    font-size: 0.9rem;
-    margin-bottom: 4px;
-  }
-
-  /* 操作ボタン */
-  .nav-controls {
-    display: flex;
-    gap: 8px;
-    margin-top: 14px;
-  }
-  .btn-prev {
-    flex: 1;
-    padding: 12px;
-    background: #ffffff;
-    color: #475569;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 0.92rem;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  .btn-prev:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-  }
-  .btn-next {
-    flex: 2;
-    padding: 12px;
-    background: var(--primary);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.98rem;
-    font-weight: bold;
-    cursor: pointer;
-    display: none;
-  }
+  .nav-controls { display: flex; gap: 8px; margin-top: 14px; }
+  .btn-prev { flex: 1; padding: 12px; background: #ffffff; color: #475569; border: 1px solid var(--border); border-radius: 8px; font-size: 0.92rem; font-weight: bold; cursor: pointer; }
+  .btn-prev:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-next { flex: 2; padding: 12px; background: var(--primary); color: #ffffff; border: none; border-radius: 8px; font-size: 0.98rem; font-weight: bold; cursor: pointer; display: none; }
   .btn-next:hover { background: var(--primary-hover); }
 
-  /* 下部メニュー */
-  .bottom-menu-box {
-    background: var(--card);
-    border-radius: 10px;
-    padding: 12px;
-    border: 1px solid var(--border);
-    margin-bottom: 20px;
-  }
-  .bottom-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .bottom-title {
-    font-size: 0.78rem;
-    font-weight: bold;
-    color: #64748b;
-  }
-  .btn-reset {
-    font-size: 0.74rem;
-    color: #dc2626;
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-decoration: underline;
-    padding: 0;
-  }
-  .spine-steps {
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-  }
-  .spine-node {
-    flex: 1;
-    min-width: 58px;
-    text-align: center;
-    padding: 6px 2px;
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.72rem;
-    font-weight: bold;
-    color: #64748b;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .spine-node.active {
-    background: var(--primary);
-    color: #ffffff !important;
-    border-color: var(--primary);
-  }
-  .spine-node.cleared {
-    background: var(--success-bg);
-    color: var(--success);
-    border-color: #86efac;
-  }
-  .spine-node.exam-node {
-    background: #fef3c7;
-    border-color: #f59e0b;
-    color: #b45309;
-  }
-  .spine-node.exam-node.active {
-    background: #d97706 !important;
-    color: white !important;
-  }
+  .bottom-menu-box { background: var(--card); border-radius: 10px; padding: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
+  .bottom-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .bottom-title { font-size: 0.78rem; font-weight: bold; color: #64748b; }
+  .btn-reset { font-size: 0.74rem; color: #dc2626; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
+  .spine-steps { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 4px; }
+  .spine-node { flex: 1; min-width: 58px; text-align: center; padding: 6px 2px; background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; font-size: 0.72rem; font-weight: bold; color: #64748b; cursor: pointer; white-space: nowrap; }
+  .spine-node.active { background: var(--primary); color: #ffffff !important; border-color: var(--primary); }
+  .spine-node.cleared { background: var(--success-bg); color: var(--success); border-color: #86efac; }
+  .spine-node.exam-node { background: #fef3c7; border-color: #f59e0b; color: #b45309; }
+  .spine-node.exam-node.active { background: #d97706 !important; color: white !important; }
 
-  /* 成績グラフ表示スタイル */
-  .result-card {
-    padding: 10px 4px;
-  }
-  .result-header {
-    text-align: center;
-    margin-bottom: 16px;
-  }
-  .graph-container {
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 12px;
-    margin: 16px 0;
-  }
-  .graph-title {
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #334155;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-  }
-  .graph-item {
-    margin-bottom: 10px;
-    cursor: pointer;
-    padding: 4px 6px;
-    border-radius: 6px;
-    transition: background 0.15s;
-  }
-  .graph-item:hover {
-    background: #e2e8f0;
-  }
-  .graph-label-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-bottom: 3px;
-  }
-  .graph-bar-bg {
-    background: #e2e8f0;
-    height: 12px;
-    border-radius: 6px;
-    overflow: hidden;
-  }
-  .graph-bar-fill {
-    height: 100%;
-    border-radius: 6px;
-    transition: width 0.6s ease;
-  }
+  .result-card { padding: 10px 4px; }
+  .result-header { text-align: center; margin-bottom: 16px; }
+  .graph-container { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px 12px; margin: 16px 0; }
+  .graph-title { font-size: 0.9rem; font-weight: bold; color: #334155; margin-bottom: 12px; display: flex; justify-content: space-between; }
+  .graph-item { margin-bottom: 10px; cursor: pointer; padding: 4px 6px; border-radius: 6px; transition: background 0.15s; }
+  .graph-item:hover { background: #e2e8f0; }
+  .graph-label-row { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 3px; }
+  .graph-bar-bg { background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden; }
+  .graph-bar-fill { height: 100%; border-radius: 6px; transition: width 0.6s ease; }
   .bar-high { background-color: #22c55e; }
   .bar-mid  { background-color: #eab308; }
   .bar-low  { background-color: #ef4444; }
 
-  .advice-box {
-    background: #f0fdfa;
-    border-left: 4px solid var(--primary);
-    padding: 10px 12px;
-    border-radius: 4px;
-    font-size: 0.88rem;
-    margin-bottom: 16px;
-    text-align: left;
-  }
-
-  .btn-action {
-    width: 100%;
-    padding: 13px;
-    border-radius: 8px;
-    font-size: 0.98rem;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    margin-top: 8px;
-  }
+  .advice-box { background: #f0fdfa; border-left: 4px solid var(--primary); padding: 10px 12px; border-radius: 4px; font-size: 0.88rem; margin-bottom: 16px; text-align: left; }
+  .btn-action { width: 100%; padding: 13px; border-radius: 8px; font-size: 0.98rem; font-weight: bold; cursor: pointer; border: none; margin-top: 8px; box-sizing: border-box; display: block; }
   .btn-retry { background: #d97706; color: white; }
   .btn-restart { background: var(--primary); color: white; }
   .btn-switch-exam { background: #0284c7; color: white; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(3px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- 上部ステータス（3点表示） -->
   <div class="top-status-bar">
     <div class="status-left">
       <span class="status-student">出席：12番</span>
@@ -390,39 +147,31 @@
     <div class="status-score" id="status-score">正解率: 0% (0/56点)</div>
   </div>
 
-  <!-- メイン問題カード -->
+  <div class="action-bar">
+    <button class="btn-action-sm btn-pause" onclick="pauseQuiz()">⏸️ 中断</button>
+    <button class="btn-action-sm btn-resume" id="btn-resume" onclick="resumeQuiz()" style="display:none;">▶️ 再開</button>
+    <button class="btn-action-sm btn-quit" onclick="quitQuiz()">⏹️ 終了</button>
+  </div>
+
   <div class="card" id="main-card">
     <div class="q-progress" id="progress-text">問 1 / 28</div>
     <h2 id="lesson-title">問題タイトル</h2>
-
-    <!-- 解説（国試4択モードでは非表示） -->
     <div class="exp-box" id="exp-container">
       <span class="exp-tag">💡 香粧品AI先生のポイント</span>
       <div id="lesson-exp">解説</div>
     </div>
-
-    <!-- 設問 -->
-    <div class="question-box" id="question-text">
-      設問
-    </div>
-
-    <!-- 選択肢 -->
+    <div class="question-box" id="question-text">設問</div>
     <div class="btn-group" id="choices-container"></div>
-
-    <!-- フィードバック -->
     <div class="feedback-box" id="feedback-area">
       <div class="feedback-header">🧑‍🏫 AI先生の個別指導</div>
       <div id="feedback-desc"></div>
     </div>
-
-    <!-- 操作ボタン -->
     <div class="nav-controls">
       <button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button>
       <button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button>
     </div>
   </div>
 
-  <!-- 下部：分野ジャンプメニュー -->
   <div class="bottom-menu-box">
     <div class="bottom-header">
       <span class="bottom-title">🗺️ 分野・モード切替（タップで移動）</span>
@@ -453,420 +202,62 @@ const fieldNames = {
   "EXAM": "国試本番実戦演習（厳選10問）"
 };
 
-// 基礎28問マスターデータ（正解位置：上14問 / 下14問の完全均等分散）
 const baseQuestions = [
-  // A. スキンケアの基本プロセス
-  {
-    id: "SH-001", block: "A", title: "基礎化粧品の3大プロセス",
-    exp: "スキンケアは【クレンジング（清浄）】➔【コンディショニング（整肌・pH復元）】➔【トリートメント（保護・水分保持）】の順に進めます！",
-    q: "洗顔後の肌に行う「pHを弱酸性に整え、失われた水分と油分のバランスを回復させるプロセス」はどれ？",
-    choices: ["コンディショニング作用", "パーマネント作用"], answer: 0,
-    hintCorrect: "大正解！+2pt！ 洗顔で乱れた肌のバランスを正常な弱酸性に戻すのがコンディショニングだね！",
-    hintWrong: "パーマは髪のウェーブ加工だね。肌の調子やpHを整えるのは『コンディショニング作用』だよ。"
-  },
-  {
-    id: "SH-002", block: "A", title: "冬場の乾燥と油性皮膜のフタ効果",
-    exp: "洗顔後の肌に水だけをつけると、蒸発するときに肌本来の水分まで一緒に奪ってしまいます。油分でフタ（エモリエント）をすることが不可欠です。",
-    q: "乾燥した冬の皮膚に「水だけ」を塗布して放置すると、皮膚の状態はどうなる？",
-    choices: ["しっとり潤い続ける", "水分の蒸散が進んで逆にかさつく"], answer: 1,
-    hintCorrect: "その通り！+2pt！ 水だけだと蒸発熱と一緒に肌の水分まで逃げてしまうからクリームのフタが必要なんだ！",
-    hintWrong: "水だけだと大気中に蒸散して、かえって肌が乾燥するよ。油分を含むクリームで蒸発を防ごう。"
-  },
-  {
-    id: "SH-003", block: "A", title: "皮脂膜と皮膚常在菌のバリア機能",
-    exp: "皮脂と汗が混ざり合った「皮脂膜」は弱酸性で、水分の蒸発を防ぎ、皮膚常在菌とともに病原微生物の侵入を防いでいます。",
-    q: "皮膚表面を覆う健康な皮脂膜の液性（pH）は、通常どちらの状態にある？",
-    choices: ["弱酸性", "強アルカリ性"], answer: 0,
-    hintCorrect: "見事！+2pt！ 肌も髪も健康な状態は『弱酸性』！ アルカリから肌を守るバリアなんだ！",
-    hintWrong: "強アルカリ性だと肌が溶けてしまうよ。健康な皮膚表面は『弱酸性（pH5前後）』に保たれているね。"
-  },
-  {
-    id: "SH-004", block: "A", title: "プレーンシャンプー（温湯洗浄）の意義",
-    exp: "薬剤を使わずお湯だけで洗うプレーンシャンプーは、汚れをふやかし、パーマの中間水洗やカラー後の流し（プレーンリンス）でも重要な物理洗浄です。",
-    q: "シャンプー料を使わずに温湯のみで髪をすすぎ洗いする技術を何という？",
-    choices: ["ドライシャンプー", "プレーンシャンプー"], answer: 1,
-    hintCorrect: "バッチリ！+2pt！ お湯だけで洗うのがプレーンシャンプー！ 予備洗いや中間水洗の基本だね！",
-    hintWrong: "ドライシャンプーは水を使わない粉末洗浄。お湯だけで洗い流すのは『プレーンシャンプー』だよ。"
-  },
-
-  // B. クリーム・乳液の分類と油分比率
-  {
-    id: "SH-005", block: "B", title: "クリームの油分量による3分類【第50回国試】",
-    exp: "弱油性（油分10〜30%：バニシングクリーム）、中油性（油分30〜50%：エモリエントクリーム）、油性（油分50%以上：コールドクリーム）と規定されています！",
-    q: "油性成分の割合が「10〜30%」で、さっぱりした使用感をもつクリームの分類はどっち？",
-    choices: ["弱油性クリーム", "油性クリーム"], answer: 0,
-    hintCorrect: "正解！+2pt！ 第50回国試直球！ 10〜30%は弱油性、50%以上が油性クリームだね！",
-    hintWrong: "油性クリームは油分50%以上！ 10〜30%のさっぱりしたものは『弱油性クリーム』だよ。"
-  },
-  {
-    id: "SH-006", block: "B", title: "バニシングクリームの性質【第50回国試】",
-    exp: "石けんを乳化剤としたO/W型（水中油型）クリームで、塗るとすっと消える（vanish）ように肌になじむ無油性・弱油性の代表格です。",
-    q: "バニシングクリームの乳化型（タイプ）として正しいものはどっち？",
-    choices: ["W/O型（油中水型）", "O/W型（水中油型）"], answer: 1,
-    hintCorrect: "その通り！+2pt！ 第50回国試的中！ 水の中に微細な油が散らばる『O/W型』だからさっぱり消えるんだ！",
-    hintWrong: "W/O型は油っぽく冷たく感じるコールドクリーム。バニシングクリームは『O/W型』だよ。"
-  },
-  {
-    id: "SH-007", block: "B", title: "コールドクリームの由来と乳化型",
-    exp: "紀元前のギリシャでミツロウと油と水から生まれた伝統クリーム。油分が多くW/O型が基本で、肌につけると冷感を与えるためこう呼ばれます。",
-    q: "コールドクリームの主原料として古くから用いられ、塗布時に冷感（ひんやり感）を与えるクリームの乳化型はどっち？",
-    choices: ["W/O型（油中水型）", "粉末型"], answer: 0,
-    hintCorrect: "完璧！+2pt！ 水分が蒸発して冷たく感じるW/O型油性クリームの代表選手だね！",
-    hintWrong: "粉末ではないよ。油の中に水滴が閉じ込められた『W/O型』の油性クリームだよ。"
-  },
-  {
-    id: "SH-008", block: "B", title: "無油性クリーム（ゲル・ゼリー状）の存在【第50回国試】",
-    exp: "クリームの中には油性成分がまったく入っていない「無油性型クリーム（ゲル化剤で固めた透明なジェル状）」も存在します！",
-    q: "「香粧品のクリームと呼ばれる製品には、必ず10%以上の油性成分が含まれている。」この記述は正しい？",
-    choices: ["正しい（○）", "誤り（×）"], answer: 1,
-    hintCorrect: "見事！+2pt！ 第50回国試の引っかけクリア！ 油分0%の無油性ゲル状クリームもあるんだよ！",
-    hintWrong: "過去問の重要引っかけ！ 油分を含まない水溶性ポリマー主体の『無油性型クリーム』もあるよ。"
-  },
-
-  // C. ベース＆ポイントメイクアップ製品
-  {
-    id: "SH-009", block: "C", title: "おしろい・ファンデーションの4大基本性能",
-    exp: "粉末化粧品には【のび（タルク）】【つき（マイカ等）】【カバー力（酸化チタン）】【吸収力（カオリン）】が必要です！",
-    q: "おしろい類において、余分な皮脂や汗を吸収してテカリや化粧崩れを防ぐ目的で配合される粉体はどっち？",
-    choices: ["カオリン（白陶土）", "エタノール"], answer: 0,
-    hintCorrect: "大正解！+2pt！ 吸水・吸油力に優れたカオリンが皮脂を吸着して崩れを防ぐんだ！",
-    hintWrong: "エタノールは液体溶媒。皮脂や汗をしっかり吸い取る粉体は『カオリン』だね。"
-  },
-  {
-    id: "SH-010", block: "C", title: "口紅のチキソトロピー性（揺変性）",
-    exp: "口紅はスティック状態では固形を保ち、唇に塗るときに力を加えるとスッと液状に伸び、塗った後は元の硬さに戻る『チキソトロピー性』を持ちます。",
-    q: "力を加えると軟化して滑らかに伸び、静置すると再び元のかたさに戻る口紅の物理的性質を何という？",
-    choices: ["重合反応", "チキソトロピー性（揺変性）"], answer: 1,
-    hintCorrect: "その通り！+2pt！ 塗る時は柔らかく、普段は折れない絶妙な性質がチキソトロピーだね！",
-    hintWrong: "重合は高分子を作る化学反応。力が加わるとサラサラになる性質は『チキソトロピー性』だよ。"
-  },
-  {
-    id: "SH-011", block: "C", title: "変色口紅（ツートン口紅）の仕組み",
-    exp: "顔料を使わず、赤色223号などの染料を配合した口紅で、塗る前は黄色〜橙色ですが、唇の水分やpHに反応して赤色に変色します。",
-    q: "唇に塗布すると、唇表面の水分やpHによって黄色から鮮やかな赤色に変色する口紅を何という？",
-    choices: ["変色口紅（ツートン口紅）", "油性ファンデーション"], answer: 0,
-    hintCorrect: "正解！+2pt！ キサンテン系染料（赤223等）が唇の上で発色する変色口紅だね！",
-    hintWrong: "ファンデーションではないよ。唇のpHで色が変わる口紅を『変色口紅（ツートン口紅）』というよ。"
-  },
-  {
-    id: "SH-012", block: "C", title: "アイライナーの目の粘膜使用禁止基準",
-    exp: "目の粘膜付近にあるマイボーム腺（涙の蒸発を防ぐ脂腺）を塞いで眼病を起こすため、アイライナーを眼瞼内側の粘膜に使用することは禁止されています！",
-    q: "「アイライナーは目を大きく見せるため、眼瞼の内側の粘膜部分に直接塗布してよい。」この記述は正しい？",
-    choices: ["正しい（○）", "誤り（×）"], answer: 1,
-    hintCorrect: "完璧！+2pt！ 粘膜への使用はマイボーム腺を塞ぎ眼球感染症の危険があるため絶対禁止！",
-    hintWrong: "絶対にダメ！ アイライナーは無菌ではなく、マイボーム腺を塞ぐため粘膜使用は禁止だよ。"
-  },
-
-  // D. ヘアクレンジング（シャンプーの化学）
-  {
-    id: "SH-013", block: "D", title: "シャンプーの洗浄メカニズム",
-    exp: "陰イオン界面活性剤が親油基を油汚れに向けて取り囲み、ミセルとして水中に浮き上がらせて洗い流し、再付着を防ぎます！",
-    q: "シャンプー料において、皮脂やスタイリング剤などの油汚れを浮き上がらせて包み込む主要成分はどれ？",
-    choices: ["陰イオン界面活性剤", "酸性染料"], answer: 0,
-    hintCorrect: "大正解！+2pt！ 豊かな泡立ちと強力な洗浄力をもつ陰イオン界面活性剤がシャンプーの主役！",
-    hintWrong: "酸性染料はヘアマニキュアの色素だね。汚れを包んで落とすのは『陰イオン界面活性剤』だよ。"
-  },
-  {
-    id: "SH-014", block: "D", title: "硬水による金属石けん（石けんカス）の発生",
-    exp: "カルシウムやマグネシウムを多く含む「硬水」で石けんを使うと、結合して不溶性の『金属石けん（石けんカス）』が生じ、髪がきしみます。",
-    q: "硬水（カルシウム等の多い水）で石けんを用いて洗髪したときに生じ、毛髪に付着してごわつきの原因となる不溶性物質は何？",
-    choices: ["精製水", "金属石けん（石けんカス）"], answer: 1,
-    hintCorrect: "その通り！+2pt！ カルシウムと脂肪酸がくっついて石けんカス（金属石けん）ができるんだ！",
-    hintWrong: "精製水は不純物のない水。硬水中のカルシウム等と石けんが反応してできるのは『金属石けん』だよ。"
-  },
-  {
-    id: "SH-015", block: "D", title: "リンスインシャンプーとカチオン化セルロース",
-    exp: "シャンプーの中に「カチオン化セルロース（ポリクオタニウム-10）」を配合し、すすぎの希釈時に毛髪表面に吸着させて指通りを良くしています。",
-    q: "リンスインシャンプーにおいて、すすぎ時に毛髪表面に吸着してコンディショニング効果を発揮する高分子化合物はどっち？",
-    choices: ["カチオン化セルロース", "アルキルベンゼンスルホン酸塩"], answer: 0,
-    hintCorrect: "見事！+2pt！ プラスの電気をもつカチオン化セルロースが髪をコーティングするんだ！",
-    hintWrong: "アルキルベンゼンは強力な合成洗剤。リンスイン効果を出すのは『カチオン化セルロース』だよ。"
-  },
-  {
-    id: "SH-016", block: "D", title: "薬用シャンプー（ふけ・かゆみ防止有効成分）",
-    exp: "頭皮の常在菌（マラセチア菌）によるふけを防ぐため、ピリチオン亜鉛、サリチル酸、ピロクトンオラミンなどを配合した医薬部外品です。",
-    q: "ふけ防止を目的とする薬用シャンプーに有効成分として配合される殺菌・抗炎症成分はどれ？",
-    choices: ["アセトン", "ピリチオン亜鉛（ジンクピリチオン）"], answer: 1,
-    hintCorrect: "バッチリ！+2pt！ マラセチア菌の繁殖を抑えてフケやかゆみを防ぐ代表的な有効成分だね！",
-    hintWrong: "アセトンは除光液の溶媒！ フケやかゆみを防ぐ薬用成分は『ピリチオン亜鉛』だよ。"
-  },
-
-  // E. ヘアリンス・トリートメント（補修と帯電防止）
-  {
-    id: "SH-017", block: "E", title: "ヘアリンスとトリートメントの根本的な違い",
-    exp: "ヘアリンスは主に毛髪【表面】のキューティクルに皮膜を作って滑りを良くし、トリートメントは毛髪【内部】に浸透して栄養補修します！",
-    q: "毛髪の内部（コルテックス等）に加水分解タンパク質や油分を浸透させ、損傷を補修することを主目的とするのはどっち？",
-    choices: ["ヘアトリートメント料", "ヘアリンス料"], answer: 0,
-    hintCorrect: "その通り！+2pt！ 表面をコートするのがリンス、中まで入って補修するのが『トリートメント』！",
-    hintWrong: "リンスは主に表面のすべり向上と帯電防止。内部までしっかり浸透・補修するのは『トリートメント』だね。"
-  },
-  {
-    id: "SH-018", block: "E", title: "酸性リンスの歴史と役割",
-    exp: "昔の石けんシャンプーのアルカリを中和し、毛髪に残った金属石けんカスを溶かして落とすために、クエン酸などの有機酸リンスが使われました。",
-    q: "石けん洗髪後やパーマ・カラー後に用いられ、アルカリを中和してキューティクルを引き締めるリンスはどっち？",
-    choices: ["アルカリリンス", "酸性リンス（クエン酸等）"], answer: 1,
-    hintCorrect: "正解！+2pt！ アルカリに傾いた髪を弱酸性に戻して引き締めるのが『酸性リンス』の役目だね！",
-    hintWrong: "アルカリ性のリンスは存在しないよ。アルカリを中和するのは弱酸性の『酸性リンス』だよ。"
-  },
-  {
-    id: "SH-019", block: "E", title: "第四級アンモニウム塩の毛髪吸着と帯電防止【第31回国試】",
-    exp: "シャンプー後の毛髪はマイナス（−）に帯電しています。プラス（＋）の第四級アンモニウム塩が電気的に吸着して中和し、静電気を防ぎます！",
-    q: "ヘアリンスに配合される陽イオン界面活性剤（第四級アンモニウム塩）がもつ、冬場に特に重要な毛髪保護効果は何？",
-    choices: ["帯電防止効果（静電気防止）", "毛髪の完全脱色効果"], answer: 0,
-    hintCorrect: "完璧！+2pt！ 第31回国試的中！ ブラッシング時の静電気や摩擦ダメージを防ぐ主役だね！",
-    hintWrong: "脱色するのは過酸化水素水だね。リンスの第四級塩は静電気を防ぐ『帯電防止効果』をもつよ。"
-  },
-  {
-    id: "SH-020", block: "E", title: "加水分解ケラチン（ppt）の毛髪補修",
-    exp: "ケラチンタンパク質を加水分解して水溶性のポリペプチド（ppt）にしたもので、毛髪内部のダメージホールに吸着してハリ・コシを与えます。",
-    q: "トリートメントに配合され、毛髪と組成が類似しているため損傷部位を補修する加水分解タンパク質を何という？",
-    choices: ["液化石油ガス（LPG）", "ポリペプチド（ppt）"], answer: 1,
-    hintCorrect: "見事！+2pt！ アミノ酸がつながったポリペプチド（ppt）が髪の傷んだすき間を埋めてくれるよ！",
-    hintWrong: "LPGはスプレーの噴射剤ガス。毛髪を補修するタンパク質の断片は『ポリペプチド（ppt）』だね。"
-  },
-
-  // F. ヘアスタイリング料の原理（粘性 vs 被膜）
-  {
-    id: "SH-021", block: "F", title: "スタイリング料の2大セット機構",
-    exp: "油分の粘着力を利用した【粘性型（ワックス・ポマード）】は手直しが可能！ 水溶性樹脂を固める【被膜形成型（スプレー・ジェル）】は再整髪が困難です！",
-    q: "固化せずに油分の粘着性で髪をまとめるため、一度崩れても「何度でも手直し（再整髪）ができる」スタイリング料はどっち？",
-    choices: ["ヘアワックス", "ハードヘアスプレー"], answer: 0,
-    hintCorrect: "大正解！+2pt！ 油のネバリを使うワックスは何度でも手ぐしで直せるのが最大のメリット！",
-    hintWrong: "ハードスプレーは膜で固めてしまうから再整髪は難しいよ。手直しできるのは『ヘアワックス』だね。"
-  },
-  {
-    id: "SH-022", block: "F", title: "植物性ポマードとヒマシ油・モクロウ【第49回国試】",
-    exp: "植物性ポマードはヒマシ油とモクロウ（木蝋）から作られ、適度な粘着性で太い黒髪をしっかり整え、シャンプーで落としやすいのが特徴です。",
-    q: "植物性ポマードにおいて、主たる油性原料として配合される植物油はどっち？",
-    choices: ["鉱物油（流動パラフィン）", "ヒマシ油"], answer: 1,
-    hintCorrect: "その通り！+2pt！ 第49回国試的中！ ヒマシ油とモクロウのネバリを利用した伝統の整髪料だね！",
-    hintWrong: "流動パラフィンは鉱物性ポマードの原料。植物性ポマードに配合されるのは『ヒマシ油』だよ。"
-  },
-  {
-    id: "SH-023", block: "F", title: "ヘアリキッドの成分とエタノール【第38回・49回国試】",
-    exp: "男性用の液体整髪料であるヘアリキッドは、安全な『エタノール水溶液』に水溶性のポリオキシプロピレンなどを溶かしたものです。メタノールは絶対禁止！",
-    q: "「ヘアリキッドは、メタノール水溶液に整髪成分を溶解した製品である。」この記述は正しい？",
-    choices: ["正しい（○）", "誤り（×）"], answer: 1,
-    hintCorrect: "素晴らしい！+2pt！ 第38回国試撃破！ メタノールは失明毒性があるため化粧品への使用は全面禁止！",
-    hintWrong: "国試の定番罠！ メタノールは劇薬で配合禁止！ 使われる溶媒は絶対に『エタノール』だよ。"
-  },
-  {
-    id: "SH-024", block: "F", title: "被膜形成剤（PVP・アクリル樹脂）【第31回・35回・38回国試】",
-    exp: "ヘアスプレーやセットローションのセット力の強さは、界面活性剤ではなく『被膜形成剤（PVPやアクリル樹脂アルカノールアミン液）』の配合量で決まります！",
-    q: "ヘアスタイリング剤において、乾燥して透明な膜を作りヘアスタイルをキープする成分はどれ？",
-    choices: ["被膜形成剤（PVP等）", "防腐・殺菌剤"], answer: 0,
-    hintCorrect: "完璧！+2pt！ 第35回・第38回国試完全的中！ 膜を作って髪を固定するのが被膜形成剤だね！",
-    hintWrong: "過去問で超頻出の引っかけ！ アクリル樹脂やPVPは殺菌剤ではなく『被膜形成剤』だよ。"
-  },
-
-  // G. エアゾール製品の構造と安全管理
-  {
-    id: "SH-025", block: "G", title: "エアゾール噴射剤（LPGとDME）【第31回・35回・49回国試】",
-    exp: "オゾン層を破壊するフロンガスは全廃されました！ 現在は可燃性の液化石油ガス（LPG）やジメチルエーテル（DME）が噴射剤として使われています。",
-    q: "エアゾールスプレーの噴射剤として現在広く使用されている可燃性ガスはどっち？",
-    choices: ["フロンガス", "液化石油ガス（LPG）"], answer: 1,
-    hintCorrect: "その通り！+2pt！ 第31回・第35回国試的中！ フロンは禁止され、現在はLPGやDMEが主役！",
-    hintWrong: "フロンは環境破壊のため全廃されたよ。現在は可燃性の『液化石油ガス（LPG）』が使われるね。"
-  },
-  {
-    id: "SH-026", block: "G", title: "ヘアスプレーとヘアフォームの噴射剤比率",
-    exp: "ヘアスプレーは原液と噴射剤が約50:50で溶け合っているため振らずに使える！ ヘアフォームは噴射剤が約10%で分離しているため【使用前によく振る】必要があります！",
-    q: "「ヘアフォームは缶内で原液と噴射剤が均一に溶けているため、使用前に容器を振る必要はない。」この記述は正しい？",
-    choices: ["正しい（○）", "誤り（×）"], answer: 1,
-    hintCorrect: "見事！+2pt！ 振らないとガスだけが先に出て泡にならなくなるから、フォームは『振って使う』が鉄則！",
-    hintWrong: "スプレーは振らなくてよいけれど、フォームは缶内で分離しているから『使用前によく振る』必要があるよ。"
-  },
-  {
-    id: "SH-027", block: "G", title: "エアゾール製品の高温破裂リスク（40℃以上禁止）",
-    exp: "LPGなどの高圧ガスは温度が上がると内圧が急上昇して缶が爆発・破裂します。直射日光下やストーブ付近など『40℃以上』になる場所への放置は絶対厳禁です！",
-    q: "エアゾール缶の破裂事故を防ぐため、保管場所の温度管理として定められている基準はどっち？",
-    choices: ["40℃以上の場所には置かない", "60℃までは暖めてよい"], answer: 0,
-    hintCorrect: "正解！+2pt！ 高圧ガス保安法に基づく絶対ルール！ 40℃以上になる場所に置くと破裂して大事故になるよ！",
-    hintWrong: "60℃なんて置いたら爆発するよ！ 高圧ガスの破裂を防ぐため『40℃以上は禁止』だよ。"
-  },
-  {
-    id: "SH-028", block: "G", title: "ヘアジェルとウォーターグリース（水性ポマード）",
-    exp: "カルボキシビニルポリマーをアルカリで中和した粘性の高い透明ジェル。保湿剤を多くして濡れ髪（ウェット感）を出したものがウォーターグリースです。",
-    q: "ヘアジェルやウォーターグリースにおいて、透明で粘り気のあるゼリー状態（ゲル）を作るために用いられる高分子化合物はどっち？",
-    choices: ["カルボキシビニルポリマー", "カーボンブラック"], answer: 0,
-    hintCorrect: "素晴らしい！+2pt！ 全28問完全制覇！ 中和するとぷるぷるのジェルになるカルボキシビニルポリマーだね！",
-    hintWrong: "カーボンブラックは黒い顔料。透明なヘアジェルのゲル構造を作るのは『カルボキシビニルポリマー』だよ。"
-  }
+  { id: "SH-001", block: "A", title: "基礎化粧品の3大プロセス", exp: "スキンケアは【クレンジング（清浄）】➔【コンディショニング（整肌・pH復元）】➔【トリートメント（保護・水分保持）】の順に進めます！", q: "洗顔後の肌に行う「pHを弱酸性に整え、失われた水分と油分のバランスを回復させるプロセス」はどれ？", choices: ["コンディショニング作用", "パーマネント作用"], answer: 0, hintCorrect: "大正解！+2pt！ 洗顔で乱れた肌のバランスを正常な弱酸性に戻すのがコンディショニングだね！", hintWrong: "パーマは髪のウェーブ加工だね。肌の調子やpHを整えるのは『コンディショニング作用』だよ。" },
+  { id: "SH-002", block: "A", title: "冬場の乾燥と油性皮膜のフタ効果", exp: "洗顔後の肌に水だけをつけると、蒸発するときに肌本来の水分まで一緒に奪ってしまいます。油分でフタ（エモリエント）をすることが不可欠です。", q: "乾燥した冬の皮膚に「水だけ」を塗布して放置すると、皮膚の状態はどうなる？", choices: ["しっとり潤い続ける", "水分の蒸散が進んで逆にかさつく"], answer: 1, hintCorrect: "その通り！+2pt！ 水だけだと蒸発熱と一緒に肌の水分まで逃げてしまうからクリームのフタが必要なんだ！", hintWrong: "水だけだと大気中に蒸散して、かえって肌が乾燥するよ。油分を含むクリームで蒸発を防ごう。" },
+  { id: "SH-003", block: "A", title: "皮脂膜と皮膚常在菌のバリア機能", exp: "皮脂と汗が混ざり合った「皮脂膜」は弱酸性で、水分の蒸発を防ぎ、皮膚常在菌とともに病原微生物の侵入を防いでいます。", q: "皮膚表面を覆う健康な皮脂膜の液性（pH）は、通常どちらの状態にある？", choices: ["弱酸性", "強アルカリ性"], answer: 0, hintCorrect: "見事！+2pt！ 肌も髪も健康な状態は『弱酸性』！ アルカリから肌を守るバリアなんだ！", hintWrong: "強アルカリ性だと肌が溶けてしまうよ。健康な皮膚表面は『弱酸性（pH5前後）』に保たれているね。" },
+  { id: "SH-004", block: "A", title: "プレーンシャンプー（温湯洗浄）の意義", exp: "薬剤を使わずお湯だけで洗うプレーンシャンプーは、汚れをふやかし、パーマの中間水洗やカラー後の流し（プレーンリンス）でも重要な物理洗浄です。", q: "シャンプー料を使わずに温湯のみで髪をすすぎ洗いする技術を何という？", choices: ["ドライシャンプー", "プレーンシャンプー"], answer: 1, hintCorrect: "バッチリ！+2pt！ お湯だけで洗うのがプレーンシャンプー！ 予備洗いや中間水洗の基本だね！", hintWrong: "ドライシャンプーは水を使わない粉末洗浄。お湯だけで洗い流すのは『プレーンシャンプー』だよ。" },
+  { id: "SH-005", block: "B", title: "クリームの油分量による3分類【第50回国試】", exp: "弱油性（油分10〜30%：バニシングクリーム）、中油性（油分30〜50%：エモリエントクリーム）、油性（油分50%以上：コールドクリーム）と規定されています！", q: "油性成分の割合が「10〜30%」で、さっぱりした使用感をもつクリームの分類はどっち？", choices: ["弱油性クリーム", "油性クリーム"], answer: 0, hintCorrect: "正解！+2pt！ 第50回国試直球！ 10〜30%は弱油性、50%以上が油性クリームだね！", hintWrong: "油性クリームは油分50%以上！ 10〜30%のさっぱりしたものは『弱油性クリーム』だよ。" },
+  { id: "SH-006", block: "B", title: "バニシングクリームの性質【第50回国試】", exp: "石けんを乳化剤としたO/W型（水中油型）クリームで、塗るとすっと消える（vanish）ように肌になじむ無油性・弱油性の代表格です。", q: "バニシングクリームの乳化型（タイプ）として正しいものはどっち？", choices: ["W/O型（油中水型）", "O/W型（水中油型）"], answer: 1, hintCorrect: "その通り！+2pt！ 第50回国試的中！ 水の中に微細な油が散らばる『O/W型』だからさっぱり消えるんだ！", hintWrong: "W/O型は油っぽく冷たく感じるコールドクリーム。バニシングクリームは『O/W型』だよ。" },
+  { id: "SH-007", block: "B", title: "コールドクリームの由来と乳化型", exp: "紀元前のギリシャでミツロウと油と水から生まれた伝統クリーム。油分が多くW/O型が基本で、肌につけると冷感を与えるためこう呼ばれます。", q: "コールドクリームの主原料として古くから用いられ、塗布時に冷感（ひんやり感）を与えるクリームの乳化型はどっち？", choices: ["W/O型（油中水型）", "粉末型"], answer: 0, hintCorrect: "完璧！+2pt！ 水分が蒸発して冷たく感じるW/O型油性クリームの代表選手だね！", hintWrong: "粉末ではないよ。油の中に水滴が閉じ込められた『W/O型』の油性クリームだよ。" },
+  { id: "SH-008", block: "B", title: "無油性クリーム（ゲル・ゼリー状）の存在【第50回国試】", exp: "クリームの中には油性成分がまったく入っていない「無油性型クリーム（ゲル化剤で固めた透明なジェル状）」も存在します！", q: "「香粧品のクリームと呼ばれる製品には、必ず10%以上の油性成分が含まれている。」この記述は正しい？", choices: ["正しい（○）", "誤り（×）"], answer: 1, hintCorrect: "見事！+2pt！ 第50回国試の引っかけクリア！ 油分0%の無油性ゲル状クリームもあるんだよ！", hintWrong: "過去問の重要引っかけ！ 油分を含まない水溶性ポリマー主体の『無油性型クリーム』もあるよ。" },
+  { id: "SH-009", block: "C", title: "おしろい・ファンデーションの4大基本性能", exp: "粉末化粧品には【のび（タルク）】【つき（マイカ等）】【カバー力（酸化チタン）】【吸収力（カオリン）】が必要です！", q: "おしろい類において、余分な皮脂や汗を吸収してテカリや化粧崩れを防ぐ目的で配合される粉体はどっち？", choices: ["カオリン（白陶土）", "エタノール"], answer: 0, hintCorrect: "大正解！+2pt！ 吸水・吸油力に優れたカオリンが皮脂を吸着して崩れを防ぐんだ！", hintWrong: "エタノールは液体溶媒。皮脂や汗をしっかり吸い取る粉体は『カオリン』だね。" },
+  { id: "SH-010", block: "C", title: "口紅のチキソトロピー性（揺変性）", exp: "口紅はスティック状態では固形を保ち、唇に塗るときに力を加えるとスッと液状に伸び、塗った後は元の硬さに戻る『チキソトロピー性』を持ちます。", q: "力を加えると軟化して滑らかに伸び、静置すると再び元のかたさに戻る口紅の物理的性質を何という？", choices: ["重合反応", "チキソトロピー性（揺変性）"], answer: 1, hintCorrect: "その通り！+2pt！ 塗る時は柔らかく、普段は折れない絶妙な性質がチキソトロピーだね！", hintWrong: "重合は高分子を作る化学反応。力が加わるとサラサラになる性質は『チキソトロピー性』だよ。" },
+  { id: "SH-011", block: "C", title: "変色口紅（ツートン口紅）の仕組み", exp: "顔料を使わず、赤色223号などの染料を配合した口紅で、塗る前は黄色〜橙色ですが、唇の水分やpHに反応して赤色に変色します。", q: "唇に塗布すると、唇表面の水分やpHによって黄色から鮮やかな赤色に変色する口紅を何という？", choices: ["変色口紅（ツートン口紅）", "油性ファンデーション"], answer: 0, hintCorrect: "正解！+2pt！ キサンテン系染料（赤223等）が唇の上で発色する変色口紅だね！", hintWrong: "ファンデーションではないよ。唇のpHで色が変わる口紅を『変色口紅（ツートン口紅）』というよ。" },
+  { id: "SH-012", block: "C", title: "アイライナーの目の粘膜使用禁止基準", exp: "目の粘膜付近にあるマイボーム腺（涙の蒸発を防ぐ脂腺）を塞いで眼病を起こすため、アイライナーを眼瞼内側の粘膜に使用することは禁止されています！", q: "「アイライナーは目を大きく見せるため、眼瞼の内側の粘膜部分に直接塗布してよい。」この記述は正しい？", choices: ["正しい（○）", "誤り（×）"], answer: 1, hintCorrect: "完璧！+2pt！ 粘膜への使用はマイボーム腺を塞ぎ眼球感染症の危険があるため絶対禁止！", hintWrong: "絶対にダメ！ アイライナーは無菌ではなく、マイボーム腺を塞ぐため粘膜使用は禁止だよ。" },
+  { id: "SH-013", block: "D", title: "シャンプーの洗浄メカニズム", exp: "陰イオン界面活性剤が親油基を油汚れに向けて取り囲み、ミセルとして水中に浮き上がらせて洗い流し、再付着を防ぎます！", q: "シャンプー料において、皮脂やスタイリング剤などの油汚れを浮き上がらせて包み込む主要成分はどれ？", choices: ["陰イオン界面活性剤", "酸性染料"], answer: 0, hintCorrect: "大正解！+2pt！ 豊かな泡立ちと強力な洗浄力をもつ陰イオン界面活性剤がシャンプーの主役！", hintWrong: "酸性染料はヘアマニキュアの色素だね。汚れを包んで落とすのは『陰イオン界面活性剤』だよ。" },
+  { id: "SH-014", block: "D", title: "硬水による金属石けん（石けんカス）の発生", exp: "カルシウムやマグネシウムを多く含む「硬水」で石けんを使うと、結合して不溶性の『金属石けん（石けんカス）』が生じ、髪がきしみます。", q: "硬水（カルシウム等の多い水）で石けんを用いて洗髪したときに生じ、毛髪に付着してごわつきの原因となる不溶性物質は何？", choices: ["精製水", "金属石けん（石けんカス）"], answer: 1, hintCorrect: "その通り！+2pt！ カルシウムと脂肪酸がくっついて石けんカス（金属石けん）ができるんだ！", hintWrong: "精製水は不純物のない水。硬水中のカルシウム等と石けんが反応してできるのは『金属石けん』だよ。" },
+  { id: "SH-015", block: "D", title: "リンスインシャンプーとカチオン化セルロース", exp: "シャンプーの中に「カチオン化セルロース（ポリクオタニウム-10）」を配合し、すすぎの希釈時に毛髪表面に吸着させて指通りを良くしています。", q: "リンスインシャンプーにおいて、すすぎ時に毛髪表面に吸着してコンディショニング効果を発揮する高分子化合物はどっち？", choices: ["カチオン化セルロース", "アルキルベンゼンスルホン酸塩"], answer: 0, hintCorrect: "見事！+2pt！ プラスの電気をもつカチオン化セルロースが髪をコーティングするんだ！", hintWrong: "アルキルベンゼンは強力な合成洗剤。リンスイン効果を出すのは『カチオン化セルロース』だよ。" },
+  { id: "SH-016", block: "D", title: "薬用シャンプー（ふけ・かゆみ防止有効成分）", exp: "頭皮の常在菌（マラセチア菌）によるふけを防ぐため、ピリチオン亜鉛、サリチル酸、ピロクトンオラミンなどを配合した医薬部外品です。", q: "ふけ防止を目的とする薬用シャンプーに有効成分として配合される殺菌・抗炎症成分はどれ？", choices: ["アセトン", "ピリチオン亜鉛（ジンクピリチオン）"], answer: 1, hintCorrect: "バッチリ！+2pt！ マラセチア菌の繁殖を抑えてフケやかゆみを防ぐ代表的な有効成分だね！", hintWrong: "アセトンは除光液の溶媒！ フケやかゆみを防ぐ薬用成分は『ピリチオン亜鉛』だよ。" },
+  { id: "SH-017", block: "E", title: "ヘアリンスとトリートメントの根本的な違い", exp: "ヘアリンスは主に毛髪【表面】のキューティクルに皮膜を作って滑りを良くし、トリートメントは毛髪【内部】に浸透して栄養補修します！", q: "毛髪の内部（コルテックス等）に加水分解タンパク質や油分を浸透させ、損傷を補修することを主目的とするのはどっち？", choices: ["ヘアトリートメント料", "ヘアリンス料"], answer: 0, hintCorrect: "その通り！+2pt！ 表面をコートするのがリンス、中まで入って補修するのが『トリートメント』！", hintWrong: "リンスは主に表面のすべり向上と帯電防止。内部までしっかり浸透・補修するのは『トリートメント』だね。" },
+  { id: "SH-018", block: "E", title: "酸性リンスの歴史と役割", exp: "昔の石けんシャンプーのアルカリを中和し、毛髪に残った金属石けんカスを溶かして落とすために、クエン酸などの有機酸リンスが使われました。", q: "石けん洗髪後やパーマ・カラー後に用いられ、アルカリを中和してキューティクルを引き締めるリンスはどっち？", choices: ["アルカリリンス", "酸性リンス（クエン酸等）"], answer: 1, hintCorrect: "正解！+2pt！ アルカリに傾いた髪を弱酸性に戻して引き締めるのが『酸性リンス』の役目だね！", hintWrong: "アルカリ性のリンスは存在しないよ。アルカリを中和するのは弱酸性の『酸性リンス』だよ。" },
+  { id: "SH-019", block: "E", title: "第四級アンモニウム塩の毛髪吸着と帯電防止【第31回国試】", exp: "シャンプー後の毛髪はマイナス（−）に帯電しています。プラス（＋）の第四級アンモニウム塩が電気的に吸着して中和し、静電気を防ぎます！", q: "ヘアリンスに配合される陽イオン界面活性剤（第四級アンモニウム塩）がもつ、冬場に特に重要な毛髪保護効果は何？", choices: ["帯電防止効果（静電気防止）", "毛髪の完全脱色効果"], answer: 0, hintCorrect: "完璧！+2pt！ 第31回国試的中！ ブラッシング時の静電気や摩擦ダメージを防ぐ主役だね！", hintWrong: "脱色するのは過酸化水素水だね。リンスの第四級塩は静電気を防ぐ『帯電防止効果』をもつよ。" },
+  { id: "SH-020", block: "E", title: "加水分解ケラチン（ppt）の毛髪補修", exp: "ケラチンタンパク質を加水分解して水溶性のポリペプチド（ppt）にしたもので、毛髪内部のダメージホールに吸着してハリ・コシを与えます。", q: "トリートメントに配合され、毛髪と組成が類似しているため損傷部位を補修する加水分解タンパク質を何という？", choices: ["液化石油ガス（LPG）", "ポリペプチド（ppt）"], answer: 1, hintCorrect: "見事！+2pt！ アミノ酸がつながったポリペプチド（ppt）が髪の傷んだすき間を埋めてくれるよ！", hintWrong: "LPGはスプレーの噴射剤ガス。毛髪を補修するタンパク質の断片は『ポリペプチド（ppt）』だね。" },
+  { id: "SH-021", block: "F", title: "スタイリング料の2大セット機構", exp: "油分の粘着力を利用した【粘性型（ワックス・ポマード）】は手直しが可能！ 水溶性樹脂を固める【被膜形成型（スプレー・ジェル）】は再整髪が困難です！", q: "固化せずに油分の粘着性で髪をまとめるため、一度崩れても「何度でも手直し（再整髪）ができる」スタイリング料はどっち？", choices: ["ヘアワックス", "ハードヘアスプレー"], answer: 0, hintCorrect: "大正解！+2pt！ 油のネバリを使うワックスは何度でも手ぐしで直せるのが最大のメリット！", hintWrong: "ハードスプレーは膜で固めてしまうから再整髪は難しいよ。手直しできるのは『ヘアワックス』だね。" },
+  { id: "SH-022", block: "F", title: "植物性ポマードとヒマシ油・モクロウ【第49回国試】", exp: "植物性ポマードはヒマシ油とモクロウ（木蝋）から作られ、適度な粘着性で太い黒髪をしっかり整え、シャンプーで落としやすいのが特徴です。", q: "植物性ポマードにおいて、主たる油性原料として配合される植物油はどっち？", choices: ["鉱物油（流動パラフィン）", "ヒマシ油"], answer: 1, hintCorrect: "その通り！+2pt！ 第49回国試的中！ ヒマシ油とモクロウのネバリを利用した伝統の整髪料だね！", hintWrong: "流動パラフィンは鉱物性ポマードの原料。植物性ポマードに配合されるのは『ヒマシ油』だよ。" },
+  { id: "SH-023", block: "F", title: "ヘアリキッドの成分とエタノール【第38回・49回国試】", exp: "男性用の液体整髪料であるヘアリキッドは、安全な『エタノール水溶液』に水溶性のポリオキシプロピレンなどを溶かしたものです。メタノールは絶対禁止！", q: "「ヘアリキッドは、メタノール水溶液に整髪成分を溶解した製品である。」この記述は正しい？", choices: ["正しい（○）", "誤り（×）"], answer: 1, hintCorrect: "素晴らしい！+2pt！ 第38回国試撃破！ メタノールは失明毒性があるため化粧品への使用は全面禁止！", hintWrong: "国試の定番罠！ メタノールは劇薬で配合禁止！ 使われる溶媒は絶対に『エタノール』だよ。" },
+  { id: "SH-024", block: "F", title: "被膜形成剤（PVP・アクリル樹脂）【第31回・35回・38回国試】", exp: "ヘアスプレーやセットローションのセット力の強さは、界面活性剤ではなく『被膜形成剤（PVPやアクリル樹脂アルカノールアミン液）』の配合量で決まります！", q: "ヘアスタイリング剤において、乾燥して透明な膜を作りヘアスタイルをキープする成分はどれ？", choices: ["被膜形成剤（PVP等）", "防腐・殺菌剤"], answer: 0, hintCorrect: "完璧！+2pt！ 第35回・第38回国試完全的中！ 膜を作って髪を固定するのが被膜形成剤だね！", hintWrong: "過去問で超頻出の引っかけ！ アクリル樹脂やPVPは殺菌剤ではなく『被膜形成剤』だよ。" },
+  { id: "SH-025", block: "G", title: "エアゾール噴射剤（LPGとDME）【第31回・35回・49回国試】", exp: "オゾン層を破壊するフロンガスは全廃されました！ 現在は可燃性の液化石油ガス（LPG）やジメチルエーテル（DME）が噴射剤として使われています。", q: "エアゾールスプレーの噴射剤として現在広く使用されている可燃性ガスはどっち？", choices: ["フロンガス", "液化石油ガス（LPG）"], answer: 1, hintCorrect: "その通り！+2pt！ 第31回・第35回国試的中！ フロンは禁止され、現在はLPGやDMEが主役！", hintWrong: "フロンは環境破壊のため全廃されたよ。現在は可燃性の『液化石油ガス（LPG）』が使われるね。" },
+  { id: "SH-026", block: "G", title: "ヘアスプレーとヘアフォームの噴射剤比率", exp: "ヘアスプレーは原液と噴射剤が約50:50で溶け合っているため振らずに使える！ ヘアフォームは噴射剤が約10%で分離しているため【使用前によく振る】必要があります！", q: "「ヘアフォームは缶内で原液と噴射剤が均一に溶けているため、使用前に容器を振る必要はない。」この記述は正しい？", choices: ["正しい（○）", "誤り（×）"], answer: 1, hintCorrect: "見事！+2pt！ 振らないとガスだけが先に出て泡にならなくなるから、フォームは『振って使う』が鉄則！", hintWrong: "スプレーは振らなくてよいけれど、フォームは缶内で分離しているから『使用前によく振る』必要があるよ。" },
+  { id: "SH-027", block: "G", title: "エアゾール製品の高温破裂リスク（40℃以上禁止）", exp: "LPGなどの高圧ガスは温度が上がると内圧が急上昇して缶が爆発・破裂します。直射日光下やストーブ付近など『40℃以上』になる場所への放置は絶対厳禁です！", q: "エアゾール缶の破裂事故を防ぐため、保管場所の温度管理として定められている基準はどっち？", choices: ["40℃以上の場所には置かない", "60℃までは暖めてよい"], answer: 0, hintCorrect: "正解！+2pt！ 高圧ガス保安法に基づく絶対ルール！ 40℃以上になる場所に置くと破裂して大事故になるよ！", hintWrong: "60℃なんて置いたら爆発するよ！ 高圧ガスの破裂を防ぐため『40℃以上は禁止』だよ。" },
+  { id: "SH-028", block: "G", title: "ヘアジェルとウォーターグリース（水性ポマード）", exp: "カルボキシビニルポリマーをアルカリで中和した粘性の高い透明ジェル。保湿剤を多くして濡れ髪（ウェット感）を出したものがウォーターグリースです。", q: "ヘアジェルやウォーターグリースにおいて、透明で粘り気のあるゼリー状態（ゲル）を作るために用いられる高分子化合物はどっち？", choices: ["カルボキシビニルポリマー", "カーボンブラック"], answer: 0, hintCorrect: "素晴らしい！+2pt！ 全28問完全制覇！ 中和するとぷるぷるのジェルになるカルボキシビニルポリマーだね！", hintWrong: "カーボンブラックは黒い顔料。透明なヘアジェルのゲル構造を作るのは『カルボキシビニルポリマー』だよ。" }
 ];
 
-// 【国試対策・本番4択問題 厳選10問（第31〜50回過去問＋教科書精選）】
 const examQuestions = [
-  {
-    id: "EX-01", block: "EXAM", title: "第31回 国家試験本番問題",
-    q: "頭皮・毛髪に使用する香粧品に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "１．エアゾールタイプのスタイリング剤には、噴射剤として可燃性の液化石油ガスやジメチルエーテルが用いられる。",
-      "２．皮膜形成剤を配合したスタイリング剤には、合成粘液質のポリビニルピロリドン（PVP）が用いられる。",
-      "３．ヘアリンス剤に用いられる陽イオン界面活性剤の第四級アンモニウム塩は、毛髪の帯電防止効果がある。",
-      "４．ムース状のスタイリング剤は、陰イオン界面活性剤の高級アルコール系合成洗剤が主成分である。"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ ムース状（フォーム）スタイリング剤の主成分は被膜形成剤と水であり、合成洗剤ではありません！",
-    hintWrong: "誤りは「４」です。フォームはスタイリング剤であり、洗浄を主目的とする合成洗剤ではありません。"
-  },
-  {
-    id: "EX-02", block: "EXAM", title: "第35回 国家試験本番問題",
-    q: "ヘアスタイリング剤に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "１．エアゾールタイプのヘアスタイリング剤に噴射剤として配合されるのは、フロンガスである。",
-      "２．ヘアスタイリング剤に配合されるアクリル樹脂アルカノールアミン液は、防腐・殺菌剤である。",
-      "３．ヘアスタイリング剤のセット力の違いは、界面活性剤の配合量による。",
-      "４．ヘアクリームは、油性原料と水を乳化させたエマルジョン型のヘアスタイリング剤である。"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ ヘアクリームは油分と水を界面活性剤で乳化させたエマルション製品です！",
-    hintWrong: "正しいのは「４」です。１はLPG/DME、２は被膜形成剤、３は被膜形成剤や油分の量によります。"
-  },
-  {
-    id: "EX-03", block: "EXAM", title: "第38回 国家試験本番問題",
-    q: "ヘアスタイリング剤に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）ヘアリキッドは、メタノール水溶液にスタイリング成分を溶解したスタイリング剤である。",
-      "（2）エアゾールタイプのヘアスタイリング剤に噴射剤として配合されるのは、フロンガスである。",
-      "（3）ヘアスタイリング剤に配合されるアクリル樹脂アルカノールアミン液は、防腐・殺菌剤である。",
-      "（4）ヘアスタイリング剤のセット力の違いは、被膜形成剤の配合量による。"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ スタイリング剤のセット力の強弱は、被膜形成剤の種類や配合量によって決まります！",
-    hintWrong: "正しいのは「（4）」です。（1）はエタノール、（2）はLPG、（3）は被膜形成剤です。"
-  },
-  {
-    id: "EX-04", block: "EXAM", title: "第40回 国家試験本番問題（タンパク質）",
-    q: "タンパク質に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）ケラチンは、タンパク質どうしが強固に結合した繊維状の硬タンパク質である。",
-      "（2）ペプチド結合は、ヒドロキシ基（-OH）とチオール基（-SH）の間の結合である。",
-      "（3）シスチン結合は、ポリペプチド鎖間の架橋構造を構成する結合の一つである。",
-      "（4）タンパク質を酸で加水分解すると、いろいろなアミノ酸を生じる。"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ ペプチド結合はアミノ基（-NH₂）とカルボキシ基（-COOH）の結合です！",
-    hintWrong: "誤りは「（2）」です。ペプチド結合はアミノ酸同士のアミノ基とカルボキシ基が脱水結合したものです。"
-  },
-  {
-    id: "EX-05", block: "EXAM", title: "第49回 国家試験本番問題",
-    q: "スタイリング剤に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）ジメチルエーテル（DME）は、保湿剤としてヘアジェルに用いられる。",
-      "（2）ポリビニルピロリドン（PVP）は、皮膜形成剤としてセットローションに用いられる。",
-      "（3）エタノール（エチルアルコール）は、溶剤としてヘアリキッドに用いられる。",
-      "（4）ヒマシ油は、油性原料として植物性ポマードに用いられる。"
-    ],
-    answer: 0,
-    hintCorrect: "正解！+3pt！ ジメチルエーテル（DME）はエアゾールの「噴射剤」であり、保湿剤ではありません！",
-    hintWrong: "誤りは「（1）」です。DMEはスプレー製品の噴射剤ガスとして用いられます。"
-  },
-  {
-    id: "EX-06", block: "EXAM", title: "第50回 国家試験本番問題（クリーム）",
-    q: "香粧品のクリームに関する次の記述のうち、正しいものの組み合わせはどれか。\n\nａ．クリームには、必ず油性成分が入っている。\nｂ．油性成分が10％のクリームは、中油性クリームに分類される。\nｃ．クレンジングクリームは、メイクアップ用香粧品を除去する機能を有している。\nｄ．バニシングクリームは、O/W型クリームである。",
-    choices: [
-      "（1） ａ と ｂ",
-      "（2） ｂ と ｃ",
-      "（3） ｃ と ｄ",
-      "（4） ａ と ｄ"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ ｃ（クレンジング機能）と ｄ（バニシングはO/W型）が正しい記述です！",
-    hintWrong: "正解は「（3）」です。ａは無油性ゲルがあり、ｂの油分10%は弱油性クリームに分類されます。"
-  },
-  {
-    id: "EX-07", block: "EXAM", title: "教科書精選問題（シャンプーと硬水）",
-    q: "シャンプー料および洗髪に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）石けんは、カルシウムイオンを多く含む硬水の中でも泡立ちが低下しない。",
-      "（2）シャンプー料の主成分には、毛髪への吸着性が高い陽イオン界面活性剤が用いられる。",
-      "（3）石けんを用いて硬水で洗髪すると、不溶性の金属石けんが生成して髪がきしみやすい。",
-      "（4）高級アルコール系シャンプーは、硬水で洗うと有毒ガスを発生する。"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ 硬水中のカルシウム等と石けんが結びついて金属石けん（石けんカス）になります！",
-    hintWrong: "正しいのは「（3）」です。石けんは硬水で泡立たずきしみます。シャンプー主成分は陰イオンです。"
-  },
-  {
-    id: "EX-08", block: "EXAM", title: "教科書精選問題（リンスとトリートメント）",
-    q: "ヘアリンス料とヘアトリートメント料に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）ヘアリンス料は、主に毛髪表面のキューティクルに作用して滑りや帯電防止性を与える。",
-      "（2）ヘアトリートメント料は、毛髪内部に加水分解ケラチン（ppt）などを浸透させて補修する。",
-      "（3）ヘアリンス料に配合される第四級アンモニウム塩は、陰イオン界面活性剤である。",
-      "（4）パーマやヘアカラーにより親水化した毛髪ほど、陽イオン界面活性剤が吸着しやすい。"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ 第四級アンモニウム塩は「陽イオン界面活性剤（カチオン）」です！",
-    hintWrong: "誤りは「（3）」です。第四級アンモニウム塩は逆性石けんとも呼ばれる陽イオン界面活性剤です。"
-  },
-  {
-    id: "EX-09", block: "EXAM", title: "教科書精選問題（スタイリング料の特性）",
-    q: "ヘアスタイリング料の特性に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）ヘアスプレーは、使用前に容器を激しく振ってから噴射しなければならない。",
-      "（2）ヘアワックスは、油分の粘着性を利用しているため、塗布後も再整髪が可能である。",
-      "（3）植物性ポマードは、流動パラフィンと固形パラフィンを主原料としている。",
-      "（4）カルボキシビニルポリマーは、強酸性の物質を加えることで透明なゲルを形成する。"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ ヘアワックスは固化しない油分の粘性を利用するため何度でも手直しができます！",
-    hintWrong: "正しいのは「（2）」です。スプレーは振る必要がなく、植物性ポマードはヒマシ油、カルボキシビニルはアルカリ中和でゲル化します。"
-  },
-  {
-    id: "EX-10", block: "EXAM", title: "教科書精選問題（エアゾールの安全性）",
-    q: "エアゾール製品の取り扱いおよび安全管理に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）直射日光の当たる場所やストーブの近くなど、温度が40℃以上となるところに置いてはならない。",
-      "（2）炎や火気の近く、または火気を使用している室内で大量に使用してはならない。",
-      "（3）噴射剤に可燃性ガス（LPG等）を使用している場合でも、火中に投げ入れて廃棄してよい。",
-      "（4）ヘアフォームは缶内で噴射剤と原液が分離しやすいため、使用前によく振って均一にする。"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ エアゾール缶を火中に投じると破裂・爆発し大事故になります！必ず使い切って捨てます！",
-    hintWrong: "誤りは「（3）」です。高圧ガス製品を火の中に投入することは絶対に禁止されています。"
-  }
+  { id: "EX-01", block: "EXAM", title: "第31回 国家試験本番問題", q: "頭皮・毛髪に使用する香粧品に関する次の記述のうち、誤っているものはどれか。", choices: ["１．エアゾールタイプのスタイリング剤には、噴射剤として可燃性の液化石油ガスやジメチルエーテルが用いられる。", "２．皮膜形成剤を配合したスタイリング剤には、合成粘液質のポリビニルピロリドン（PVP）が用いられる。", "３．ヘアリンス剤に用いられる陽イオン界面活性剤の第四級アンモニウム塩は、毛髪の帯電防止効果がある。", "４．ムース状のスタイリング剤は、陰イオン界面活性剤の高級アルコール系合成洗剤が主成分である。"], answer: 3, hintCorrect: "正解！+3pt！ ムース状（フォーム）スタイリング剤の主成分は被膜形成剤と水であり、合成洗剤ではありません！", hintWrong: "誤りは「４」です。フォームはスタイリング剤であり、洗浄を主目的とする合成洗剤ではありません。" },
+  { id: "EX-02", block: "EXAM", title: "第35回 国家試験本番問題", q: "ヘアスタイリング剤に関する次の記述のうち、正しいものはどれか。", choices: ["１．エアゾールタイプのヘアスタイリング剤に噴射剤として配合されるのは、フロンガスである。", "２．ヘアスタイリング剤に配合されるアクリル樹脂アルカノールアミン液は、防腐・殺菌剤である。", "３．ヘアスタイリング剤のセット力の違いは、界面活性剤の配合量による。", "４．ヘアクリームは、油性原料と水を乳化させたエマルジョン型のヘアスタイリング剤である。"], answer: 3, hintCorrect: "正解！+3pt！ ヘアクリームは油分と水を界面活性剤で乳化させたエマルション製品です！", hintWrong: "正しいのは「４」です。１はLPG/DME、２は被膜形成剤、３は被膜形成剤や油分の量によります。" },
+  { id: "EX-03", block: "EXAM", title: "第38回 国家試験本番問題", q: "ヘアスタイリング剤に関する次の記述のうち、正しいものはどれか。", choices: ["（1）ヘアリキッドは、メタノール水溶液にスタイリング成分を溶解したスタイリング剤である。", "（2）エアゾールタイプのヘアスタイリング剤に噴射剤として配合されるのは、フロンガスである。", "（3）ヘアスタイリング剤に配合されるアクリル樹脂アルカノールアミン液は、防腐・殺菌剤である。", "（4）ヘアスタイリング剤のセット力の違いは、被膜形成剤の配合量による。"], answer: 3, hintCorrect: "正解！+3pt！ スタイリング剤のセット力の強弱は、被膜形成剤の種類や配合量によって決まります！", hintWrong: "正しいのは「（4）」です。（1）はエタノール、（2）はLPG、（3）は被膜形成剤です。" },
+  { id: "EX-04", block: "EXAM", title: "第40回 国家試験本番問題（タンパク質）", q: "タンパク質に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）ケラチンは、タンパク質どうしが強固に結合した繊維状の硬タンパク質である。", "（2）ペプチド結合は、ヒドロキシ基（-OH）とチオール基（-SH）の間の結合である。", "（3）シスチン結合は、ポリペプチド鎖間の架橋構造を構成する結合の一つである。", "（4）タンパク質を酸で加水分解すると、いろいろなアミノ酸を生じる。"], answer: 1, hintCorrect: "正解！+3pt！ ペプチド結合はアミノ基（-NH₂）とカルボキシ基（-COOH）の結合です！", hintWrong: "誤りは「（2）」です。ペプチド結合はアミノ酸同士のアミノ基とカルボキシ基が脱水結合したものです。" },
+  { id: "EX-05", block: "EXAM", title: "第49回 国家試験本番問題", q: "スタイリング剤に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）ジメチルエーテル（DME）は、保湿剤としてヘアジェルに用いられる。", "（2）ポリビニルピロリドン（PVP）は、皮膜形成剤としてセットローションに用いられる。", "（3）エタノール（エチルアルコール）は、溶剤としてヘアリキッドに用いられる。", "（4）ヒマシ油は、油性原料として植物性ポマードに用いられる。"], answer: 0, hintCorrect: "正解！+3pt！ ジメチルエーテル（DME）はエアゾールの「噴射剤」であり、保湿剤ではありません！", hintWrong: "誤りは「（1）」です。DMEはスプレー製品の噴射剤ガスとして用いられます。" },
+  { id: "EX-06", block: "EXAM", title: "第50回 国家試験本番問題（クリーム）", q: "香粧品のクリームに関する次の記述のうち、正しいものの組み合わせはどれか。\n\nａ．クリームには、必ず油性成分が入っている。\nｂ．油性成分が10％のクリームは、中油性クリームに分類される。\nｃ．クレンジングクリームは、メイクアップ用香粧品を除去する機能を有している。\nｄ．バニシングクリームは、O/W型クリームである。", choices: ["（1） ａ と ｂ", "（2） ｂ と ｃ", "（3） ｃ と ｄ", "（4） ａ と ｄ"], answer: 2, hintCorrect: "正解！+3pt！ ｃ（クレンジング機能）と ｄ（バニシングはO/W型）が正しい記述です！", hintWrong: "正解は「（3）」です。ａは無油性ゲルがあり、ｂの油分10%は弱油性クリームに分類されます。" },
+  { id: "EX-07", block: "EXAM", title: "教科書精選問題（シャンプーと硬水）", q: "シャンプー料および洗髪に関する次の記述のうち、正しいものはどれか。", choices: ["（1）石けんは、カルシウムイオンを多く含む硬水の中でも泡立ちが低下しない。", "（2）シャンプー料の主成分には、毛髪への吸着性が高い陽イオン界面活性剤が用いられる。", "（3）石けんを用いて硬水で洗髪すると、不溶性の金属石けんが生成して髪がきしみやすい。", "（4）高級アルコール系シャンプーは、硬水で洗うと有毒ガスを発生する。"], answer: 2, hintCorrect: "正解！+3pt！ 硬水中のカルシウム等と石けんが結びついて金属石けん（石けんカス）になります！", hintWrong: "正しいのは「（3）」です。石けんは硬水で泡立たずきしみます。シャンプー主成分は陰イオンです。" },
+  { id: "EX-08", block: "EXAM", title: "教科書精選問題（リンスとトリートメント）", q: "ヘアリンス料とヘアトリートメント料に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）ヘアリンス料は、主に毛髪表面のキューティクルに作用して滑りや帯電防止性を与える。", "（2）ヘアトリートメント料は、毛髪内部に加水分解ケラチン（ppt）などを浸透させて補修する。", "（3）ヘアリンス料に配合される第四級アンモニウム塩は、陰イオン界面活性剤である。", "（4）パーマやヘアカラーにより親水化した毛髪ほど、陽イオン界面活性剤が吸着しやすい。"], answer: 2, hintCorrect: "正解！+3pt！ 第四級アンモニウム塩は「陽イオン界面活性剤（カチオン）」です！", hintWrong: "誤りは「（3）」です。第四級アンモニウム塩は逆性石けんとも呼ばれる陽イオン界面活性剤です。" },
+  { id: "EX-09", block: "EXAM", title: "教科書精選問題（スタイリング料の特性）", q: "ヘアスタイリング料の特性に関する次の記述のうち、正しいものはどれか。", choices: ["（1）ヘアスプレーは、使用前に容器を激しく振ってから噴射しなければならない。", "（2）ヘアワックスは、油分の粘着性を利用しているため、塗布後も再整髪が可能である。", "（3）植物性ポマードは、流動パラフィンと固形パラフィンを主原料としている。", "（4）カルボキシビニルポリマーは、強酸性の物質を加えることで透明なゲルを形成する。"], answer: 1, hintCorrect: "正解！+3pt！ ヘアワックスは固化しない油分の粘性を利用するため何度でも手直しができます！", hintWrong: "正しいのは「（2）」です。スプレーは振る必要がなく、植物性ポマードはヒマシ油、カルボキシビニルはアルカリ中和でゲル化します。" },
+  { id: "EX-10", block: "EXAM", title: "教科書精選問題（エアゾールの安全性）", q: "エアゾール製品の取り扱いおよび安全管理に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）直射日光の当たる場所やストーブの近くなど、温度が40℃以上となるところに置いてはならない。", "（2）炎や火気の近く、または火気を使用している室内で大量に使用してはならない。", "（3）噴射剤に可燃性ガス（LPG等）を使用している場合でも、火中に投げ入れて廃棄してよい。", "（4）ヘアフォームは缶内で噴射剤と原液が分離しやすいため、使用前によく振って均一にする。"], answer: 2, hintCorrect: "正解！+3pt！ エアゾール缶を火中に投じると破裂・爆発し大事故になります！必ず使い切って捨てます！", hintWrong: "誤りは「（3）」です。高圧ガス製品を火の中に投入することは絶対に禁止されています。" }
 ];
 
-// 状態管理
-const STORAGE_KEY = "skin_hair_care_save_data";
-let state = {
-  mode: "BASE", // "BASE" または "EXAM"
-  currentQuestionIndex: 0,
-  answers: {},
-  wrongQuestionIds: [],
-  isRetryMode: false,
-  isFinished: false
-};
+const STORAGE_KEY = "skin_hair_care_save_data_v4";
+let state = { mode: "BASE", currentQuestionIndex: 0, answers: {}, wrongQuestionIds: [], isRetryMode: false, isFinished: false };
 
-function getActiveQuestions() {
-  if (state.mode === "EXAM") {
-    return examQuestions;
-  }
-  return baseQuestions;
-}
-
-function getBlockStartIndex(blockCode) {
-  const qs = getActiveQuestions();
-  return qs.findIndex(q => q.block === blockCode);
-}
+function getActiveQuestions() { return (state.mode === "EXAM") ? examQuestions : baseQuestions; }
+function getBlockStartIndex(blockCode) { return getActiveQuestions().findIndex(q => q.block === blockCode); }
 
 function loadProgress() {
   const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    try {
-      state = JSON.parse(saved);
-    } catch(e) {
-      console.error(e);
-    }
-  }
+  if (saved) { try { state = JSON.parse(saved); } catch(e) {} }
 }
+function saveProgress() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
-function saveProgress() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-// 得点と正解率の計算
 function calculateScore(mode) {
   const qs = (mode === "EXAM") ? examQuestions : baseQuestions;
   const pointPerQ = (mode === "EXAM") ? 3 : 2;
@@ -881,25 +272,17 @@ function updateSpineMap() {
   const blocks = ["A", "B", "C", "D", "E", "F", "G"];
   const currentQ = getCurrentQuestion();
   const currentBlock = currentQ ? currentQ.block : null;
-
   blocks.forEach(b => {
     const node = document.getElementById(`node-${b}`);
     if (!node) return;
     node.className = "spine-node";
-
-    const blockQuestions = baseQuestions.filter(q => q.block === b);
-    const isAllCorrect = blockQuestions.every(q => state.answers[q.id] === true);
-
-    if (isAllCorrect) node.classList.add("cleared");
+    const bQs = baseQuestions.filter(q => q.block === b);
+    if (bQs.every(q => state.answers[q.id] === true)) node.classList.add("cleared");
     if (b === currentBlock && state.mode === "BASE" && !state.isFinished) node.classList.add("active");
   });
-
   const examNode = document.getElementById("node-EXAM");
-  if (state.mode === "EXAM" && !state.isFinished) {
-    examNode.classList.add("active");
-  } else {
-    examNode.classList.remove("active");
-  }
+  if (state.mode === "EXAM" && !state.isFinished) examNode.classList.add("active");
+  else examNode.classList.remove("active");
 }
 
 function getCurrentQuestion() {
@@ -914,11 +297,7 @@ function getCurrentQuestion() {
 function renderQuestion() {
   state.isFinished = false;
   const item = getCurrentQuestion();
-  if (!item) {
-    showResultScreen();
-    return;
-  }
-
+  if (!item) { showResultScreen(); return; }
   updateSpineMap();
 
   const scoreData = calculateScore(state.mode);
@@ -927,20 +306,12 @@ function renderQuestion() {
   if (state.mode === "EXAM") {
     expBox.style.display = "none";
     document.getElementById("status-field").innerText = "🎯 国試本番10問演習";
-    if (state.isRetryMode) {
-      document.getElementById("progress-text").innerText = `🔥 弱点集中特訓：${state.currentQuestionIndex + 1} / ${state.wrongQuestionIds.length}`;
-    } else {
-      document.getElementById("progress-text").innerText = `国試問 ${state.currentQuestionIndex + 1} / ${examQuestions.length}`;
-    }
+    document.getElementById("progress-text").innerText = state.isRetryMode ? `🔥 弱点特訓：${state.currentQuestionIndex + 1}/${state.wrongQuestionIds.length}` : `国試問 ${state.currentQuestionIndex + 1} / ${examQuestions.length}`;
   } else {
     expBox.style.display = "block";
     document.getElementById("status-field").innerText = fieldNames[item.block] || "ヘア・スキンケア";
     document.getElementById("lesson-exp").innerText = item.exp;
-    if (state.isRetryMode) {
-      document.getElementById("progress-text").innerText = `🔥 弱点集中特訓：${state.currentQuestionIndex + 1} / ${state.wrongQuestionIds.length}`;
-    } else {
-      document.getElementById("progress-text").innerText = `問 ${state.currentQuestionIndex + 1} / ${baseQuestions.length}`;
-    }
+    document.getElementById("progress-text").innerText = state.isRetryMode ? `🔥 弱点特訓：${state.currentQuestionIndex + 1}/${state.wrongQuestionIds.length}` : `問 ${state.currentQuestionIndex + 1} / ${baseQuestions.length}`;
   }
 
   document.getElementById("status-score").innerText = `正解率: ${scoreData.rate}% (${scoreData.currentPoints}/${scoreData.maxPoints}点)`;
@@ -967,30 +338,22 @@ function selectAnswer(selectedIndex) {
   const feedback = document.getElementById("feedback-area");
   const feedbackDesc = document.getElementById("feedback-desc");
   const buttons = document.querySelectorAll(".btn-choice");
-
   buttons.forEach(b => b.disabled = true);
 
   const isCorrect = (selectedIndex === item.answer);
-
   if (isCorrect) {
     buttons[selectedIndex].classList.add("correct-highlight");
     feedback.className = "feedback-box feedback-correct";
     feedbackDesc.innerText = item.hintCorrect;
     state.answers[item.id] = true;
-
-    if (state.isRetryMode) {
-      state.wrongQuestionIds = state.wrongQuestionIds.filter(id => id !== item.id);
-    }
+    if (state.isRetryMode) state.wrongQuestionIds = state.wrongQuestionIds.filter(id => id !== item.id);
   } else {
     buttons[selectedIndex].classList.add("wrong-highlight");
     buttons[item.answer].classList.add("correct-highlight");
     feedback.className = "feedback-box feedback-wrong";
     feedbackDesc.innerText = item.hintWrong;
     state.answers[item.id] = false;
-
-    if (!state.wrongQuestionIds.includes(item.id)) {
-      state.wrongQuestionIds.push(item.id);
-    }
+    if (!state.wrongQuestionIds.includes(item.id)) state.wrongQuestionIds.push(item.id);
   }
 
   saveProgress();
@@ -1002,15 +365,12 @@ function selectAnswer(selectedIndex) {
 }
 
 function nextQuestion() {
-  const qs = getActiveQuestions();
-  const total = state.isRetryMode ? state.wrongQuestionIds.length : qs.length;
+  const total = state.isRetryMode ? state.wrongQuestionIds.length : getActiveQuestions().length;
   if (state.currentQuestionIndex < total - 1) {
     state.currentQuestionIndex++;
     saveProgress();
     renderQuestion();
-  } else {
-    showResultScreen();
-  }
+  } else { showResultScreen(); }
 }
 
 function prevQuestion() {
@@ -1022,13 +382,9 @@ function prevQuestion() {
 }
 
 function jumpToBlock(blockCode) {
-  if (state.mode === "EXAM") {
-    state.mode = "BASE";
-    state.isRetryMode = false;
-  } else if (state.isRetryMode) {
-    if (!confirm("弱点リトライを中断して通常問題へ戻りますか？")) return;
-    state.isRetryMode = false;
-  }
+  if (state.mode === "EXAM") { state.mode = "BASE"; state.isRetryMode = false; }
+  else if (state.isRetryMode && !confirm("弱点リトライを中断して戻りますか？")) return;
+  state.isRetryMode = false;
   const targetIndex = getBlockStartIndex(blockCode);
   if (targetIndex !== -1) {
     restoreCardStructure();
@@ -1039,10 +395,8 @@ function jumpToBlock(blockCode) {
 }
 
 function startExamMode() {
-  if (state.isRetryMode) {
-    if (!confirm("弱点リトライを終了して国試10問演習へ移動しますか？")) return;
-    state.isRetryMode = false;
-  }
+  if (state.isRetryMode && !confirm("弱点リトライを終了して国試演習へ移動しますか？")) return;
+  state.isRetryMode = false;
   state.mode = "EXAM";
   state.currentQuestionIndex = 0;
   saveProgress();
@@ -1059,43 +413,34 @@ function startBaseMode() {
   renderQuestion();
 }
 
+function pauseQuiz() {
+  saveProgress();
+  alert("⏸️ 学習を一時中断し、進捗を保存しました。\n次回もこの問題から再開できます。");
+  document.getElementById("btn-resume").style.display = "inline-block";
+}
+function resumeQuiz() {
+  document.getElementById("btn-resume").style.display = "none";
+  alert("▶️ 学習を再開します。");
+}
+function quitQuiz() {
+  if (confirm("学習を終了しますか？\n\n[OK]：成績結果を表示する\n[キャンセル]：そのまま続ける")) showResultScreen();
+}
+
 function generateStatsHtml() {
   const blocks = ["A", "B", "C", "D", "E", "F", "G"];
-  let lowestRate = 101;
-  let lowestBlock = "";
-  let graphHtml = "";
-
+  let lowestRate = 101, lowestBlock = "", graphHtml = "";
   blocks.forEach(b => {
     const questions = baseQuestions.filter(q => q.block === b);
-    const total = questions.length;
     const correctCount = questions.filter(q => state.answers[q.id] === true).length;
-    const rate = Math.round((correctCount / total) * 100);
-
-    if (rate < lowestRate) {
-      lowestRate = rate;
-      lowestBlock = fieldNames[b];
-    }
-
-    let barClass = "bar-high";
-    if (rate < 50) {
-      barClass = "bar-low";
-    } else if (rate < 80) {
-      barClass = "bar-mid";
-    }
-
+    const rate = Math.round((correctCount / questions.length) * 100);
+    if (rate < lowestRate) { lowestRate = rate; lowestBlock = fieldNames[b]; }
+    let barClass = (rate < 50) ? "bar-low" : (rate < 80) ? "bar-mid" : "bar-high";
     graphHtml += `
       <div class="graph-item" onclick="jumpToBlock('${b}')" title="クリックしてこの分野を復習">
-        <div class="graph-label-row">
-          <span>${fieldNames[b]}</span>
-          <span>${correctCount}/${total}問 (${rate}%)</span>
-        </div>
-        <div class="graph-bar-bg">
-          <div class="graph-bar-fill ${barClass}" style="width: ${rate}%;"></div>
-        </div>
-      </div>
-    `;
+        <div class="graph-label-row"><span>${fieldNames[b]}</span><span>${correctCount}/${questions.length}問 (${rate}%)</span></div>
+        <div class="graph-bar-bg"><div class="graph-bar-fill ${barClass}" style="width: ${rate}%;"></div></div>
+      </div>`;
   });
-
   return { graphHtml, lowestBlock, lowestRate };
 }
 
@@ -1107,7 +452,6 @@ function showResultScreen() {
   const scoreData = calculateScore(state.mode);
   const currentWrongCount = scoreData.total - scoreData.correctCount;
   const isPerfect = (currentWrongCount === 0);
-
   let resultHtml = "";
 
   if (state.mode === "EXAM") {
@@ -1120,40 +464,23 @@ function showResultScreen() {
           <div style="background:var(--primary-light); color:var(--primary); font-size:1.1rem; font-weight:bold; padding:10px 20px; border-radius:16px; display:inline-block; margin:8px 0; border:1px solid #99f6e4;">
             正解率: ${scoreData.rate}% （獲得 ${scoreData.currentPoints}点 / 満点 ${scoreData.maxPoints}点）
           </div>
-          <div style="font-size:0.85rem; color:#64748b;">
-            正解数: ${scoreData.correctCount} / ${scoreData.total} 問
-          </div>
+          <div style="font-size:0.85rem; color:#64748b;">正解数: ${scoreData.correctCount} / ${scoreData.total} 問</div>
         </div>
         <div class="advice-box">
           💡 <strong>AI先生の国試診断：</strong><br>
-          ${isPerfect 
-            ? '本番過去問10問を全問正解！クリームの油分分類、シャンプー・リンスの界面化学、エアゾール製品の安全管理まで完璧にマスターしています！' 
-            : `間違えた問題が ${currentWrongCount} 問あります。「クリームの油分比率（バニシングはO/W型）」「リンスの第四級アンモニウム塩（陽イオン）」「スプレーの噴射剤（LPG）」の重要ポイントを再確認しましょう。`}
+          ${isPerfect ? '本番過去問10問を全問正解！クリームの油分分類、シャンプー・リンスの界面化学、エアゾール製品の安全管理まで完璧にマスターしています！' : `間違えた問題が ${currentWrongCount} 問あります。「クリームの油分比率（バニシングはO/W型）」「リンスの第四級アンモニウム塩（陽イオン）」「スプレーの噴射剤（LPG）」の重要ポイントを再確認しましょう。`}
         </div>
-        ${!isPerfect ? `
-          <button class="btn-action btn-retry" onclick="startRetryMode()">
-            🔥 間違えた問題だけを集中リトライする
-          </button>
-        ` : ''}
-        <button class="btn-action btn-restart" onclick="startExamMode()">
-          🔄 国試10問演習をもう一度解く
-        </button>
-        <button class="btn-action btn-switch-exam" onclick="startBaseMode()">
-          📚 基礎演習（2択・28問）へ戻る
-        </button>
-      </div>
-    `;
+        ${!isPerfect ? `<button class="btn-action btn-retry" onclick="startRetryMode()">🔥 間違えた問題だけを集中リトライする</button>` : ''}
+        <button class="btn-action btn-restart" onclick="startExamMode()">🔄 国試10問演習をもう一度解く</button>
+        <button class="btn-action btn-switch-exam" onclick="startBaseMode()">📚 基礎演習（2択・28問）へ戻る</button>
+
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <a href="index.html#units" class="btn-action" style="background:#0284c7; color:white; text-decoration:none; text-align:center; flex:1;">📚 単元メニューへ</a>
+          <a href="index.html" class="btn-action" style="background:#475569; color:white; text-decoration:none; text-align:center; flex:1;">🏠 ポータルトップへ</a>
+        </div>
+      </div>`;
   } else {
     const stats = generateStatsHtml();
-    let adviceText = "";
-    if (isPerfect) {
-      adviceText = "全分野で100%達成！次は下の「国試10問演習」ボタンを押して、本番形式の4択問題にチャレンジしてみましょう！";
-    } else if (stats.lowestRate < 80) {
-      adviceText = `特に<strong>「${stats.lowestBlock}」</strong>の正答率が低めです。下のグラフをタップして集中的に再学習してみましょう！`;
-    } else {
-      adviceText = "全体的によく理解できています。間違えた問題だけをリトライして満点を目指しましょう！";
-    }
-
     resultHtml = `
       <div class="result-card">
         <div class="result-header">
@@ -1163,39 +490,20 @@ function showResultScreen() {
           <div style="background:var(--primary-light); color:var(--primary); font-size:1.1rem; font-weight:bold; padding:10px 20px; border-radius:16px; display:inline-block; margin:8px 0; border:1px solid #99f6e4;">
             正解率: ${scoreData.rate}% （獲得 ${scoreData.currentPoints}点 / 満点 ${scoreData.maxPoints}点）
           </div>
-          <div style="font-size:0.85rem; color:#64748b;">
-            正解数: ${scoreData.correctCount} / ${scoreData.total} 問
-          </div>
+          <div style="font-size:0.85rem; color:#64748b;">正解数: ${scoreData.correctCount} / ${scoreData.total} 問</div>
         </div>
+        <div class="graph-container"><div class="graph-title"><span>📊 分野別 正答率</span><span style="font-size:0.75rem; color:#64748b; font-weight:normal;">タップで各分野へ移動</span></div>${stats.graphHtml}</div>
+        <div class="advice-box">💡 <strong>AI先生の分析診断：</strong><br>${isPerfect ? '全分野で100%達成！次は下の「国試10問演習」ボタンを押して、本番形式の4択問題にチャレンジしてみましょう！' : `特に<strong>「${stats.lowestBlock}」</strong>の正答率が低めです。上のグラフをタップして集中的に復習しましょう！`}</div>
+        <button class="btn-action btn-switch-exam" onclick="startExamMode()">🎯 本番力試し！「国試10問演習」へ進む</button>
+        ${!isPerfect ? `<button class="btn-action btn-retry" onclick="startRetryMode()">🔥 間違えた問題だけを集中特訓する</button>` : ''}
+        <button class="btn-action btn-restart" onclick="confirmResetAll()">🔄 最初からやり直す</button>
 
-        <div class="graph-container">
-          <div class="graph-title">
-            <span>📊 分野別 正答率</span>
-            <span style="font-size:0.75rem; color:#64748b; font-weight:normal;">タップで各分野へ移動</span>
-          </div>
-          ${stats.graphHtml}
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <a href="index.html#units" class="btn-action" style="background:#0284c7; color:white; text-decoration:none; text-align:center; flex:1;">📚 単元メニューへ</a>
+          <a href="index.html" class="btn-action" style="background:#475569; color:white; text-decoration:none; text-align:center; flex:1;">🏠 ポータルトップへ</a>
         </div>
-
-        <div class="advice-box">
-          💡 <strong>AI先生の分析診断：</strong><br>
-          ${adviceText}
-        </div>
-
-        <button class="btn-action btn-switch-exam" onclick="startExamMode()">
-          🎯 本番力試し！「国試10問演習」へ進む
-        </button>
-        ${!isPerfect ? `
-          <button class="btn-action btn-retry" onclick="startRetryMode()">
-            🔥 間違えた問題だけを集中特訓する
-          </button>
-        ` : ''}
-        <button class="btn-action btn-restart" onclick="confirmResetAll()">
-          🔄 最初からやり直す
-        </button>
-      </div>
-    `;
+      </div>`;
   }
-
   document.getElementById("main-card").innerHTML = resultHtml;
 }
 
@@ -1212,14 +520,7 @@ function startRetryMode() {
 function confirmResetAll() {
   if (confirm("学習記録をリセットして最初からやり直しますか？")) {
     localStorage.removeItem(STORAGE_KEY);
-    state = {
-      mode: "BASE",
-      currentQuestionIndex: 0,
-      answers: {},
-      wrongQuestionIds: [],
-      isRetryMode: false,
-      isFinished: false
-    };
+    state = { mode: "BASE", currentQuestionIndex: 0, answers: {}, wrongQuestionIds: [], isRetryMode: false, isFinished: false };
     restoreCardStructure();
     renderQuestion();
   }
@@ -1229,30 +530,16 @@ function restoreCardStructure() {
   document.getElementById("main-card").innerHTML = `
     <div class="q-progress" id="progress-text"></div>
     <h2 id="lesson-title"></h2>
-    <div class="exp-box" id="exp-container">
-      <span class="exp-tag">💡 香粧品AI先生のポイント</span>
-      <div id="lesson-exp"></div>
-    </div>
+    <div class="exp-box" id="exp-container"><span class="exp-tag">💡 香粧品AI先生のポイント</span><div id="lesson-exp"></div></div>
     <div class="question-box" id="question-text"></div>
     <div class="btn-group" id="choices-container"></div>
-    <div class="feedback-box" id="feedback-area">
-      <div class="feedback-header">🧑‍🏫 AI先生の個別指導</div>
-      <div id="feedback-desc"></div>
-    </div>
-    <div class="nav-controls">
-      <button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button>
-      <button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button>
-    </div>
-  `;
+    <div class="feedback-box" id="feedback-area"><div class="feedback-header">🧑‍🏫 AI先生の個別指導</div><div id="feedback-desc"></div></div>
+    <div class="nav-controls"><button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button><button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button></div>`;
 }
 
-// 起動
 loadProgress();
-if (state.isFinished) {
-  showResultScreen();
-} else {
-  renderQuestion();
-}
+if (state.isFinished) showResultScreen();
+else renderQuestion();
 </script>
 
 </body>

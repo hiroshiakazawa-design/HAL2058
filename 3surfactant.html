@@ -6,7 +6,7 @@
 <title>香粧品化学 AI個別指導チューター - 界面活性剤・高分子化合物編</title>
 <style>
   :root {
-    --primary: #0284c7; /* オーシャンブルー（界面活性・泡のイメージ） */
+    --primary: #0284c7;
     --primary-light: #f0f9ff;
     --primary-hover: #0369a1;
     --accent: #f59e0b;
@@ -29,53 +29,32 @@
     padding: 8px 10px;
     line-height: 1.5;
   }
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-  }
+  .container { max-width: 600px; margin: 0 auto; }
 
-  /* 上部ステータス（3点表示） */
   .top-status-bar {
     background: var(--card);
     border-radius: 8px;
     padding: 8px 12px;
     border: 1px solid var(--border);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04);
   }
-  .status-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .status-student {
-    font-size: 0.85rem;
-    font-weight: bold;
-    color: #475569;
-  }
-  .status-field {
-    font-size: 0.8rem;
-    font-weight: bold;
-    background: #e0f2fe;
-    color: #0369a1;
-    padding: 2px 8px;
-    border-radius: 4px;
-  }
-  .status-score {
-    font-size: 0.82rem;
-    font-weight: bold;
-    background: var(--primary-light);
-    color: var(--primary);
-    padding: 3px 10px;
-    border-radius: 12px;
-    border: 1px solid #bae6fd;
-    white-space: nowrap;
-  }
+  .status-left { display: flex; align-items: center; gap: 8px; }
+  .status-student { font-size: 0.85rem; font-weight: bold; color: #475569; }
+  .status-field { font-size: 0.8rem; font-weight: bold; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; }
+  .status-score { font-size: 0.82rem; font-weight: bold; background: var(--primary-light); color: var(--primary); padding: 3px 10px; border-radius: 12px; border: 1px solid #bae6fd; white-space: nowrap; }
 
-  /* メイン問題カード */
+  /* 操作バー */
+  .action-bar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 8px; }
+  .btn-action-sm { padding: 5px 12px; font-size: 0.78rem; font-weight: bold; border-radius: 6px; border: 1px solid var(--border); cursor: pointer; background: #ffffff; color: var(--text); transition: all 0.15s; }
+  .btn-action-sm:hover { background: #f1f5f9; }
+  .btn-pause { border-color: #f59e0b; color: #b45309; }
+  .btn-resume { border-color: #10b981; color: #047857; background: #ecfdf5; }
+  .btn-quit { border-color: #ef4444; color: #b91c1c; }
+
   .card {
     background: var(--card);
     border-radius: 12px;
@@ -84,55 +63,14 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.03);
     margin-bottom: 14px;
   }
-  .q-progress {
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: #64748b;
-    margin-bottom: 4px;
-  }
-  h2 {
-    font-size: 1.12rem;
-    margin: 0 0 12px 0;
-    line-height: 1.35;
-    color: #0f172a;
-  }
+  .q-progress { font-size: 0.8rem; font-weight: bold; color: #64748b; margin-bottom: 4px; }
+  h2 { font-size: 1.12rem; margin: 0 0 12px 0; line-height: 1.35; color: #0f172a; }
 
-  /* 解説枠 */
-  .exp-box {
-    background: var(--accent-bg);
-    border-left: 4px solid var(--accent);
-    padding: 10px 12px;
-    border-radius: 4px;
-    margin-bottom: 14px;
-    font-size: 0.92rem;
-  }
-  .exp-tag {
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #b45309;
-    display: block;
-    margin-bottom: 3px;
-  }
+  .exp-box { background: var(--accent-bg); border-left: 4px solid var(--accent); padding: 10px 12px; border-radius: 4px; margin-bottom: 14px; font-size: 0.92rem; }
+  .exp-tag { font-size: 0.75rem; font-weight: bold; color: #b45309; display: block; margin-bottom: 3px; }
+  .question-box { background: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 8px; margin-bottom: 14px; font-weight: 600; font-size: 1rem; line-height: 1.5; white-space: pre-wrap; }
 
-  /* 設問枠 */
-  .question-box {
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    padding: 14px;
-    border-radius: 8px;
-    margin-bottom: 14px;
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.5;
-    white-space: pre-wrap;
-  }
-
-  /* 選択肢ボタン */
-  .btn-group {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-  }
+  .btn-group { display: flex; flex-direction: column; gap: 9px; }
   .btn-choice {
     background: #ffffff;
     border: 2px solid #cbd5e1;
@@ -149,239 +87,58 @@
     -webkit-tap-highlight-color: transparent;
   }
   .btn-choice:active { transform: scale(0.98); }
-  .btn-choice:hover:not(:disabled) {
-    border-color: var(--primary);
-    background: var(--primary-light);
-  }
+  .btn-choice:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-light); }
   .btn-choice:disabled { cursor: default; }
+  .btn-choice.correct-highlight { background: var(--success-bg) !important; border-color: var(--success) !important; color: var(--success) !important; }
+  .btn-choice.wrong-highlight { background: var(--danger-bg) !important; border-color: var(--danger) !important; color: var(--danger) !important; }
 
-  .btn-choice.correct-highlight {
-    background: var(--success-bg) !important;
-    border-color: var(--success) !important;
-    color: var(--success) !important;
-  }
-  .btn-choice.wrong-highlight {
-    background: var(--danger-bg) !important;
-    border-color: var(--danger) !important;
-    color: var(--danger) !important;
-  }
+  .feedback-box { display: none; margin-top: 14px; padding: 12px 14px; border-radius: 8px; animation: fadeIn 0.25s ease; }
+  .feedback-correct { background: var(--success-bg); border: 1px solid #86efac; color: var(--success); }
+  .feedback-wrong { background: var(--danger-bg); border: 1px solid #fca5a5; color: var(--danger); }
+  .feedback-header { font-weight: bold; font-size: 0.9rem; margin-bottom: 4px; }
 
-  /* AIフィードバック */
-  .feedback-box {
-    display: none;
-    margin-top: 14px;
-    padding: 12px 14px;
-    border-radius: 8px;
-    animation: fadeIn 0.25s ease;
-  }
-  .feedback-correct {
-    background: var(--success-bg);
-    border: 1px solid #86efac;
-    color: var(--success);
-  }
-  .feedback-wrong {
-    background: var(--danger-bg);
-    border: 1px solid #fca5a5;
-    color: var(--danger);
-  }
-  .feedback-header {
-    font-weight: bold;
-    font-size: 0.9rem;
-    margin-bottom: 4px;
-  }
-
-  /* 操作ボタン */
-  .nav-controls {
-    display: flex;
-    gap: 8px;
-    margin-top: 14px;
-  }
-  .btn-prev {
-    flex: 1;
-    padding: 12px;
-    background: #ffffff;
-    color: #475569;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 0.92rem;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  .btn-prev:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-  }
-  .btn-next {
-    flex: 2;
-    padding: 12px;
-    background: var(--primary);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.98rem;
-    font-weight: bold;
-    cursor: pointer;
-    display: none;
-  }
+  .nav-controls { display: flex; gap: 8px; margin-top: 14px; }
+  .btn-prev { flex: 1; padding: 12px; background: #ffffff; color: #475569; border: 1px solid var(--border); border-radius: 8px; font-size: 0.92rem; font-weight: bold; cursor: pointer; }
+  .btn-prev:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-next { flex: 2; padding: 12px; background: var(--primary); color: #ffffff; border: none; border-radius: 8px; font-size: 0.98rem; font-weight: bold; cursor: pointer; display: none; }
   .btn-next:hover { background: var(--primary-hover); }
 
-  /* 下部メニュー */
-  .bottom-menu-box {
-    background: var(--card);
-    border-radius: 10px;
-    padding: 12px;
-    border: 1px solid var(--border);
-    margin-bottom: 20px;
-  }
-  .bottom-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .bottom-title {
-    font-size: 0.78rem;
-    font-weight: bold;
-    color: #64748b;
-  }
-  .btn-reset {
-    font-size: 0.74rem;
-    color: #dc2626;
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-decoration: underline;
-    padding: 0;
-  }
-  .spine-steps {
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-  }
-  .spine-node {
-    flex: 1;
-    min-width: 58px;
-    text-align: center;
-    padding: 6px 2px;
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.72rem;
-    font-weight: bold;
-    color: #64748b;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .spine-node.active {
-    background: var(--primary);
-    color: #ffffff !important;
-    border-color: var(--primary);
-  }
-  .spine-node.cleared {
-    background: var(--success-bg);
-    color: var(--success);
-    border-color: #86efac;
-  }
-  .spine-node.exam-node {
-    background: #fef3c7;
-    border-color: #f59e0b;
-    color: #b45309;
-  }
-  .spine-node.exam-node.active {
-    background: #d97706 !important;
-    color: white !important;
-  }
+  .bottom-menu-box { background: var(--card); border-radius: 10px; padding: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
+  .bottom-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .bottom-title { font-size: 0.78rem; font-weight: bold; color: #64748b; }
+  .btn-reset { font-size: 0.74rem; color: #dc2626; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
+  .spine-steps { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 4px; }
+  .spine-node { flex: 1; min-width: 58px; text-align: center; padding: 6px 2px; background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; font-size: 0.72rem; font-weight: bold; color: #64748b; cursor: pointer; white-space: nowrap; }
+  .spine-node.active { background: var(--primary); color: #ffffff !important; border-color: var(--primary); }
+  .spine-node.cleared { background: var(--success-bg); color: var(--success); border-color: #86efac; }
+  .spine-node.exam-node { background: #fef3c7; border-color: #f59e0b; color: #b45309; }
+  .spine-node.exam-node.active { background: #d97706 !important; color: white !important; }
 
-  /* 成績グラフ表示スタイル */
-  .result-card {
-    padding: 10px 4px;
-  }
-  .result-header {
-    text-align: center;
-    margin-bottom: 16px;
-  }
-  .graph-container {
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 12px;
-    margin: 16px 0;
-  }
-  .graph-title {
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #334155;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-  }
-  .graph-item {
-    margin-bottom: 10px;
-    cursor: pointer;
-    padding: 4px 6px;
-    border-radius: 6px;
-    transition: background 0.15s;
-  }
-  .graph-item:hover {
-    background: #e2e8f0;
-  }
-  .graph-label-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-bottom: 3px;
-  }
-  .graph-bar-bg {
-    background: #e2e8f0;
-    height: 12px;
-    border-radius: 6px;
-    overflow: hidden;
-  }
-  .graph-bar-fill {
-    height: 100%;
-    border-radius: 6px;
-    transition: width 0.6s ease;
-  }
+  .result-card { padding: 10px 4px; }
+  .result-header { text-align: center; margin-bottom: 16px; }
+  .graph-container { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px 12px; margin: 16px 0; }
+  .graph-title { font-size: 0.9rem; font-weight: bold; color: #334155; margin-bottom: 12px; display: flex; justify-content: space-between; }
+  .graph-item { margin-bottom: 10px; cursor: pointer; padding: 4px 6px; border-radius: 6px; transition: background 0.15s; }
+  .graph-item:hover { background: #e2e8f0; }
+  .graph-label-row { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 3px; }
+  .graph-bar-bg { background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden; }
+  .graph-bar-fill { height: 100%; border-radius: 6px; transition: width 0.6s ease; }
   .bar-high { background-color: #22c55e; }
   .bar-mid  { background-color: #eab308; }
   .bar-low  { background-color: #ef4444; }
 
-  .advice-box {
-    background: #f0f9ff;
-    border-left: 4px solid var(--primary);
-    padding: 10px 12px;
-    border-radius: 4px;
-    font-size: 0.88rem;
-    margin-bottom: 16px;
-    text-align: left;
-  }
-
-  .btn-action {
-    width: 100%;
-    padding: 13px;
-    border-radius: 8px;
-    font-size: 0.98rem;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    margin-top: 8px;
-  }
+  .advice-box { background: #f0f9ff; border-left: 4px solid var(--primary); padding: 10px 12px; border-radius: 4px; font-size: 0.88rem; margin-bottom: 16px; text-align: left; }
+  .btn-action { width: 100%; padding: 13px; border-radius: 8px; font-size: 0.98rem; font-weight: bold; cursor: pointer; border: none; margin-top: 8px; box-sizing: border-box; display: block; }
   .btn-retry { background: #d97706; color: white; }
   .btn-restart { background: var(--primary); color: white; }
   .btn-switch-exam { background: #0284c7; color: white; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(3px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- 上部ステータス（3点表示） -->
   <div class="top-status-bar">
     <div class="status-left">
       <span class="status-student">出席：12番</span>
@@ -390,39 +147,31 @@
     <div class="status-score" id="status-score">正解率: 0% (0/52点)</div>
   </div>
 
-  <!-- メイン問題カード -->
+  <div class="action-bar">
+    <button class="btn-action-sm btn-pause" onclick="pauseQuiz()">⏸️ 中断</button>
+    <button class="btn-action-sm btn-resume" id="btn-resume" onclick="resumeQuiz()" style="display:none;">▶️ 再開</button>
+    <button class="btn-action-sm btn-quit" onclick="quitQuiz()">⏹️ 終了</button>
+  </div>
+
   <div class="card" id="main-card">
     <div class="q-progress" id="progress-text">問 1 / 26</div>
     <h2 id="lesson-title">問題タイトル</h2>
-
-    <!-- 解説（国試4択モードでは非表示） -->
     <div class="exp-box" id="exp-container">
       <span class="exp-tag">💡 香粧品AI先生のポイント</span>
       <div id="lesson-exp">解説</div>
     </div>
-
-    <!-- 設問 -->
-    <div class="question-box" id="question-text">
-      設問
-    </div>
-
-    <!-- 選択肢 -->
+    <div class="question-box" id="question-text">設問</div>
     <div class="btn-group" id="choices-container"></div>
-
-    <!-- フィードバック -->
     <div class="feedback-box" id="feedback-area">
       <div class="feedback-header">🧑‍🏫 AI先生の個別指導</div>
       <div id="feedback-desc"></div>
     </div>
-
-    <!-- 操作ボタン -->
     <div class="nav-controls">
       <button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button>
       <button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button>
     </div>
   </div>
 
-  <!-- 下部：分野ジャンプメニュー -->
   <div class="bottom-menu-box">
     <div class="bottom-header">
       <span class="bottom-title">🗺️ 分野・モード切替（タップで移動）</span>
@@ -453,404 +202,60 @@ const fieldNames = {
   "EXAM": "国試本番実戦演習（4択）"
 };
 
-// 基礎26問マスターデータ（正解位置：上13問 / 下13問の完全均等分散）
 const baseQuestions = [
-  // A. 界面活性剤の基本構造とミセル
-  {
-    id: "SP-001", block: "A", title: "界面活性剤の分子構造",
-    exp: "マッチ棒に例えると、頭が水になじむ「親水基」、軸が油になじむ「親油基（疎水基）」です。1分子の中に両方持っています！",
-    q: "界面活性剤の分子において、水になじみやすい部分を何という？",
-    choices: ["親水基", "親油基（疎水基）"], answer: 0, // 上が正解
-    hintCorrect: "大正解！+2pt！ 水となかよしなのが親水基、油となかよしなのが親油基だね！",
-    hintWrong: "油になじむのが親油基（疎水基）。水になじみやすい部分は『親水基』だよ。"
-  },
-  {
-    id: "SP-002", block: "A", title: "臨界ミセル濃度（cmc）の定義【第35回・38回国試】",
-    exp: "界面活性剤の濃度を高めていくと水面が埋め尽くされ、これ以上表面に存在できなくなって水中に集合体（ミセル）を作り始める限界の濃度を臨界ミセル濃度（cmc）といいます。",
-    q: "界面活性剤が水中でミセル（分子集合体）を形成し始める基準となる濃度を何という？",
-    choices: ["飽和溶解度", "臨界ミセル濃度（cmc）"], answer: 1, // 下が正解
-    hintCorrect: "その通り！+2pt！ cmcを超えるとミセルができて、洗浄力や乳化力が一気に発揮されるよ！",
-    hintWrong: "香粧品化学の最重要用語！ ミセルを作り始める濃度は『臨界ミセル濃度（cmc）』だよ。"
-  },
-  {
-    id: "SP-003", block: "A", title: "ミセルの構造と向き【第49回・51回国試】",
-    exp: "水中でミセルを作るとき、水を嫌う疎水基（親油基）を内側に隠し、水となじむ親水基を外側（水側）に向けます！",
-    q: "水溶液中で形成されるミセルにおいて、外側（水と接する側）に向いているのはどっち？",
-    choices: ["親水基", "親油基（疎水基）"], answer: 0, // 上が正解
-    hintCorrect: "見事！+2pt！ 水が大好きな親水基が外側をガードして、油汚れを内側に包み込むんだ！",
-    hintWrong: "水を嫌う親油基は内側に隠れるよ。外側に向いて水と触れ合うのは『親水基』だね。"
-  },
-  {
-    id: "SP-004", block: "A", title: "cmcと洗浄力・可溶化能の関係【第35回国試直球】",
-    exp: "界面活性剤の洗浄作用や可溶化作用は、ミセルが形成される臨界ミセル濃度（cmc）以上になって初めて効果的に発揮されます！",
-    q: "「界面活性剤は、臨界ミセル濃度（cmc）より低い濃度のほうが洗浄力が高い。」この記述は正しい？",
-    choices: ["正しい（○）", "誤り（×）"], answer: 1, // 下が正解
-    hintCorrect: "完璧！+2pt！ 第35回国試クリア！ ミセルができない薄い濃度では油を包めないから誤りだね！",
-    hintWrong: "過去問頻出の罠！ ミセルが形成される『cmc以上の濃度』になって初めて強い洗浄力を発揮するよ。"
-  },
-
-  // B. 乳化・可溶化・分散とコロイド
-  {
-    id: "SP-005", block: "B", title: "可溶化の定義と透明性【第35回・51回国試】",
-    exp: "水に溶けない少量の油や香料が、微細なミセル内部に取り込まれて、あたかも透明に溶けたようになる現象を『可溶化』といいます。",
-    q: "化粧水などに水に溶けない香料や油性成分を加えて、透明に均一溶解させる作用を何という？",
-    choices: ["可溶化", "乳化"], answer: 0, // 上が正解
-    hintCorrect: "大正解！+2pt！ 白く濁るのが乳化、光が透き通って透明に見えるのが『可溶化』だよ！",
-    hintWrong: "白く濁るのが乳化。ミセルが極めて小さく透明に溶け込んだ状態にするのは『可溶化』だね。"
-  },
-  {
-    id: "SP-006", block: "B", title: "乳化とエマルションの定義【第44回・51回国試】",
-    exp: "混ざり合わない液体同士（水と油）を界面活性剤（乳化剤）で微粒子にして均一分散させた白濁液を『乳濁液（エマルション）』といいます。",
-    q: "乳化作用によって得られる、水と油が微細粒子となって混ざり合った液体を何という？",
-    choices: ["サスペンション（懸濁液）", "エマルション（乳濁液）"], answer: 1, // 下が正解
-    hintCorrect: "バッチリ！+2pt！ クリームや乳液、マヨネーズなどはすべて『エマルション』だね！",
-    hintWrong: "固体の粉が混ざっているのはサスペンション。液体同士が混ざり合ったものは『エマルション』だよ。"
-  },
-  {
-    id: "SP-007", block: "B", title: "乳化型の区別（O/W型とW/O型）【第42回・44回国試】",
-    exp: "水の中に油が浮いているのが水中油型（O/W型：バニシングクリーム、牛乳）。油の中に水が浮いているのが油中水型（W/O型：コールドクリーム、バター）です！",
-    q: "「油相の中に水滴が微細に分散している乳化型」を正しく表している記号はどっち？",
-    choices: ["W/O型（油中水型）", "O/W型（水中油型）"], answer: 0, // 上が正解
-    hintCorrect: "その通り！+2pt！ Oil（油）の中にWater（水）が入っているから『W/O型』だね！",
-    hintWrong: "外側が油で中が水なのは『W/O型（Water in Oil）』だよ。逆にならないように注意！"
-  },
-  {
-    id: "SP-008", block: "B", title: "分散作用の定義【第38回・42回国試】",
-    exp: "ファンデーションや口紅のように、水や油の中に固体の微粒子（顔料などの粉体）を沈殿させずに均一に散らばらせる作用を『分散』といいます。",
-    q: "リキッドファンデーションにおいて、液体中に粉体の顔料を均一な微粒子状で安定化させる作用はどっち？",
-    choices: ["可溶化作用", "分散作用"], answer: 1, // 下が正解
-    hintCorrect: "正解！+2pt！ 固体の粉を散らすのが『分散』！ 液体同士を混ぜる乳化としっかり区別しよう！",
-    hintWrong: "溶かして透明にするのが可溶化。固体の粉末を均一に散らばらせるのは『分散作用』だね。"
-  },
-
-  // C. 陰イオン界面活性剤（アニオン）
-  {
-    id: "SP-009", block: "C", title: "石けんの分類【国試最頻出・6回以上出題】",
-    exp: "石けんは水に溶けると親水基がマイナス（陰イオン）に電離します！ 国試で『石けんは陽イオン』と書かれていたら即座にバツです！",
-    q: "洗顔料や固形石けんとして古くから使われる「石けん」は、界面活性剤の分類としてどれに属する？",
-    choices: ["陰イオン界面活性剤（アニオン）", "陽イオン界面活性剤（カチオン）"], answer: 0, // 上が正解
-    hintCorrect: "完璧！+2pt！ 国試最大の定番引っかけクリア！ 石けんは絶対に『陰イオン』だよ！",
-    hintWrong: "国試で一番狙われる嘘！ 石けんは陽イオンではなく『陰イオン界面活性剤』だよ。"
-  },
-  {
-    id: "SP-010", block: "C", title: "石けんの製法と陰イオンの特徴",
-    exp: "石けんは天然油脂をアルカリ（水酸化Naや水酸化K）でけん化（加水分解）して作られます。豊かな泡立ちと高い洗浄力が自慢です。",
-    q: "石けんをはじめとする陰イオン界面活性剤の大きな特徴として、正しいものはどっち？",
-    choices: ["水溶液中で親水基がプラスの電気を帯びる", "起泡性（泡立ち）や洗浄力に優れている"], answer: 1, // 下が正解
-    hintCorrect: "見事！+2pt！ モコモコの泡で汚れを落とすのが陰イオン界面活性剤の最大の強みだね！",
-    hintWrong: "親水基が帯びるのはマイナス（負電気）だよ。優れた泡立ちと洗浄力がアニオンの特徴だね。"
-  },
-  {
-    id: "SP-011", block: "C", title: "シャンプーの合成界面活性剤【第48回・50回国試】",
-    exp: "シャンプーによく使われる「アルキル硫酸ナトリウム（ラウリル硫酸Na等）」や「ポリオキシエチレンアルキル硫酸Na」も代表的な陰イオン界面活性剤です。",
-    q: "高級アルコール系シャンプーの主洗浄成分として配合される「アルキル硫酸ナトリウム」の分類はどっち？",
-    choices: ["陰イオン界面活性剤", "非イオン界面活性剤"], answer: 0, // 上が正解
-    hintCorrect: "その通り！+2pt！ 第50回国試的中！ シャンプーの豊かな泡を作る陰イオン界面活性剤だね！",
-    hintWrong: "非イオンではなく『陰イオン界面活性剤』だよ。皮脂汚れをスッキリ落とす主役だね。"
-  },
-
-  // D. 陽イオン界面活性剤（カチオン）
-  {
-    id: "SP-012", block: "D", title: "陽イオン界面活性剤の別名と電荷",
-    exp: "水に溶かすと親水基がプラス（正電気）に帯電します。マイナスに帯電する石けんと逆の電気を持つため『逆性石けん』とも呼ばれます。",
-    q: "水溶液中で親水基がプラス（陽イオン）に帯電し、石けんと逆の電荷をもつことから「逆性石けん」と呼ばれる界面活性剤はどっち？",
-    choices: ["非イオン界面活性剤", "陽イオン界面活性剤"], answer: 1, // 下が正解
-    hintCorrect: "大正解！+2pt！ プラスの電気を帯びるからカチオン（陽イオン）、別名『逆性石けん』だね！",
-    hintWrong: "イオン化しないのは非イオン。逆性石けんと呼ばれるのは『陽イオン界面活性剤』だよ。"
-  },
-  {
-    id: "SP-013", block: "D", title: "第四級アンモニウム塩とヘアリンス【国試超定番】",
-    exp: "塩化アルキルトリメチルアンモニウムなどの「第四級アンモニウム塩」は、傷んでマイナスに傾いた毛髪に吸着し、柔軟性と『帯電防止（静電気防止）』効果を発揮します！",
-    q: "ヘアリンスやトリートメントに配合され、毛髪のきしみを防ぎ帯電防止効果を与える成分はどっち？",
-    choices: ["第四級アンモニウム塩（陽イオン）", "アルキルベンゼンスルホン酸塩（陰イオン）"], answer: 0, // 上が正解
-    hintCorrect: "素晴らしい！+2pt！ リンスで髪がサラサラになってパチパチ静電気を防げるのはこれのおかげ！",
-    hintWrong: "アルキルベンゼンは強力な洗剤成分。髪に吸着して静電気を防ぐのは『第四級アンモニウム塩』だよ。"
-  },
-  {
-    id: "SP-014", block: "D", title: "消毒薬としての逆性石けん【衛生法規連動】",
-    exp: "ベンザルコニウム塩化物（塩化ベンザルコニウム）は第四級アンモニウム塩で、強い殺菌力をもつため薬用石けんや器具消毒（0.1%液）に使われます。",
-    q: "理美容師法に基づく器具消毒液の一つとしても指定されている「ベンザルコニウム塩化物」は、どの界面活性剤？",
-    choices: ["非イオン界面活性剤", "陽イオン界面活性剤（逆性石けん）"], answer: 1, // 下が正解
-    hintCorrect: "完璧！+2pt！ 消毒法でも必ず習うベンザルコニウム！ 立派な陽イオン界面活性剤だね！",
-    hintWrong: "消毒用逆性石けんの主役！ ベンザルコニウム塩化物は『陽イオン界面活性剤』だよ。"
-  },
-
-  // E. 両性・非イオン界面活性剤
-  {
-    id: "SP-015", block: "E", title: "両性界面活性剤のpH変化【第43回国試】",
-    exp: "両性界面活性剤はpHによって変身！ 酸性水溶液中では「陽イオン（＋）」、アルカリ性水溶液中では「陰イオン（−）」になります！",
-    q: "両性界面活性剤は、酸性の水溶液中ではどちらのイオンとして振る舞う？",
-    choices: ["陽イオン（プラス）", "陰イオン（マイナス）"], answer: 0, // 上が正解
-    hintCorrect: "正解！+2pt！ 第43回国試的中！ 酸性ではカチオン（陽イオン）、アルカリ性ではアニオンになるよ！",
-    hintWrong: "酸性では水素イオンを受け取って『陽イオン』になり、アルカリ性で陰イオンになるんだ。"
-  },
-  {
-    id: "SP-016", block: "E", title: "天然両性界面活性剤「レシチン」【第47回・50回国試】",
-    exp: "大豆や卵黄から抽出される「レシチン」は天然の両性界面活性剤（リン脂質）です！ マヨネーズの乳化や口紅の分散剤として有名です。",
-    q: "卵黄や大豆に含まれ、乳化剤や顔料分散剤として香粧品に広く使われる「レシチン」の分類はどっち？",
-    choices: ["非イオン界面活性剤", "両性界面活性剤"], answer: 1, // 下が正解
-    hintCorrect: "見事！+2pt！ 国試超頻出！ レシチンはリン酸（陰）と第四級アンモニウム（陽）を両方持つ『両性』だよ！",
-    hintWrong: "過去問で何度も狙われた罠！ レシチンは非イオンではなく『両性界面活性剤』だよ。"
-  },
-  {
-    id: "SP-017", block: "E", title: "非イオン（ノニオン）界面活性剤の特徴【第41回・43回国試】",
-    exp: "水中で電離（イオン化）しない界面活性剤です。泡立ちは控えめですが、乳化力・可溶化力に極めて優れ、クリームや乳液の乳化剤として最も多く使われます。",
-    q: "「非イオン界面活性剤は、水に溶かすと親水基が電離して陰イオンになる。」この記述は正しい？",
-    choices: ["正しい（○）", "誤り（×）"], answer: 1, // 下が正解
-    hintCorrect: "その通り！+2pt！ 『非イオン』という名前の通り、水中で絶対にイオンにならないよ！",
-    hintWrong: "水中でイオンに電離しないから『非イオン（ノニオン）』！ 誤りの記述だね。"
-  },
-  {
-    id: "SP-018", block: "E", title: "非イオンの代表例（ソルビタン脂肪酸エステル等）",
-    exp: "グリセリンやソルビトールなどの多価アルコールに脂肪酸を結合させたエステル型非イオン界面活性剤は、安全性が高く食品や化粧品に広く汎用されます。",
-    q: "モノステアリン酸ソルビタンなどの「ソルビタン脂肪酸エステル」は、どの界面活性剤に分類される？",
-    choices: ["非イオン界面活性剤", "陽イオン界面活性剤"], answer: 0, // 上が正解
-    hintCorrect: "バッチリ！+2pt！ 多価アルコールと脂肪酸のエステル型非イオン界面活性剤の代表例だね！",
-    hintWrong: "カチオンではないよ。食品添加物にも使われる安全な『非イオン界面活性剤』だね。"
-  },
-
-  // F. 天然・半合成高分子化合物
-  {
-    id: "SP-019", block: "F", title: "高分子化合物の定義（分子量1万以上）",
-    exp: "小さな基本単位（単量体・モノマー）がたくさん結合（重合）したもので、一般に分子量1万以上の化合物を高分子化合物（ポリマー）といいます。",
-    q: "化学において、一般に「高分子化合物」と呼ばれるのは分子量がおよそいくら以上のもの？",
-    choices: ["分子量100以上", "分子量1万以上"], answer: 1, // 下が正解
-    hintCorrect: "正解！+2pt！ 分子量数万〜数百万にもなる巨大分子が高分子化合物だよ！",
-    hintWrong: "100程度は水やエタノールなどの低分子化合物。高分子はおおむね『1万以上』を指すよ。"
-  },
-  {
-    id: "SP-020", block: "F", title: "動物性天然高分子（キトサン・エラスチン）【第38回・40回国試】",
-    exp: "カニやエビの殻から得られる「キトサン」や、皮膚組織にある「コラーゲン」「エラスチン」「ゼラチン」は動物性の天然高分子化合物です！",
-    q: "甲殻類（カニ・エビ）の殻から得られ、抗菌作用や保湿作用をもつ天然高分子化合物はどっち？",
-    choices: ["キトサン", "カルボキシビニルポリマー"], answer: 0, // 上が正解
-    hintCorrect: "完璧！+2pt！ 第40回国試的中！ カニ殻キチンから作られる天然生体高分子がキトサンだね！",
-    hintWrong: "カルボキシビニルポリマーは合成品。カニやエビの殻からとれる天然高分子は『キトサン』だよ。"
-  },
-  {
-    id: "SP-021", block: "F", title: "植物性天然高分子（デンプン・ガム質）",
-    exp: "植物の幹や種子からとれる「アラビアゴム」「トラガントガム」「デンプン」は植物性の天然高分子です。デンプンは多数のブドウ糖（グルコース）が縮重合したものです。",
-    q: "「デンプンは、果糖（フルクトース）が縮重合してできた高分子化合物である。」この記述は正しい？",
-    choices: ["正しい（○）", "誤り（×）"], answer: 1, // 下が正解
-    hintCorrect: "その通り！+2pt！ 第39回国試撃破！ デンプンを構成する単量体は果糖ではなく『ブドウ糖』だよ！",
-    hintWrong: "デンプンの基本単位は果糖ではなく『ブドウ糖（グルコース）』！ 過去問の鋭い引っかけだね。"
-  },
-  {
-    id: "SP-022", block: "F", title: "半合成高分子「ニトロセルロース」【第39回国試】",
-    exp: "天然のセルロース（綿など）を硝酸で処理（ニトロ化）した半合成品で、ネイルエナメル（マニキュア）の強靭な『皮膜形成剤』として不可欠です！",
-    q: "マニキュア（ネイルエナメル）に配合され、爪の表面に光沢と硬い膜を作る半合成高分子化合物はどっち？",
-    choices: ["ニトロセルロース", "流動パラフィン"], answer: 0, // 上が正解
-    hintCorrect: "大正解！+2pt！ ネイルの膜といえばニトロセルロース！ 揺るぎない定番原料だね！",
-    hintWrong: "流動パラフィンは鉱物油だよ。爪の上で乾いて強い膜を作るのは『ニトロセルロース』だね。"
-  },
-
-  // G. 合成高分子化合物と機能
-  {
-    id: "SP-023", block: "G", title: "ポリビニルアルコール（PVA）とパック基剤【第39回国試】",
-    exp: "合成高分子のポリビニルアルコール（PVA）は、水に溶けて乾くと強靭で透明な膜を作るため、はがすタイプの『パック基剤』として古くから有名です。",
-    q: "香粧品において「ポリビニルアルコール（PVA）」が最もよく利用される用途はどっち？",
-    choices: ["毛髪の酸化染料", "ピールオフパック（はがすパック）の基剤"], answer: 1, // 下が正解
-    hintCorrect: "見事！+2pt！ 第39回国試的中！ 乾くとペロッとはがせるパックの膜を作るのがPVAだよ！",
-    hintWrong: "酸化染料はヘアカラーの低分子化合物。乾いて透明な膜を作るPVAは『パック基剤』だね。"
-  },
-  {
-    id: "SP-024", block: "G", title: "ポリビニルピロリドン（PVP）とヘアスプレー",
-    exp: "ポリビニルピロリドン（PVP）は水・アルコールに溶けやすく、乾くとしなやかな皮膜を形成するため、ヘアスプレーやセット剤の皮膜形成剤として活躍します。",
-    q: "ヘアスプレーに配合され、髪の毛の形をキープするための皮膜形成剤として使われる合成高分子はどっち？",
-    choices: ["ポリビニルピロリドン（PVP）", "ステアリン酸"], answer: 0, // 上が正解
-    hintCorrect: "素晴らしい！+2pt！ スプレーを吹きかけると髪をキープしてくれるのがPVPの皮膜だよ！",
-    hintWrong: "ステアリン酸は高級脂肪酸。ヘアスプレーの皮膜を作る合成ポリマーは『PVP』だね。"
-  },
-  {
-    id: "SP-025", block: "G", title: "カルボキシビニルポリマーとアルカリ中和増粘",
-    exp: "アクリル酸重合物のカルボキシビニルポリマーは、水酸化Na等のアルカリで中和すると粘度が跳ね上がり、美しい透明ゲル（ヘアジェル）を作ります。",
-    q: "ヘアジェルなどの増粘剤として用いられ、アルカリ性物質で中和することで高い粘性のゲルを形成する合成高分子はどっち？",
-    choices: ["塩化ナトリウム", "カルボキシビニルポリマー"], answer: 1, // 下が正解
-    hintCorrect: "正解！+2pt！ アルカリで中和するとぷるぷるのジェルになる不思議で便利なポリマーだね！",
-    hintWrong: "塩化ナトリウムは食塩。アルカリで中和してぷるぷるのヘアジェル基剤になるのは『カルボキシビニルポリマー』だよ。"
-  },
-  {
-    id: "SP-026", block: "G", title: "高分子化合物の香粧品での5大機能",
-    exp: "高分子化合物は、皮膜形成剤（スプレー・マニキュア）、増粘剤（シャンプー・ジェル）、保護コロイド（乳化安定）、結合剤（固形おしろい）、香料保留剤として応用されます。",
-    q: "固形おしろいやアイシャドーなどの粉末香粧品において、粉同士を結びつけて固める高分子の役割を何という？",
-    choices: ["結合剤（バインダー）", "漂白剤"], answer: 0, // 上が正解
-    hintCorrect: "完璧！+2pt！ 全26問完全制覇！ プレストパウダーの粉がバラバラにならないよう固めるのがバインダーだね！",
-    hintWrong: "漂白剤は色を抜く薬。粉体を固形に成型するために結びつける役割は『結合剤（バインダー）』だよ。"
-  }
+  { id: "SP-001", block: "A", title: "界面活性剤の分子構造", exp: "マッチ棒に例えると、頭が水になじむ「親水基」、軸が油になじむ「親油基（疎水基）」です。1分子の中に両方持っています！", q: "界面活性剤の分子において、水になじみやすい部分を何という？", choices: ["親水基", "親油基（疎水基）"], answer: 0, hintCorrect: "大正解！+2pt！ 水となかよしなのが親水基、油となかよしなのが親油基だね！", hintWrong: "油になじむのが親油基（疎水基）。水になじみやすい部分は『親水基』だよ。" },
+  { id: "SP-002", block: "A", title: "臨界ミセル濃度（cmc）の定義【第35回・38回国試】", exp: "界面活性剤の濃度を高めていくと水面が埋め尽くされ、これ以上表面に存在できなくなって水中に集合体（ミセル）を作り始める限界の濃度を臨界ミセル濃度（cmc）といいます。", q: "界面活性剤が水中でミセル（分子集合体）を形成し始める基準となる濃度を何という？", choices: ["飽和溶解度", "臨界ミセル濃度（cmc）"], answer: 1, hintCorrect: "その通り！+2pt！ cmcを超えるとミセルができて、洗浄力や乳化力が一気に発揮されるよ！", hintWrong: "香粧品化学の最重要用語！ ミセルを作り始める濃度は『臨界ミセル濃度（cmc）』だよ。" },
+  { id: "SP-003", block: "A", title: "ミセルの構造と向き【第49回・51回国試】", exp: "水中でミセルを作るとき、水を嫌う疎水基（親油基）を内側に隠し、水となじむ親水基を外側（水側）に向けます！", q: "水溶液中で形成されるミセルにおいて、外側（水と接する側）に向いているのはどっち？", choices: ["親水基", "親油基（疎水基）"], answer: 0, hintCorrect: "見事！+2pt！ 水が大好きな親水基が外側をガードして、油汚れを内側に包み込むんだ！", hintWrong: "水を嫌う親油基は内側に隠れるよ。外側に向いて水と触れ合うのは『親水基』だね。" },
+  { id: "SP-004", block: "A", title: "cmcと洗浄力・可溶化能の関係【第35回国試直球】", exp: "界面活性剤の洗浄作用や可溶化作用は、ミセルが形成される臨界ミセル濃度（cmc）以上になって初めて効果的に発揮されます！", q: "「界面活性剤は、臨界ミセル濃度（cmc）より低い濃度のほうが洗浄力が高い。」この記述は正しい？", choices: ["正しい（○）", "誤り（×）"], answer: 1, hintCorrect: "完璧！+2pt！ 第35回国試クリア！ ミセルができない薄い濃度では油を包めないから誤りだね！", hintWrong: "過去問頻出の罠！ ミセルが形成される『cmc以上の濃度』になって初めて強い洗浄力を発揮するよ。" },
+  { id: "SP-005", block: "B", title: "可溶化の定義と透明性【第35回・51回国試】", exp: "水に溶けない少量の油や香料が、微細なミセル内部に取り込まれて、あたかも透明に溶けたようになる現象を『可溶化』といいます。", q: "化粧水などに水に溶けない香料や油性成分を加えて、透明に均一溶解させる作用を何という？", choices: ["可溶化", "乳化"], answer: 0, hintCorrect: "大正解！+2pt！ 白く濁るのが乳化、光が透き通って透明に見えるのが『可溶化』だよ！", hintWrong: "白く濁るのが乳化。ミセルが極めて小さく透明に溶け込んだ状態にするのは『可溶化』だね。" },
+  { id: "SP-006", block: "B", title: "乳化とエマルションの定義【第44回・51回国試】", exp: "混ざり合わない液体同士（水と油）を界面活性剤（乳化剤）で微粒子にして均一分散させた白濁液を『乳濁液（エマルション）』といいます。", q: "乳化作用によって得られる、水と油が微細粒子となって混ざり合った液体を何という？", choices: ["サスペンション（懸濁液）", "エマルション（乳濁液）"], answer: 1, hintCorrect: "バッチリ！+2pt！ クリームや乳液、マヨネーズなどはすべて『エマルション』だね！", hintWrong: "固体の粉が混ざっているのはサスペンション。液体同士が混ざり合ったものは『エマルション』だよ。" },
+  { id: "SP-007", block: "B", title: "乳化型の区別（O/W型とW/O型）【第42回・44回国試】", exp: "水の中に油が浮いているのが水中油型（O/W型：バニシングクリーム、牛乳）。油の中に水が浮いているのが油中水型（W/O型：コールドクリーム、バター）です！", q: "「油相の中に水滴が微細に分散している乳化型」を正しく表している記号はどっち？", choices: ["W/O型（油中水型）", "O/W型（水中油型）"], answer: 0, hintCorrect: "その通り！+2pt！ Oil（油）の中にWater（水）が入っているから『W/O型』だね！", hintWrong: "外側が油で中が水なのは『W/O型（Water in Oil）』だよ。逆にならないように注意！" },
+  { id: "SP-008", block: "B", title: "分散作用の定義【第38回・42回国試】", exp: "ファンデーションや口紅のように、水や油の中に固体の微粒子（顔料などの粉体）を沈殿させずに均一に散らばらせる作用を『分散』といいます。", q: "リキッドファンデーションにおいて、液体中に粉体の顔料を均一な微粒子状で安定化させる作用はどっち？", choices: ["可溶化作用", "分散作用"], answer: 1, hintCorrect: "正解！+2pt！ 固体の粉を散らすのが『分散』！ 液体同士を混ぜる乳化としっかり区別しよう！", hintWrong: "溶かして透明にするのが可溶化。固体の粉末を均一に散らばらせるのは『分散作用』だね。" },
+  { id: "SP-009", block: "C", title: "石けんの分類【国試最頻出・6回以上出題】", exp: "石けんは水に溶けると親水基がマイナス（陰イオン）に電離します！ 国試で『石けんは陽イオン』と書かれていたら即座にバツです！", q: "洗顔料や固形石けんとして古くから使われる「石けん」は、界面活性剤の分類としてどれに属する？", choices: ["陰イオン界面活性剤（アニオン）", "陽イオン界面活性剤（カチオン）"], answer: 0, hintCorrect: "完璧！+2pt！ 国試最大の定番引っかけクリア！ 石けんは絶対に『陰イオン』だよ！", hintWrong: "国試で一番狙われる嘘！ 石けんは陽イオンではなく『陰イオン界面活性剤』だよ。" },
+  { id: "SP-010", block: "C", title: "石けんの製法と陰イオンの特徴", exp: "石けんは天然油脂をアルカリ（水酸化Naや水酸化K）でけん化（加水分解）して作られます。豊かな泡立ちと高い洗浄力が自慢です。", q: "石けんをはじめとする陰イオン界面活性剤の大きな特徴として、正しいものはどっち？", choices: ["水溶液中で親水基がプラスの電気を帯びる", "起泡性（泡立ち）や洗浄力に優れている"], answer: 1, hintCorrect: "見事！+2pt！ モコモコの泡で汚れを落とすのが陰イオン界面活性剤の最大の強みだね！", hintWrong: "親水基が帯びるのはマイナス（負電気）だよ。優れた泡立ちと洗浄力がアニオンの特徴だね。" },
+  { id: "SP-011", block: "C", title: "シャンプーの合成界面活性剤【第48回・50回国試】", exp: "シャンプーによく使われる「アルキル硫酸ナトリウム（ラウリル硫酸Na等）」や「ポリオキシエチレンアルキル硫酸Na」も代表的な陰イオン界面活性剤です。", q: "高級アルコール系シャンプーの主洗浄成分として配合される「アルキル硫酸ナトリウム」の分類はどっち？", choices: ["陰イオン界面活性剤", "非イオン界面活性剤"], answer: 0, hintCorrect: "その通り！+2pt！ 第50回国試的中！ シャンプーの豊かな泡を作る陰イオン界面活性剤だね！", hintWrong: "非イオンではなく『陰イオン界面活性剤』だよ。皮脂汚れをスッキリ落とす主役だね。" },
+  { id: "SP-012", block: "D", title: "陽イオン界面活性剤の別名と電荷", exp: "水に溶かすと親水基がプラス（正電気）に帯電します。マイナスに帯電する石けんと逆の電気を持つため『逆性石けん』とも呼ばれます。", q: "水溶液中で親水基がプラス（陽イオン）に帯電し、石けんと逆の電荷をもつことから「逆性石けん」と呼ばれる界面活性剤はどっち？", choices: ["非イオン界面活性剤", "陽イオン界面活性剤"], answer: 1, hintCorrect: "大正解！+2pt！ プラスの電気を帯びるからカチオン（陽イオン）、別名『逆性石けん』だね！", hintWrong: "イオン化しないのは非イオン。逆性石けんと呼ばれるのは『陽イオン界面活性剤』だよ。" },
+  { id: "SP-013", block: "D", title: "第四級アンモニウム塩とヘアリンス【国試超定番】", exp: "塩化アルキルトリメチルアンモニウムなどの「第四級アンモニウム塩」は、傷んでマイナスに傾いた毛髪に吸着し、柔軟性と『帯電防止（静電気防止）』効果を発揮します！", q: "ヘアリンスやトリートメントに配合され、毛髪のきしみを防ぎ帯電防止効果を与える成分はどっち？", choices: ["第四級アンモニウム塩（陽イオン）", "アルキルベンゼンスルホン酸塩（陰イオン）"], answer: 0, hintCorrect: "素晴らしい！+2pt！ リンスで髪がサラサラになってパチパチ静電気を防げるのはこれのおかげ！", hintWrong: "アルキルベンゼンは強力な洗剤成分。髪に吸着して静電気を防ぐのは『第四級アンモニウム塩』だよ。" },
+  { id: "SP-014", block: "D", title: "消毒薬としての逆性石けん【衛生法規連動】", exp: "ベンザルコニウム塩化物（塩化ベンザルコニウム）は第四級アンモニウム塩で、強い殺菌力をもつため薬用石けんや器具消毒（0.1%液）に使われます。", q: "理美容師法に基づく器具消毒液の一つとしても指定されている「ベンザルコニウム塩化物」は、どの界面活性剤？", choices: ["非イオン界面活性剤", "陽イオン界面活性剤（逆性石けん）"], answer: 1, hintCorrect: "完璧！+2pt！ 消毒法でも必ず習うベンザルコニウム！ 立派な陽イオン界面活性剤だね！", hintWrong: "消毒用逆性石けんの主役！ ベンザルコニウム塩化物は『陽イオン界面活性剤』だよ。" },
+  { id: "SP-015", block: "E", title: "両性界面活性剤のpH変化【第43回国試】", exp: "両性界面活性剤はpHによって変身！ 酸性水溶液中では「陽イオン（＋）」、アルカリ性水溶液中では「陰イオン（−）」になります！", q: "両性界面活性剤は、酸性の水溶液中ではどちらのイオンとして振る舞う？", choices: ["陽イオン（プラス）", "陰イオン（マイナス）"], answer: 0, hintCorrect: "正解！+2pt！ 第43回国試的中！ 酸性ではカチオン（陽イオン）、アルカリ性ではアニオンになるよ！", hintWrong: "酸性では水素イオンを受け取って『陽イオン』になり、アルカリ性で陰イオンになるんだ。" },
+  { id: "SP-016", block: "E", title: "天然両性界面活性剤「レシチン」【第47回・50回国試】", exp: "大豆や卵黄から抽出される「レシチン」は天然の両性界面活性剤（リン脂質）です！ マヨネーズの乳化や口紅の分散剤として有名です。", q: "卵黄や大豆に含まれ、乳化剤や顔料分散剤として香粧品に広く使われる「レシチン」の分類はどっち？", choices: ["非イオン界面活性剤", "両性界面活性剤"], answer: 1, hintCorrect: "見事！+2pt！ 国試超頻出！ レシチンはリン酸（陰）と第四級アンモニウム（陽）を両方持つ『両性』だよ！", hintWrong: "過去問で何度も狙われた罠！ レシチンは非イオンではなく『両性界面活性剤』だよ。" },
+  { id: "SP-017", block: "E", title: "非イオン（ノニオン）界面活性剤の特徴【第41回・43回国試】", exp: "水中で電離（イオン化）しない界面活性剤です。泡立ちは控えめですが、乳化力・可溶化力に極めて優れ、クリームや乳液の乳化剤として最も多く使われます。", q: "「非イオン界面活性剤は、水に溶かすと親水基が電離して陰イオンになる。」この記述は正しい？", choices: ["正しい（○）", "誤り（×）"], answer: 1, hintCorrect: "その通り！+2pt！ 『非イオン』という名前の通り、水中で絶対にイオンにならないよ！", hintWrong: "水中でイオンに電離しないから『非イオン（ノニオン）』！ 誤りの記述だね。" },
+  { id: "SP-018", block: "E", title: "非イオンの代表例（ソルビタン脂肪酸エステル等）", exp: "グリセリンやソルビトールなどの多価アルコールに脂肪酸を結合させたエステル型非イオン界面活性剤は、安全性が高く食品や化粧品に広く汎用されます。", q: "モノステアリン酸ソルビタンなどの「ソルビタン脂肪酸エステル」は、どの界面活性剤に分類される？", choices: ["非イオン界面活性剤", "陽イオン界面活性剤"], answer: 0, hintCorrect: "バッチリ！+2pt！ 多価アルコールと脂肪酸のエステル型非イオン界面活性剤の代表例だね！", hintWrong: "カチオンではないよ。食品添加物にも使われる安全な『非イオン界面活性剤』だね。" },
+  { id: "SP-019", block: "F", title: "高分子化合物の定義（分子量1万以上）", exp: "小さな基本単位（単量体・モノマー）がたくさん結合（重合）したもので、一般に分子量1万以上の化合物を高分子化合物（ポリマー）といいます。", q: "化学において、一般に「高分子化合物」と呼ばれるのは分子量がおよそいくら以上のもの？", choices: ["分子量100以上", "分子量1万以上"], answer: 1, hintCorrect: "正解！+2pt！ 分子量数万〜数百万にもなる巨大分子が高分子化合物だよ！", hintWrong: "100程度は水やエタノールなどの低分子化合物。高分子はおおむね『1万以上』を指すよ。" },
+  { id: "SP-020", block: "F", title: "動物性天然高分子（キトサン・エラスチン）【第38回・40回国試】", exp: "カニやエビの殻から得られる「キトサン」や、皮膚組織にある「コラーゲン」「エラスチン」「ゼラチン」は動物性の天然高分子化合物です！", q: "甲殻類（カニ・エビ）の殻から得られ、抗菌作用や保湿作用をもつ天然高分子化合物はどっち？", choices: ["キトサン", "カルボキシビニルポリマー"], answer: 0, hintCorrect: "完璧！+2pt！ 第40回国試的中！ カニ殻キチンから作られる天然生体高分子がキトサンだね！", hintWrong: "カルボキシビニルポリマーは合成品。カニやエビの殻からとれる天然高分子は『キトサン』だよ。" },
+  { id: "SP-021", block: "F", title: "植物性天然高分子（デンプン・ガム質）", exp: "植物の幹や種子からとれる「アラビアゴム」「トラガントガム」「デンプン」は植物性の天然高分子です。デンプンは多数のブドウ糖（グルコース）が縮重合したものです。", q: "「デンプンは、果糖（フルクトース）が縮重合してできた高分子化合物である。」この記述は正しい？", choices: ["正しい（○）", "誤り（×）"], answer: 1, hintCorrect: "その通り！+2pt！ 第39回国試撃破！ デンプンを構成する単量体は果糖ではなく『ブドウ糖』だよ！", hintWrong: "デンプンの基本単位は果糖ではなく『ブドウ糖（グルコース）』！ 過去問の鋭い引っかけだね。" },
+  { id: "SP-022", block: "F", title: "半合成高分子「ニトロセルロース」【第39回国試】", exp: "天然のセルロース（綿など）を硝酸で処理（ニトロ化）した半合成品で、ネイルエナメル（マニキュア）の強靭な『皮膜形成剤』として不可欠です！", q: "マニキュア（ネイルエナメル）に配合され、爪の表面に光沢と硬い膜を作る半合成高分子化合物はどっち？", choices: ["ニトロセルロース", "流動パラフィン"], answer: 0, hintCorrect: "大正解！+2pt！ ネイルの膜といえばニトロセルロース！ 揺るぎない定番原料だね！", hintWrong: "流動パラフィンは鉱物油だよ。爪の上で乾いて強い膜を作るのは『ニトロセルロース』だね。" },
+  { id: "SP-023", block: "G", title: "ポリビニルアルコール（PVA）とパック基剤【第39回国試】", exp: "合成高分子のポリビニルアルコール（PVA）は、水に溶けて乾くと強靭で透明な膜を作るため、はがすタイプの『パック基剤』として古くから有名です。", q: "香粧品において「ポリビニルアルコール（PVA）」が最もよく利用される用途はどっち？", choices: ["毛髪の酸化染料", "ピールオフパック（はがすパック）の基剤"], answer: 1, hintCorrect: "見事！+2pt！ 第39回国試的中！ 乾くとペロッとはがせるパックの膜を作るのがPVAだよ！", hintWrong: "酸化染料はヘアカラーの低分子化合物。乾いて透明な膜を作るPVAは『パック基剤』だね。" },
+  { id: "SP-024", block: "G", title: "ポリビニルピロリドン（PVP）とヘアスプレー", exp: "ポリビニルピロリドン（PVP）は水・アルコールに溶けやすく、乾くとしなやかな皮膜を形成するため、ヘアスプレーやセット剤の皮膜形成剤として活躍します。", q: "ヘアスプレーに配合され、髪の毛の形をキープするための皮膜形成剤として使われる合成高分子はどっち？", choices: ["ポリビニルピロリドン（PVP）", "ステアリン酸"], answer: 0, hintCorrect: "素晴らしい！+2pt！ スプレーを吹きかけると髪をキープしてくれるのがPVPの皮膜だよ！", hintWrong: "ステアリン酸は高級脂肪酸。ヘアスプレーの皮膜を作る合成ポリマーは『PVP』だね。" },
+  { id: "SP-025", block: "G", title: "カルボキシビニルポリマーとアルカリ中和増粘", exp: "アクリル酸重合物のカルボキシビニルポリマーは、水酸化Na等のアルカリで中和すると粘度が跳ね上がり、美しい透明ゲル（ヘアジェル）を作ります。", q: "ヘアジェルなどの増粘剤として用いられ、アルカリ性物質で中和することで高い粘性のゲルを形成する合成高分子はどっち？", choices: ["塩化ナトリウム", "カルボキシビニルポリマー"], answer: 1, hintCorrect: "正解！+2pt！ アルカリで中和するとぷるぷるのジェルになる不思議で便利なポリマーだね！", hintWrong: "塩化ナトリウムは食塩。アルカリで中和してぷるぷるのヘアジェル基剤になるのは『カルボキシビニルポリマー』だよ。" },
+  { id: "SP-026", block: "G", title: "高分子化合物の香粧品での5大機能", exp: "高分子化合物は、皮膜形成剤（スプレー・マニキュア）、増粘剤（シャンプー・ジェル）、保護コロイド（乳化安定）、結合剤（固形おしろい）、香料保留剤として応用されます。", q: "固形おしろいやアイシャドーなどの粉末香粧品において、粉同士を結びつけて固める高分子の役割を何という？", choices: ["結合剤（バインダー）", "漂白剤"], answer: 0, hintCorrect: "完璧！+2pt！ 全26問完全制覇！ プレストパウダーの粉がバラバラにならないよう固めるのがバインダーだね！", hintWrong: "漂白剤は色を抜く薬。粉体を固形に成型するために結びつける役割は『結合剤（バインダー）』だよ。" }
 ];
 
-// 【国試対策・本番4択問題 厳選10問】
 const examQuestions = [
-  {
-    id: "EX-01", block: "EXAM", title: "第35回 国家試験本番問題",
-    q: "界面活性剤に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "１．界面活性剤は、臨界ミセル濃度（cmc）より低い濃度の方が洗浄力が高い。",
-      "２．界面活性剤が水に溶けない物質を透明に溶解させるはたらきを乳化という。",
-      "３．石けんは、陰イオン界面活性剤である。",
-      "４．陰イオン界面活性剤のイオン化した部分は、親油性が高い。"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ 石けんは代表的な陰イオン界面活性剤です！",
-    hintWrong: "正しいのは「３」です。１はcmc以上で高い、２は可溶化、４のイオン化部分は親水性です。"
-  },
-  {
-    id: "EX-02", block: "EXAM", title: "第36回 国家試験本番問題",
-    q: "界面活性剤に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）石けんは陽イオン界面活性剤である。",
-      "（2）石けんは油脂を加水分解してつくる。",
-      "（3）陽イオン界面活性剤を水に溶かすと、親水基は負電気を帯びる。",
-      "（4）界面活性剤は乳液に使用されることはない。"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ 石けんは動植物油脂をアルカリでけん化（加水分解）して作ります！",
-    hintWrong: "正しいのは「（2）」です。石けんは陰イオン、陽イオンは正電気を帯び、乳液には乳化剤として必須です。"
-  },
-  {
-    id: "EX-03", block: "EXAM", title: "第38回 国家試験本番問題（界面活性剤）",
-    q: "界面活性剤に関する次の記述のうち、正しいものの組合せはどれか。\n\nａ．ヘアクリームは、界面活性剤の乳化作用によりエマルジョンを形成している。\nｂ．両性界面活性剤は、水溶液中でイオンに解離しない。\nｃ．界面活性剤は、臨界ミセル濃度（cmc）以上になると可溶化能が減少する。\nｄ．界面活性剤は、リキッドファンデーションの油性基剤中で粉体（固体）の顔料を分散して安定化させている。",
-    choices: [
-      "（1） ａ と ｂ",
-      "（2） ｂ と ｃ",
-      "（3） ｃ と ｄ",
-      "（4） ａ と ｄ"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ ａ（乳化でエマルション）と ｄ（粉体顔料の分散安定化）が正しい記述です！",
-    hintWrong: "正解は「（4）」です。ｂはイオンに解離します。ｃはcmc以上で可溶化が起こります。"
-  },
-  {
-    id: "EX-04", block: "EXAM", title: "第38回 国家試験本番問題（高分子化合物）",
-    q: "次の化合物のうち、天然高分子化合物はどれか。",
-    choices: [
-      "（1）ポリビニルアルコール",
-      "（2）カルボキシビニルポリマー",
-      "（3）エラスチン",
-      "（4）カルボキシメチルセルロース"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ エラスチンやコラーゲンは生体組織から得られる動物性天然高分子です！",
-    hintWrong: "正解は「（3）」です。（1）（2）は合成高分子、（4）はセルロースの半合成高分子です。"
-  },
-  {
-    id: "EX-05", block: "EXAM", title: "第39回 国家試験本番問題",
-    q: "高分子化合物に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）デンプンは、基本単位の果糖が互いに縮重合した構造である。",
-      "（2）タンパク質は、多数のアミノ酸が結合したポリペプチドが基本構造である。",
-      "（3）ポリビニルアルコール（PVA）はパック基剤として用いられる。",
-      "（4）ニトロセルロースは、ネイルエナメルの皮膜形成剤として用いられる。"
-    ],
-    answer: 0,
-    hintCorrect: "正解！+3pt！ デンプンの基本構成単位は果糖ではなく「ブドウ糖（グルコース）」です！",
-    hintWrong: "誤りは「（1）」です。デンプンは多数のブドウ糖（グルコース）が縮重合した多糖類です。"
-  },
-  {
-    id: "EX-06", block: "EXAM", title: "第40回 国家試験本番問題（穴埋め）",
-    q: "界面活性剤に関する次の文章の（   ）内に入る語句の組合せのうち、正しいものはどれか。\n\n「界面活性剤の作用の一つに洗浄作用がある。この作用を示すものに石けんがあるが、これは（ Ａ ）界面活性剤である。また、油性原料を溶解した油相と水溶性原料を溶解した水相とを混合し、エマルジョンを形成させる作用を（ Ｂ ）といい、非イオン（ノニオン）界面活性剤がよく用いられる。その他、ヘアリンス剤に用いられ、毛髪に対して帯電防止効果がある界面活性剤として、塩化アルキルトリメチルアンモニウムなどの（ Ｃ ）アンモニウム塩が挙げられる。」",
-    choices: [
-      "（1） Ａ：陽イオン ── Ｂ：乳化 ── Ｃ：第一級",
-      "（2） Ａ：陽イオン ── Ｂ：可溶化 ── Ｃ：第四級",
-      "（3） Ａ：陰イオン ── Ｂ：乳化 ── Ｃ：第四級",
-      "（4） Ａ：陰イオン ── Ｂ：可溶化 ── Ｃ：第一級"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ Ａ＝陰イオン、Ｂ＝乳化、Ｃ＝第四級アンモニウム塩の完璧な組合せです！",
-    hintWrong: "正解は「（3）」です。石けんは陰イオン、エマルションを作るのは乳化、リンスは第四級塩です。"
-  },
-  {
-    id: "EX-07", block: "EXAM", title: "第40回 国家試験本番問題（高分子）",
-    q: "次の高分子化合物のうち、動物から採取されるものはどれか。",
-    choices: [
-      "（1）キトサン",
-      "（2）ポリビニルアルコール",
-      "（3）アラビアゴム",
-      "（4）デンプン"
-    ],
-    answer: 0,
-    hintCorrect: "正解！+3pt！ キトサンはカニやエビなど甲殻類の殻から採取される動物性天然高分子です！",
-    hintWrong: "正解は「（1）」です。（2）は合成、（3）（4）は植物から採取される天然高分子です。"
-  },
-  {
-    id: "EX-08", block: "EXAM", title: "第41回 国家試験本番問題",
-    q: "界面活性剤の働きに関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）水に溶けないビタミンを化粧水に溶解させる。",
-      "（2）レシチンは、口紅中の顔料を分散させる。",
-      "（3）Ｏ／Ｗ型のクリーム中で、水と油性成分を乳化させる。",
-      "（4）非イオン界面活性剤は、殺菌消毒作用が強い。"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ 殺菌消毒作用が強いのは逆性石けん（陽イオン界面活性剤）です！",
-    hintWrong: "誤りは「（4）」です。非イオン界面活性剤は乳化や可溶化に優れますが、殺菌消毒力はありません。"
-  },
-  {
-    id: "EX-09", block: "EXAM", title: "第44回 国家試験本番問題",
-    q: "界面活性剤の乳化作用に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）水相と油相とが乳化状態にあるものをエマルジョンという。",
-      "（2）油相に水滴が分散している乳化型（タイプ）をＯ/Ｗ型という。",
-      "（3）界面活性剤は分子内に親油基（疎水基）と親水基を持ち、乳化作用を示す。",
-      "（4）界面活性剤がミセルを形成する濃度以上になると、乳化作用が発揮される。"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ 油相に水滴が分散しているタイプは「W/O型（油中水型）」です！",
-    hintWrong: "誤りは「（2）」です。外側が油で内部に水滴が浮いているのはW/O型（Water in Oil）です。"
-  },
-  {
-    id: "EX-10", block: "EXAM", title: "第47回 国家試験本番問題",
-    q: "界面活性剤に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）石けんは、陽イオン界面活性剤（カチオン界面活性剤）に分類され、洗浄力に優れている。",
-      "（2）第四級アンモニウム塩は、陰イオン界面活性剤（アニオン界面活性剤）に分類され、ヘアリンスに用いられる。",
-      "（3）レシチンは、両性界面活性剤に分類され、大豆や卵黄などから得ることができる。",
-      "（4）ラノリンは、非イオン界面活性剤（ノニオン界面活性剤）に分類され、クリームや乳液などの乳化剤として用いられる。"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ レシチンは大豆や卵黄から得られる代表的な両性界面活性剤（リン脂質）です！",
-    hintWrong: "正しいのは「（3）」です。石けんは陰イオン、第四級塩は陽イオン、ラノリンは動物性ロウです。"
-  }
+  { id: "EX-01", block: "EXAM", title: "第35回 国家試験本番問題", q: "界面活性剤に関する次の記述のうち、正しいものはどれか。", choices: ["１．界面活性剤は、臨界ミセル濃度（cmc）より低い濃度の方が洗浄力が高い。", "２．界面活性剤が水に溶けない物質を透明に溶解させるはたらきを乳化という。", "３．石けんは、陰イオン界面活性剤である。", "４．陰イオン界面活性剤のイオン化した部分は、親油性が高い。"], answer: 2, hintCorrect: "正解！+3pt！ 石けんは代表的な陰イオン界面活性剤です！", hintWrong: "正しいのは「３」です。１はcmc以上で高い、２は可溶化、４のイオン化部分は親水性です。" },
+  { id: "EX-02", block: "EXAM", title: "第36回 国家試験本番問題", q: "界面活性剤に関する次の記述のうち、正しいものはどれか。", choices: ["（1）石けんは陽イオン界面活性剤である。", "（2）石けんは油脂を加水分解してつくる。", "（3）陽イオン界面活性剤を水に溶かすと、親水基は負電気を帯びる。", "（4）界面活性剤は乳液に使用されることはない。"], answer: 1, hintCorrect: "正解！+3pt！ 石けんは動植物油脂をアルカリでけん化（加水分解）して作ります！", hintWrong: "正しいのは「（2）」です。石けんは陰イオン、陽イオンは正電気を帯び、乳液には乳化剤として必須です。" },
+  { id: "EX-03", block: "EXAM", title: "第38回 国家試験本番問題（界面活性剤）", q: "界面活性剤に関する次の記述のうち、正しいものの組合せはどれか。\n\nａ．ヘアクリームは、界面活性剤の乳化作用によりエマルジョンを形成している。\nｂ．両性界面活性剤は、水溶液中でイオンに解離しない。\nｃ．界面活性剤は、臨界ミセル濃度（cmc）以上になると可溶化能が減少する。\nｄ．界面活性剤は、リキッドファンデーションの油性基剤中で粉体（固体）の顔料を分散して安定化させている。", choices: ["（1） ａ と ｂ", "（2） ｂ と ｃ", "（3） ｃ と ｄ", "（4） ａ と ｄ"], answer: 3, hintCorrect: "正解！+3pt！ ａ（乳化でエマルション）と ｄ（粉体顔料の分散安定化）が正しい記述です！", hintWrong: "正解は「（4）」です。ｂはイオンに解離します。ｃはcmc以上で可溶化が起こります。" },
+  { id: "EX-04", block: "EXAM", title: "第38回 国家試験本番問題（高分子化合物）", q: "次の化合物のうち、天然高分子化合物はどれか。", choices: ["（1）ポリビニルアルコール", "（2）カルボキシビニルポリマー", "（3）エラスチン", "（4）カルボキシメチルセルロース"], answer: 2, hintCorrect: "正解！+3pt！ エラスチンやコラーゲンは生体組織から得られる動物性天然高分子です！", hintWrong: "正解は「（3）」です。（1）（2）は合成高分子、（4）はセルロースの半合成高分子です。" },
+  { id: "EX-05", block: "EXAM", title: "第39回 国家試験本番問題", q: "高分子化合物に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）デンプンは、基本単位の果糖が互いに縮重合した構造である。", "（2）タンパク質は、多数のアミノ酸が結合したポリペプチドが基本構造である。", "（3）ポリビニルアルコール（PVA）はパック基剤として用いられる。", "（4）ニトロセルロースは、ネイルエナメルの皮膜形成剤として用いられる。"], answer: 0, hintCorrect: "正解！+3pt！ デンプンの基本構成単位は果糖ではなく「ブドウ糖（グルコース）」です！", hintWrong: "誤りは「（1）」です。デンプンは多数のブドウ糖（グルコース）が縮重合した多糖類です。" },
+  { id: "EX-06", block: "EXAM", title: "第40回 国家試験本番問題（穴埋め）", q: "界面活性剤に関する次の文章の（   ）内に入る語句の組合せのうち、正しいものはどれか。\n\n「界面活性剤の作用の一つに洗浄作用がある。この作用を示すものに石けんがあるが、これは（ Ａ ）界面活性剤である。また、油性原料を溶解した油相と水溶性原料を溶解した水相とを混合し、エマルジョンを形成させる作用を（ Ｂ ）といい、非イオン（ノニオン）界面活性剤がよく用いられる。その他、ヘアリンス剤に用いられ、毛髪に対して帯電防止効果がある界面活性剤として、塩化アルキルトリメチルアンモニウムなどの（ Ｃ ）アンモニウム塩が挙げられる。」", choices: ["（1） Ａ：陽イオン ── Ｂ：乳化 ── Ｃ：第一級", "（2） Ａ：陽イオン ── Ｂ：可溶化 ── Ｃ：第四級", "（3） Ａ：陰イオン ── Ｂ：乳化 ── Ｃ：第四級", "（4） Ａ：陰イオン ── Ｂ：可溶化 ── Ｃ：第一級"], answer: 2, hintCorrect: "正解！+3pt！ Ａ＝陰イオン、Ｂ＝乳化、Ｃ＝第四級アンモニウム塩の完璧な組合せです！", hintWrong: "正解は「（3）」です。石けんは陰イオン、エマルションを作るのは乳化、リンスは第四級塩です。" },
+  { id: "EX-07", block: "EXAM", title: "第40回 国家試験本番問題（高分子）", q: "次の高分子化合物のうち、動物から採取されるものはどれか。", choices: ["（1）キトサン", "（2）ポリビニルアルコール", "（3）アラビアゴム", "（4）デンプン"], answer: 0, hintCorrect: "正解！+3pt！ キトサンはカニやエビなど甲殻類の殻から採取される動物性天然高分子です！", hintWrong: "正解は「（1）」です。（2）は合成、（3）（4）は植物から採取される天然高分子です。" },
+  { id: "EX-08", block: "EXAM", title: "第41回 国家試験本番問題", q: "界面活性剤の働きに関する次の記述のうち、誤っているものはどれか。", choices: ["（1）水に溶けないビタミンを化粧水に溶解させる。", "（2）レシチンは、口紅中の顔料を分散させる。", "（3）Ｏ／Ｗ型のクリーム中で、水と油性成分を乳化させる。", "（4）非イオン界面活性剤は、殺菌消毒作用が強い。"], answer: 3, hintCorrect: "正解！+3pt！ 殺菌消毒作用が強いのは逆性石けん（陽イオン界面活性剤）です！", hintWrong: "誤りは「（4）」です。非イオン界面活性剤は乳化や可溶化に優れますが、殺菌消毒力はありません。" },
+  { id: "EX-09", block: "EXAM", title: "第44回 国家試験本番問題", q: "界面活性剤の乳化作用に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）水相と油相とが乳化状態にあるものをエマルジョンという。", "（2）油相に水滴が分散している乳化型（タイプ）をＯ/Ｗ型という。", "（3）界面活性剤は分子内に親油基（疎水基）と親水基を持ち、乳化作用を示す。", "（4）界面活性剤がミセルを形成する濃度以上になると、乳化作用が発揮される。"], answer: 1, hintCorrect: "正解！+3pt！ 油相に水滴が分散しているタイプは「W/O型（油中水型）」です！", hintWrong: "誤りは「（2）」です。外側が油で内部に水滴が浮いているのはW/O型（Water in Oil）です。" },
+  { id: "EX-10", block: "EXAM", title: "第47回 国家試験本番問題", q: "界面活性剤に関する次の記述のうち、正しいものはどれか。", choices: ["（1）石けんは、陽イオン界面活性剤（カチオン界面活性剤）に分類され、洗浄力に優れている。", "（2）第四級アンモニウム塩は、陰イオン界面活性剤（アニオン界面活性剤）に分類され、ヘアリンスに用いられる。", "（3）レシチンは、両性界面活性剤に分類され、大豆や卵黄などから得ることができる。", "（4）ラノリンは、非イオン界面活性剤（ノニオン界面活性剤）に分類され、クリームや乳液などの乳化剤として用いられる。"], answer: 2, hintCorrect: "正解！+3pt！ レシチンは大豆や卵黄から得られる代表的な両性界面活性剤（リン脂質）です！", hintWrong: "正しいのは「（3）」です。石けんは陰イオン、第四級塩は陽イオン、ラノリンは動物性ロウです。" }
 ];
 
-// 状態管理
-const STORAGE_KEY = "surfactant_polymer_tutor_save_data";
-let state = {
-  mode: "BASE", // "BASE" または "EXAM"
-  currentQuestionIndex: 0,
-  answers: {},
-  wrongQuestionIds: [],
-  isRetryMode: false,
-  isFinished: false
-};
+const STORAGE_KEY = "surfactant_polymer_tutor_save_data_v3";
+let state = { mode: "BASE", currentQuestionIndex: 0, answers: {}, wrongQuestionIds: [], isRetryMode: false, isFinished: false };
 
-function getActiveQuestions() {
-  if (state.mode === "EXAM") {
-    return examQuestions;
-  }
-  return baseQuestions;
-}
-
-function getBlockStartIndex(blockCode) {
-  const qs = getActiveQuestions();
-  return qs.findIndex(q => q.block === blockCode);
-}
+function getActiveQuestions() { return (state.mode === "EXAM") ? examQuestions : baseQuestions; }
+function getBlockStartIndex(blockCode) { return getActiveQuestions().findIndex(q => q.block === blockCode); }
 
 function loadProgress() {
   const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    try {
-      state = JSON.parse(saved);
-    } catch(e) {
-      console.error(e);
-    }
-  }
+  if (saved) { try { state = JSON.parse(saved); } catch(e) {} }
 }
+function saveProgress() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
-function saveProgress() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-// 得点と正解率の計算
 function calculateScore(mode) {
   const qs = (mode === "EXAM") ? examQuestions : baseQuestions;
   const pointPerQ = (mode === "EXAM") ? 3 : 2;
@@ -865,25 +270,17 @@ function updateSpineMap() {
   const blocks = ["A", "B", "C", "D", "E", "F", "G"];
   const currentQ = getCurrentQuestion();
   const currentBlock = currentQ ? currentQ.block : null;
-
   blocks.forEach(b => {
     const node = document.getElementById(`node-${b}`);
     if (!node) return;
     node.className = "spine-node";
-
-    const blockQuestions = baseQuestions.filter(q => q.block === b);
-    const isAllCorrect = blockQuestions.every(q => state.answers[q.id] === true);
-
-    if (isAllCorrect) node.classList.add("cleared");
+    const bQs = baseQuestions.filter(q => q.block === b);
+    if (bQs.every(q => state.answers[q.id] === true)) node.classList.add("cleared");
     if (b === currentBlock && state.mode === "BASE" && !state.isFinished) node.classList.add("active");
   });
-
   const examNode = document.getElementById("node-EXAM");
-  if (state.mode === "EXAM" && !state.isFinished) {
-    examNode.classList.add("active");
-  } else {
-    examNode.classList.remove("active");
-  }
+  if (state.mode === "EXAM" && !state.isFinished) examNode.classList.add("active");
+  else examNode.classList.remove("active");
 }
 
 function getCurrentQuestion() {
@@ -898,11 +295,7 @@ function getCurrentQuestion() {
 function renderQuestion() {
   state.isFinished = false;
   const item = getCurrentQuestion();
-  if (!item) {
-    showResultScreen();
-    return;
-  }
-
+  if (!item) { showResultScreen(); return; }
   updateSpineMap();
 
   const scoreData = calculateScore(state.mode);
@@ -911,20 +304,12 @@ function renderQuestion() {
   if (state.mode === "EXAM") {
     expBox.style.display = "none";
     document.getElementById("status-field").innerText = "🎯 国試本番4択演習";
-    if (state.isRetryMode) {
-      document.getElementById("progress-text").innerText = `🔥 弱点集中特訓：${state.currentQuestionIndex + 1} / ${state.wrongQuestionIds.length}`;
-    } else {
-      document.getElementById("progress-text").innerText = `国試問 ${state.currentQuestionIndex + 1} / ${examQuestions.length}`;
-    }
+    document.getElementById("progress-text").innerText = state.isRetryMode ? `🔥 弱点特訓：${state.currentQuestionIndex + 1}/${state.wrongQuestionIds.length}` : `国試問 ${state.currentQuestionIndex + 1} / ${examQuestions.length}`;
   } else {
     expBox.style.display = "block";
     document.getElementById("status-field").innerText = fieldNames[item.block] || "界面活性剤・高分子";
     document.getElementById("lesson-exp").innerText = item.exp;
-    if (state.isRetryMode) {
-      document.getElementById("progress-text").innerText = `🔥 弱点集中特訓：${state.currentQuestionIndex + 1} / ${state.wrongQuestionIds.length}`;
-    } else {
-      document.getElementById("progress-text").innerText = `問 ${state.currentQuestionIndex + 1} / ${baseQuestions.length}`;
-    }
+    document.getElementById("progress-text").innerText = state.isRetryMode ? `🔥 弱点特訓：${state.currentQuestionIndex + 1}/${state.wrongQuestionIds.length}` : `問 ${state.currentQuestionIndex + 1} / ${baseQuestions.length}`;
   }
 
   document.getElementById("status-score").innerText = `正解率: ${scoreData.rate}% (${scoreData.currentPoints}/${scoreData.maxPoints}点)`;
@@ -951,30 +336,22 @@ function selectAnswer(selectedIndex) {
   const feedback = document.getElementById("feedback-area");
   const feedbackDesc = document.getElementById("feedback-desc");
   const buttons = document.querySelectorAll(".btn-choice");
-
   buttons.forEach(b => b.disabled = true);
 
   const isCorrect = (selectedIndex === item.answer);
-
   if (isCorrect) {
     buttons[selectedIndex].classList.add("correct-highlight");
     feedback.className = "feedback-box feedback-correct";
     feedbackDesc.innerText = item.hintCorrect;
     state.answers[item.id] = true;
-
-    if (state.isRetryMode) {
-      state.wrongQuestionIds = state.wrongQuestionIds.filter(id => id !== item.id);
-    }
+    if (state.isRetryMode) state.wrongQuestionIds = state.wrongQuestionIds.filter(id => id !== item.id);
   } else {
     buttons[selectedIndex].classList.add("wrong-highlight");
     buttons[item.answer].classList.add("correct-highlight");
     feedback.className = "feedback-box feedback-wrong";
     feedbackDesc.innerText = item.hintWrong;
     state.answers[item.id] = false;
-
-    if (!state.wrongQuestionIds.includes(item.id)) {
-      state.wrongQuestionIds.push(item.id);
-    }
+    if (!state.wrongQuestionIds.includes(item.id)) state.wrongQuestionIds.push(item.id);
   }
 
   saveProgress();
@@ -986,15 +363,12 @@ function selectAnswer(selectedIndex) {
 }
 
 function nextQuestion() {
-  const qs = getActiveQuestions();
-  const total = state.isRetryMode ? state.wrongQuestionIds.length : qs.length;
+  const total = state.isRetryMode ? state.wrongQuestionIds.length : getActiveQuestions().length;
   if (state.currentQuestionIndex < total - 1) {
     state.currentQuestionIndex++;
     saveProgress();
     renderQuestion();
-  } else {
-    showResultScreen();
-  }
+  } else { showResultScreen(); }
 }
 
 function prevQuestion() {
@@ -1006,13 +380,9 @@ function prevQuestion() {
 }
 
 function jumpToBlock(blockCode) {
-  if (state.mode === "EXAM") {
-    state.mode = "BASE";
-    state.isRetryMode = false;
-  } else if (state.isRetryMode) {
-    if (!confirm("弱点リトライを中断して通常問題へ戻りますか？")) return;
-    state.isRetryMode = false;
-  }
+  if (state.mode === "EXAM") { state.mode = "BASE"; state.isRetryMode = false; }
+  else if (state.isRetryMode && !confirm("弱点リトライを中断して戻りますか？")) return;
+  state.isRetryMode = false;
   const targetIndex = getBlockStartIndex(blockCode);
   if (targetIndex !== -1) {
     restoreCardStructure();
@@ -1023,10 +393,8 @@ function jumpToBlock(blockCode) {
 }
 
 function startExamMode() {
-  if (state.isRetryMode) {
-    if (!confirm("弱点リトライを終了して国試4択演習へ移動しますか？")) return;
-    state.isRetryMode = false;
-  }
+  if (state.isRetryMode && !confirm("弱点リトライを終了して国試演習へ移動しますか？")) return;
+  state.isRetryMode = false;
   state.mode = "EXAM";
   state.currentQuestionIndex = 0;
   saveProgress();
@@ -1043,43 +411,34 @@ function startBaseMode() {
   renderQuestion();
 }
 
+function pauseQuiz() {
+  saveProgress();
+  alert("⏸️ 学習を一時中断し、進捗を保存しました。\n次回もこの問題から再開できます。");
+  document.getElementById("btn-resume").style.display = "inline-block";
+}
+function resumeQuiz() {
+  document.getElementById("btn-resume").style.display = "none";
+  alert("▶️ 学習を再開します。");
+}
+function quitQuiz() {
+  if (confirm("学習を終了しますか？\n\n[OK]：成績結果を表示する\n[キャンセル]：そのまま続ける")) showResultScreen();
+}
+
 function generateStatsHtml() {
   const blocks = ["A", "B", "C", "D", "E", "F", "G"];
-  let lowestRate = 101;
-  let lowestBlock = "";
-  let graphHtml = "";
-
+  let lowestRate = 101, lowestBlock = "", graphHtml = "";
   blocks.forEach(b => {
     const questions = baseQuestions.filter(q => q.block === b);
-    const total = questions.length;
     const correctCount = questions.filter(q => state.answers[q.id] === true).length;
-    const rate = Math.round((correctCount / total) * 100);
-
-    if (rate < lowestRate) {
-      lowestRate = rate;
-      lowestBlock = fieldNames[b];
-    }
-
-    let barClass = "bar-high";
-    if (rate < 50) {
-      barClass = "bar-low";
-    } else if (rate < 80) {
-      barClass = "bar-mid";
-    }
-
+    const rate = Math.round((correctCount / questions.length) * 100);
+    if (rate < lowestRate) { lowestRate = rate; lowestBlock = fieldNames[b]; }
+    let barClass = (rate < 50) ? "bar-low" : (rate < 80) ? "bar-mid" : "bar-high";
     graphHtml += `
       <div class="graph-item" onclick="jumpToBlock('${b}')" title="クリックしてこの分野を復習">
-        <div class="graph-label-row">
-          <span>${fieldNames[b]}</span>
-          <span>${correctCount}/${total}問 (${rate}%)</span>
-        </div>
-        <div class="graph-bar-bg">
-          <div class="graph-bar-fill ${barClass}" style="width: ${rate}%;"></div>
-        </div>
-      </div>
-    `;
+        <div class="graph-label-row"><span>${fieldNames[b]}</span><span>${correctCount}/${questions.length}問 (${rate}%)</span></div>
+        <div class="graph-bar-bg"><div class="graph-bar-fill ${barClass}" style="width: ${rate}%;"></div></div>
+      </div>`;
   });
-
   return { graphHtml, lowestBlock, lowestRate };
 }
 
@@ -1091,7 +450,6 @@ function showResultScreen() {
   const scoreData = calculateScore(state.mode);
   const currentWrongCount = scoreData.total - scoreData.correctCount;
   const isPerfect = (currentWrongCount === 0);
-
   let resultHtml = "";
 
   if (state.mode === "EXAM") {
@@ -1104,40 +462,23 @@ function showResultScreen() {
           <div style="background:var(--primary-light); color:var(--primary); font-size:1.1rem; font-weight:bold; padding:10px 20px; border-radius:16px; display:inline-block; margin:8px 0; border:1px solid #bae6fd;">
             正解率: ${scoreData.rate}% （獲得 ${scoreData.currentPoints}点 / 満点 ${scoreData.maxPoints}点）
           </div>
-          <div style="font-size:0.85rem; color:#64748b;">
-            正解数: ${scoreData.correctCount} / ${scoreData.total} 問
-          </div>
+          <div style="font-size:0.85rem; color:#64748b;">正解数: ${scoreData.correctCount} / ${scoreData.total} 問</div>
         </div>
         <div class="advice-box">
           💡 <strong>AI先生の国試診断：</strong><br>
-          ${isPerfect 
-            ? '本番過去問10問を全問正解！石けん（陰イオン）や第四級アンモニウム塩（陽イオン）、キトサンなどの重要分類を完璧に見破れています！' 
-            : `間違えた問題が ${currentWrongCount} 問あります。「石けんは陰イオン」「レシチンは両性」「第四級アンモニウム塩は帯電防止・殺菌」の3大頻出ポイントを再確認しましょう。`}
+          ${isPerfect ? '本番過去問10問を全問正解！石けん（陰イオン）や第四級アンモニウム塩（陽イオン）、キトサンなどの重要分類を完璧に見破れています！' : `間違えた問題が ${currentWrongCount} 問あります。「石けんは陰イオン」「レシチンは両性」「第四級アンモニウム塩は帯電防止・殺菌」の3大頻出ポイントを再確認しましょう。`}
         </div>
-        ${!isPerfect ? `
-          <button class="btn-action btn-retry" onclick="startRetryMode()">
-            🔥 間違えた問題だけを集中リトライする
-          </button>
-        ` : ''}
-        <button class="btn-action btn-restart" onclick="startExamMode()">
-          🔄 国試4択演習をもう一度解く
-        </button>
-        <button class="btn-action btn-switch-exam" onclick="startBaseMode()">
-          📚 基礎演習（2択・26問）へ戻る
-        </button>
-      </div>
-    `;
+        ${!isPerfect ? `<button class="btn-action btn-retry" onclick="startRetryMode()">🔥 間違えた問題だけを集中リトライする</button>` : ''}
+        <button class="btn-action btn-restart" onclick="startExamMode()">🔄 国試4択演習をもう一度解く</button>
+        <button class="btn-action btn-switch-exam" onclick="startBaseMode()">📚 基礎演習（2択・26問）へ戻る</button>
+
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <a href="index.html#units" class="btn-action" style="background:#0284c7; color:white; text-decoration:none; text-align:center; flex:1;">📚 単元メニューへ</a>
+          <a href="index.html" class="btn-action" style="background:#475569; color:white; text-decoration:none; text-align:center; flex:1;">🏠 ポータルトップへ</a>
+        </div>
+      </div>`;
   } else {
     const stats = generateStatsHtml();
-    let adviceText = "";
-    if (isPerfect) {
-      adviceText = "全分野で100%達成！次は下の「国試4択演習」ボタンを押して本番形式にチャレンジしてみましょう！";
-    } else if (stats.lowestRate < 80) {
-      adviceText = `特に<strong>「${stats.lowestBlock}」</strong>の正答率が低めです。下のグラフをタップして集中的に再学習してみましょう！`;
-    } else {
-      adviceText = "全体的によく理解できています。間違えた問題だけをリトライして満点を目指しましょう！";
-    }
-
     resultHtml = `
       <div class="result-card">
         <div class="result-header">
@@ -1147,39 +488,20 @@ function showResultScreen() {
           <div style="background:var(--primary-light); color:var(--primary); font-size:1.1rem; font-weight:bold; padding:10px 20px; border-radius:16px; display:inline-block; margin:8px 0; border:1px solid #bae6fd;">
             正解率: ${scoreData.rate}% （獲得 ${scoreData.currentPoints}点 / 満点 ${scoreData.maxPoints}点）
           </div>
-          <div style="font-size:0.85rem; color:#64748b;">
-            正解数: ${scoreData.correctCount} / ${scoreData.total} 問
-          </div>
+          <div style="font-size:0.85rem; color:#64748b;">正解数: ${scoreData.correctCount} / ${scoreData.total} 問</div>
         </div>
+        <div class="graph-container"><div class="graph-title"><span>📊 分野別 正答率</span><span style="font-size:0.75rem; color:#64748b; font-weight:normal;">タップで各分野へ移動</span></div>${stats.graphHtml}</div>
+        <div class="advice-box">💡 <strong>AI先生の分析診断：</strong><br>${isPerfect ? '全分野で100%達成！次は下の「国試4択演習」ボタンを押して本番形式にチャレンジしてみましょう！' : `特に<strong>「${stats.lowestBlock}」</strong>の正答率が低めです。上のグラフをタップして集中的に復習しましょう！`}</div>
+        <button class="btn-action btn-switch-exam" onclick="startExamMode()">🎯 本番力試し！「国試4択演習（10問）」へ進む</button>
+        ${!isPerfect ? `<button class="btn-action btn-retry" onclick="startRetryMode()">🔥 間違えた問題だけを集中特訓する</button>` : ''}
+        <button class="btn-action btn-restart" onclick="confirmResetAll()">🔄 最初からやり直す</button>
 
-        <div class="graph-container">
-          <div class="graph-title">
-            <span>📊 分野別 正答率</span>
-            <span style="font-size:0.75rem; color:#64748b; font-weight:normal;">タップで各分野へ移動</span>
-          </div>
-          ${stats.graphHtml}
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <a href="index.html#units" class="btn-action" style="background:#0284c7; color:white; text-decoration:none; text-align:center; flex:1;">📚 単元メニューへ</a>
+          <a href="index.html" class="btn-action" style="background:#475569; color:white; text-decoration:none; text-align:center; flex:1;">🏠 ポータルトップへ</a>
         </div>
-
-        <div class="advice-box">
-          💡 <strong>AI先生の分析診断：</strong><br>
-          ${adviceText}
-        </div>
-
-        <button class="btn-action btn-switch-exam" onclick="startExamMode()">
-          🎯 本番力試し！「国試4択演習（10問）」へ進む
-        </button>
-        ${!isPerfect ? `
-          <button class="btn-action btn-retry" onclick="startRetryMode()">
-            🔥 間違えた問題だけを集中特訓する
-          </button>
-        ` : ''}
-        <button class="btn-action btn-restart" onclick="confirmResetAll()">
-          🔄 最初からやり直す
-        </button>
-      </div>
-    `;
+      </div>`;
   }
-
   document.getElementById("main-card").innerHTML = resultHtml;
 }
 
@@ -1196,14 +518,7 @@ function startRetryMode() {
 function confirmResetAll() {
   if (confirm("学習記録をリセットして最初からやり直しますか？")) {
     localStorage.removeItem(STORAGE_KEY);
-    state = {
-      mode: "BASE",
-      currentQuestionIndex: 0,
-      answers: {},
-      wrongQuestionIds: [],
-      isRetryMode: false,
-      isFinished: false
-    };
+    state = { mode: "BASE", currentQuestionIndex: 0, answers: {}, wrongQuestionIds: [], isRetryMode: false, isFinished: false };
     restoreCardStructure();
     renderQuestion();
   }
@@ -1213,30 +528,16 @@ function restoreCardStructure() {
   document.getElementById("main-card").innerHTML = `
     <div class="q-progress" id="progress-text"></div>
     <h2 id="lesson-title"></h2>
-    <div class="exp-box" id="exp-container">
-      <span class="exp-tag">💡 香粧品AI先生のポイント</span>
-      <div id="lesson-exp"></div>
-    </div>
+    <div class="exp-box" id="exp-container"><span class="exp-tag">💡 香粧品AI先生のポイント</span><div id="lesson-exp"></div></div>
     <div class="question-box" id="question-text"></div>
     <div class="btn-group" id="choices-container"></div>
-    <div class="feedback-box" id="feedback-area">
-      <div class="feedback-header">🧑‍🏫 AI先生の個別指導</div>
-      <div id="feedback-desc"></div>
-    </div>
-    <div class="nav-controls">
-      <button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button>
-      <button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button>
-    </div>
-  `;
+    <div class="feedback-box" id="feedback-area"><div class="feedback-header">🧑‍🏫 AI先生の個別指導</div><div id="feedback-desc"></div></div>
+    <div class="nav-controls"><button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button><button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button></div>`;
 }
 
-// 起動
 loadProgress();
-if (state.isFinished) {
-  showResultScreen();
-} else {
-  renderQuestion();
-}
+if (state.isFinished) showResultScreen();
+else renderQuestion();
 </script>
 
 </body>

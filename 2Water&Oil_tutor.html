@@ -6,7 +6,7 @@
 <title>香粧品化学 AI個別指導チューター - 水性・油性原料編</title>
 <style>
   :root {
-    --primary: #059669; /* エメラルドグリーン（水・天然油のイメージ） */
+    --primary: #059669;
     --primary-light: #ecfdf5;
     --primary-hover: #047857;
     --accent: #f59e0b;
@@ -29,53 +29,32 @@
     padding: 8px 10px;
     line-height: 1.5;
   }
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-  }
+  .container { max-width: 600px; margin: 0 auto; }
 
-  /* 上部ステータス（3点表示） */
   .top-status-bar {
     background: var(--card);
     border-radius: 8px;
     padding: 8px 12px;
     border: 1px solid var(--border);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04);
   }
-  .status-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .status-student {
-    font-size: 0.85rem;
-    font-weight: bold;
-    color: #475569;
-  }
-  .status-field {
-    font-size: 0.8rem;
-    font-weight: bold;
-    background: #d1fae5;
-    color: #065f46;
-    padding: 2px 8px;
-    border-radius: 4px;
-  }
-  .status-score {
-    font-size: 0.82rem;
-    font-weight: bold;
-    background: var(--primary-light);
-    color: var(--primary);
-    padding: 3px 10px;
-    border-radius: 12px;
-    border: 1px solid #a7f3d0;
-    white-space: nowrap;
-  }
+  .status-left { display: flex; align-items: center; gap: 8px; }
+  .status-student { font-size: 0.85rem; font-weight: bold; color: #475569; }
+  .status-field { font-size: 0.8rem; font-weight: bold; background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 4px; }
+  .status-score { font-size: 0.82rem; font-weight: bold; background: var(--primary-light); color: var(--primary); padding: 3px 10px; border-radius: 12px; border: 1px solid #a7f3d0; white-space: nowrap; }
 
-  /* メイン問題カード */
+  /* 操作バー */
+  .action-bar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 8px; }
+  .btn-action-sm { padding: 5px 12px; font-size: 0.78rem; font-weight: bold; border-radius: 6px; border: 1px solid var(--border); cursor: pointer; background: #ffffff; color: var(--text); transition: all 0.15s; }
+  .btn-action-sm:hover { background: #f1f5f9; }
+  .btn-pause { border-color: #f59e0b; color: #b45309; }
+  .btn-resume { border-color: #10b981; color: #047857; background: #ecfdf5; }
+  .btn-quit { border-color: #ef4444; color: #b91c1c; }
+
   .card {
     background: var(--card);
     border-radius: 12px;
@@ -84,55 +63,14 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.03);
     margin-bottom: 14px;
   }
-  .q-progress {
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: #64748b;
-    margin-bottom: 4px;
-  }
-  h2 {
-    font-size: 1.12rem;
-    margin: 0 0 12px 0;
-    line-height: 1.35;
-    color: #0f172a;
-  }
+  .q-progress { font-size: 0.8rem; font-weight: bold; color: #64748b; margin-bottom: 4px; }
+  h2 { font-size: 1.12rem; margin: 0 0 12px 0; line-height: 1.35; color: #0f172a; }
 
-  /* 解説枠 */
-  .exp-box {
-    background: var(--accent-bg);
-    border-left: 4px solid var(--accent);
-    padding: 10px 12px;
-    border-radius: 4px;
-    margin-bottom: 14px;
-    font-size: 0.92rem;
-  }
-  .exp-tag {
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #b45309;
-    display: block;
-    margin-bottom: 3px;
-  }
+  .exp-box { background: var(--accent-bg); border-left: 4px solid var(--accent); padding: 10px 12px; border-radius: 4px; margin-bottom: 14px; font-size: 0.92rem; }
+  .exp-tag { font-size: 0.75rem; font-weight: bold; color: #b45309; display: block; margin-bottom: 3px; }
+  .question-box { background: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 8px; margin-bottom: 14px; font-weight: 600; font-size: 1rem; line-height: 1.5; white-space: pre-wrap; }
 
-  /* 設問枠 */
-  .question-box {
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    padding: 14px;
-    border-radius: 8px;
-    margin-bottom: 14px;
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.5;
-    white-space: pre-wrap;
-  }
-
-  /* 選択肢ボタン */
-  .btn-group {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-  }
+  .btn-group { display: flex; flex-direction: column; gap: 9px; }
   .btn-choice {
     background: #ffffff;
     border: 2px solid #cbd5e1;
@@ -149,239 +87,58 @@
     -webkit-tap-highlight-color: transparent;
   }
   .btn-choice:active { transform: scale(0.98); }
-  .btn-choice:hover:not(:disabled) {
-    border-color: var(--primary);
-    background: var(--primary-light);
-  }
+  .btn-choice:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-light); }
   .btn-choice:disabled { cursor: default; }
+  .btn-choice.correct-highlight { background: var(--success-bg) !important; border-color: var(--success) !important; color: var(--success) !important; }
+  .btn-choice.wrong-highlight { background: var(--danger-bg) !important; border-color: var(--danger) !important; color: var(--danger) !important; }
 
-  .btn-choice.correct-highlight {
-    background: var(--success-bg) !important;
-    border-color: var(--success) !important;
-    color: var(--success) !important;
-  }
-  .btn-choice.wrong-highlight {
-    background: var(--danger-bg) !important;
-    border-color: var(--danger) !important;
-    color: var(--danger) !important;
-  }
+  .feedback-box { display: none; margin-top: 14px; padding: 12px 14px; border-radius: 8px; animation: fadeIn 0.25s ease; }
+  .feedback-correct { background: var(--success-bg); border: 1px solid #86efac; color: var(--success); }
+  .feedback-wrong { background: var(--danger-bg); border: 1px solid #fca5a5; color: var(--danger); }
+  .feedback-header { font-weight: bold; font-size: 0.9rem; margin-bottom: 4px; }
 
-  /* AIフィードバック */
-  .feedback-box {
-    display: none;
-    margin-top: 14px;
-    padding: 12px 14px;
-    border-radius: 8px;
-    animation: fadeIn 0.25s ease;
-  }
-  .feedback-correct {
-    background: var(--success-bg);
-    border: 1px solid #86efac;
-    color: var(--success);
-  }
-  .feedback-wrong {
-    background: var(--danger-bg);
-    border: 1px solid #fca5a5;
-    color: var(--danger);
-  }
-  .feedback-header {
-    font-weight: bold;
-    font-size: 0.9rem;
-    margin-bottom: 4px;
-  }
-
-  /* 操作ボタン */
-  .nav-controls {
-    display: flex;
-    gap: 8px;
-    margin-top: 14px;
-  }
-  .btn-prev {
-    flex: 1;
-    padding: 12px;
-    background: #ffffff;
-    color: #475569;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 0.92rem;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  .btn-prev:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-  }
-  .btn-next {
-    flex: 2;
-    padding: 12px;
-    background: var(--primary);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.98rem;
-    font-weight: bold;
-    cursor: pointer;
-    display: none;
-  }
+  .nav-controls { display: flex; gap: 8px; margin-top: 14px; }
+  .btn-prev { flex: 1; padding: 12px; background: #ffffff; color: #475569; border: 1px solid var(--border); border-radius: 8px; font-size: 0.92rem; font-weight: bold; cursor: pointer; }
+  .btn-prev:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-next { flex: 2; padding: 12px; background: var(--primary); color: #ffffff; border: none; border-radius: 8px; font-size: 0.98rem; font-weight: bold; cursor: pointer; display: none; }
   .btn-next:hover { background: var(--primary-hover); }
 
-  /* 下部メニュー */
-  .bottom-menu-box {
-    background: var(--card);
-    border-radius: 10px;
-    padding: 12px;
-    border: 1px solid var(--border);
-    margin-bottom: 20px;
-  }
-  .bottom-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .bottom-title {
-    font-size: 0.78rem;
-    font-weight: bold;
-    color: #64748b;
-  }
-  .btn-reset {
-    font-size: 0.74rem;
-    color: #dc2626;
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-decoration: underline;
-    padding: 0;
-  }
-  .spine-steps {
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-  }
-  .spine-node {
-    flex: 1;
-    min-width: 58px;
-    text-align: center;
-    padding: 6px 2px;
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.72rem;
-    font-weight: bold;
-    color: #64748b;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .spine-node.active {
-    background: var(--primary);
-    color: #ffffff !important;
-    border-color: var(--primary);
-  }
-  .spine-node.cleared {
-    background: var(--success-bg);
-    color: var(--success);
-    border-color: #86efac;
-  }
-  .spine-node.exam-node {
-    background: #fef3c7;
-    border-color: #f59e0b;
-    color: #b45309;
-  }
-  .spine-node.exam-node.active {
-    background: #d97706 !important;
-    color: white !important;
-  }
+  .bottom-menu-box { background: var(--card); border-radius: 10px; padding: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
+  .bottom-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .bottom-title { font-size: 0.78rem; font-weight: bold; color: #64748b; }
+  .btn-reset { font-size: 0.74rem; color: #dc2626; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
+  .spine-steps { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 4px; }
+  .spine-node { flex: 1; min-width: 58px; text-align: center; padding: 6px 2px; background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; font-size: 0.72rem; font-weight: bold; color: #64748b; cursor: pointer; white-space: nowrap; }
+  .spine-node.active { background: var(--primary); color: #ffffff !important; border-color: var(--primary); }
+  .spine-node.cleared { background: var(--success-bg); color: var(--success); border-color: #86efac; }
+  .spine-node.exam-node { background: #fef3c7; border-color: #f59e0b; color: #b45309; }
+  .spine-node.exam-node.active { background: #d97706 !important; color: white !important; }
 
-  /* 成績グラフ表示スタイル */
-  .result-card {
-    padding: 10px 4px;
-  }
-  .result-header {
-    text-align: center;
-    margin-bottom: 16px;
-  }
-  .graph-container {
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 12px;
-    margin: 16px 0;
-  }
-  .graph-title {
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #334155;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-  }
-  .graph-item {
-    margin-bottom: 10px;
-    cursor: pointer;
-    padding: 4px 6px;
-    border-radius: 6px;
-    transition: background 0.15s;
-  }
-  .graph-item:hover {
-    background: #e2e8f0;
-  }
-  .graph-label-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-bottom: 3px;
-  }
-  .graph-bar-bg {
-    background: #e2e8f0;
-    height: 12px;
-    border-radius: 6px;
-    overflow: hidden;
-  }
-  .graph-bar-fill {
-    height: 100%;
-    border-radius: 6px;
-    transition: width 0.6s ease;
-  }
+  .result-card { padding: 10px 4px; }
+  .result-header { text-align: center; margin-bottom: 16px; }
+  .graph-container { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px 12px; margin: 16px 0; }
+  .graph-title { font-size: 0.9rem; font-weight: bold; color: #334155; margin-bottom: 12px; display: flex; justify-content: space-between; }
+  .graph-item { margin-bottom: 10px; cursor: pointer; padding: 4px 6px; border-radius: 6px; transition: background 0.15s; }
+  .graph-item:hover { background: #e2e8f0; }
+  .graph-label-row { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 3px; }
+  .graph-bar-bg { background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden; }
+  .graph-bar-fill { height: 100%; border-radius: 6px; transition: width 0.6s ease; }
   .bar-high { background-color: #22c55e; }
   .bar-mid  { background-color: #eab308; }
   .bar-low  { background-color: #ef4444; }
 
-  .advice-box {
-    background: #ecfdf5;
-    border-left: 4px solid var(--primary);
-    padding: 10px 12px;
-    border-radius: 4px;
-    font-size: 0.88rem;
-    margin-bottom: 16px;
-    text-align: left;
-  }
-
-  .btn-action {
-    width: 100%;
-    padding: 13px;
-    border-radius: 8px;
-    font-size: 0.98rem;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    margin-top: 8px;
-  }
+  .advice-box { background: #ecfdf5; border-left: 4px solid var(--primary); padding: 10px 12px; border-radius: 4px; font-size: 0.88rem; margin-bottom: 16px; text-align: left; }
+  .btn-action { width: 100%; padding: 13px; border-radius: 8px; font-size: 0.98rem; font-weight: bold; cursor: pointer; border: none; margin-top: 8px; box-sizing: border-box; display: block; }
   .btn-retry { background: #d97706; color: white; }
   .btn-restart { background: var(--primary); color: white; }
   .btn-switch-exam { background: #0284c7; color: white; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(3px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- 上部ステータス（3点表示） -->
   <div class="top-status-bar">
     <div class="status-left">
       <span class="status-student">出席：12番</span>
@@ -390,39 +147,31 @@
     <div class="status-score" id="status-score">正解率: 0% (0/52点)</div>
   </div>
 
-  <!-- メイン問題カード -->
+  <div class="action-bar">
+    <button class="btn-action-sm btn-pause" onclick="pauseQuiz()">⏸️ 中断</button>
+    <button class="btn-action-sm btn-resume" id="btn-resume" onclick="resumeQuiz()" style="display:none;">▶️ 再開</button>
+    <button class="btn-action-sm btn-quit" onclick="quitQuiz()">⏹️ 終了</button>
+  </div>
+
   <div class="card" id="main-card">
     <div class="q-progress" id="progress-text">問 1 / 26</div>
     <h2 id="lesson-title">問題タイトル</h2>
-
-    <!-- 解説（国試4択モードでは非表示） -->
     <div class="exp-box" id="exp-container">
       <span class="exp-tag">💡 香粧品AI先生のポイント</span>
       <div id="lesson-exp">解説</div>
     </div>
-
-    <!-- 設問 -->
-    <div class="question-box" id="question-text">
-      設問
-    </div>
-
-    <!-- 選択肢 -->
+    <div class="question-box" id="question-text">設問</div>
     <div class="btn-group" id="choices-container"></div>
-
-    <!-- フィードバック -->
     <div class="feedback-box" id="feedback-area">
       <div class="feedback-header">🧑‍🏫 AI先生の個別指導</div>
       <div id="feedback-desc"></div>
     </div>
-
-    <!-- 操作ボタン -->
     <div class="nav-controls">
       <button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button>
       <button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button>
     </div>
   </div>
 
-  <!-- 下部：分野ジャンプメニュー -->
   <div class="bottom-menu-box">
     <div class="bottom-header">
       <span class="bottom-title">🗺️ 分野・モード切替（タップで移動）</span>
@@ -453,404 +202,60 @@ const fieldNames = {
   "EXAM": "国試本番実戦演習（4択）"
 };
 
-// 基礎26問マスターデータ（正解位置：上13問 / 下13問の完全均等分散）
 const baseQuestions = [
-  // A. 水と親水性溶媒・溶液
-  {
-    id: "WO-001", block: "A", title: "溶液・溶媒・溶質の定義【第47回・51回国試】",
-    exp: "食塩水でいうと、水が『溶媒』、溶けている食塩が『溶質』、全体が『溶液』です！",
-    q: "物質が均一に溶け合って液体となっている溶液において、「溶けている物質」を何という？",
-    choices: ["溶質", "溶媒"], answer: 0, // 上が正解
-    hintCorrect: "大正解！+2pt！ 溶かす液体が溶媒、溶けている本体が『溶質』だよ！",
-    hintWrong: "溶かしている液体が溶媒。溶けている物質のほうは『溶質』だね。"
-  },
-  {
-    id: "WO-002", block: "A", title: "水分子の極性と水素結合【第46回・51回国試】",
-    exp: "水分子（H₂O）は酸素が電子を引き寄せるため、分子内に電気の偏り（極性）があり、炭素を含まない「無機溶媒」です。",
-    q: "水（H₂O）は、溶媒の分類としてどちらに属する？",
-    choices: ["有機溶媒", "無機溶媒"], answer: 1, // 下が正解
-    hintCorrect: "見事！+2pt！ 炭素（C）を含まない水は立派な『無機溶媒』だね！",
-    hintWrong: "エタノールなどは有機溶媒だけど、炭素を持たない水は『無機溶媒』だよ。"
-  },
-  {
-    id: "WO-003", block: "A", title: "香粧品に用いられる精製水",
-    exp: "水道水（常水）にはカルシウムや塩素などの不純物イオンが含まれるため、イオン交換樹脂などで取り除いた精製水が基剤に使われます。",
-    q: "香粧品の品質低下を防ぐため、水道水（常水）をイオン交換樹脂に通して不純物を取り除いた水を何という？",
-    choices: ["精製水", "硬水"], answer: 0, // 上が正解
-    hintCorrect: "その通り！+2pt！ 不純物を除いた『精製水』が化粧水などの基本ベースだよ！",
-    hintWrong: "ミネラルが多いのは硬水。不純物イオンを取り除いた純度の高い水は『精製水』だね。"
-  },
-  {
-    id: "WO-004", block: "A", title: "pH（水素イオン指数）の性質",
-    exp: "pHは水溶液中の水素イオン濃度を示す指標。pH7が中性、7未満が酸性、7超がアルカリ性です。水素イオンを出さない純エタノールのpHは測れません。",
-    q: "水溶液の性質において、水素イオン濃度が低く、水酸化物イオン濃度が高い状態（pH>7）を何という？",
-    choices: ["酸性", "塩基性（アルカリ性）"], answer: 1, // 下が正解
-    hintCorrect: "バッチリ！+2pt！ 水酸化物イオンが多いpH7より上は『アルカリ性（塩基性）』だね！",
-    hintWrong: "水素イオンが多いのが酸性（pH<7）。水酸化物イオンが多いのは『アルカリ性』だよ。"
-  },
-
-  // B. アルコール類と有機溶媒
-  {
-    id: "WO-005", block: "B", title: "エタノールの作用と収れん性【第43回・47回国試】",
-    exp: "エタノールは水に溶けない油分や香料を溶かす有機溶媒です。皮膚に塗ると蒸発熱を奪って皮膚を引き締める『収れん作用』があります。",
-    q: "エタノールを肌に塗布したとき、蒸発する際に熱を奪って皮膚組織を一時的に引き締める作用を何という？",
-    choices: ["収れん作用", "エモリエント作用"], answer: 0, // 上が正解
-    hintCorrect: "完璧！+2pt！ 毛穴や肌をキュッと引き締めるのがエタノールの『収れん作用』だね！",
-    hintWrong: "油分で柔らかくするのがエモリエント。皮膚を引き締めて冷感を与えるのは『収れん作用』だよ。"
-  },
-  {
-    id: "WO-006", block: "B", title: "メタノールの配合禁止基準【国試最頻出】",
-    exp: "メタノール（メチルアルコール）は体内でホルムアルデヒドやギ酸になり、視神経障害（失明）を起こす猛毒のため、化粧品への配合は全面禁止です！",
-    q: "「メタノールは殺菌力があるため、化粧水の溶媒として自由に使用することが認められている。」この記述は正しい？",
-    choices: ["正しい（○）", "誤り（×）"], answer: 1, // 下が正解
-    hintCorrect: "大正解！+2pt！ 国試超頻出！ メタノールは失明の危険がある猛毒なので『配合禁止』だよ！",
-    hintWrong: "絶対ダメ！ メタノールは失明や中毒を起こすため、化粧品基準で配合が固く禁止されているよ。"
-  },
-  {
-    id: "WO-007", block: "B", title: "2-プロパノール（イソプロパノール）",
-    exp: "2-プロパノールはエタノールと同様に殺菌・消毒力があり安価ですが、特有の臭気があるためおしぼり等に用いられます。配合禁止ではありません。",
-    q: "2-プロパノール（イソプロピルアルコール）に関する記述として、正しいものはどっち？",
-    choices: ["殺菌力があり、消毒や防腐の目的で用いられる", "人体に無害無臭で、香水に最も多く汎用される"], answer: 0, // 上が正解
-    hintCorrect: "正解！+2pt！ 独特の匂いはあるけれど、しっかりとした殺菌力をもつアルコールだよ！",
-    hintWrong: "無臭ではないよ。独特な臭気があるけれど、確かな殺菌・防腐力を持っているんだ。"
-  },
-  {
-    id: "WO-008", block: "B", title: "ネイル製品に用いられるアセトン【第38回・46回国試】",
-    exp: "ネイルエナメル（マニキュア）を落とす除光液（リムーバー）には、樹脂を素早く溶かす有機溶媒として『アセトン』や酢酸エチルが用いられます。",
-    q: "ネイルエナメルリムーバー（除光液）に配合され、固まったエナメル樹脂を溶かす代表的な有機溶媒はどっち？",
-    choices: ["精製水", "アセトン"], answer: 1, // 下が正解
-    hintCorrect: "その通り！+2pt！ 水では落ちないネイル樹脂をしっかり溶かすのが『アセトン』だね！",
-    hintWrong: "水ではネイルは溶けないよ。強力な有機溶媒である『アセトン』などが使われるね。"
-  },
-
-  // C. 油脂の構造と酸敗
-  {
-    id: "WO-009", block: "C", title: "油脂の構造とアルコールの「価数」【国試最頻出】",
-    exp: "アルコールの『価数』は分子内のヒドロキシ基（-OH）の個数のこと！ グリセリンは-OHを3個もつ【3価アルコール】です。炭素数が多い『高級アルコール』と混同しないように注意！ 天然油脂は脂肪酸とグリセリンのエステル（トリグリセリド）です。",
-    q: "アルコールにおける「3価」などの“価数”とは、分子の中に含まれる何の個数を表している？",
-    choices: ["ヒドロキシ基（-OH）の個数", "炭素原子（C）の個数"], answer: 0, // 上が正解
-    hintCorrect: "大正解！+2pt！ -OHが1個なら1価、3個なら3価！ 炭素数は高級・低級を表すよ！",
-    hintWrong: "炭素数は『高級・低級』を決める数だよ。3価アルコールなどの価数は『-OH基の個数』を表すんだ。"
-  },
-  {
-    id: "WO-010", block: "C", title: "脂肪と脂肪油・不乾性油",
-    exp: "常温で固体の油脂を「脂肪（牛脂等）」、液体の油脂を「脂肪油（オリーブ油等）」といいます。固まらない『不乾性油』が香粧品に向いています。",
-    q: "オリーブ油やツバキ油のように、空気中で薄膜にしても固化せず、香粧品原料として安定して用いられる植物油はどっち？",
-    choices: ["乾性油", "不乾性油"], answer: 1, // 下が正解
-    hintCorrect: "見事！+2pt！ 固まらない『不乾性油』だからこそ、肌や髪を滑らかに保てるんだね！",
-    hintWrong: "乾性油は空気中で固まってしまう油（絵の具用）。化粧品に使うのは固まらない『不乾性油』だよ。"
-  },
-  {
-    id: "WO-011", block: "C", title: "油脂の酸敗と防止策【国試超定番】",
-    exp: "油脂が空気中の酸素、日光、微生物の作用で酸化・加水分解して悪臭や変質を起こす現象を『酸敗』といい、酸化防止剤（ビタミンE等）で防ぎます。",
-    q: "油脂が酸素や光の作用によって酸化・変質し、不快な臭いや変色を起こす現象を何という？",
-    choices: ["酸敗", "けん化"], answer: 0, // 上が正解
-    hintCorrect: "正解！+2pt！ 国試超頻出語句！ 油が酸化して古くなる現象を『酸敗』というよ！",
-    hintWrong: "けん化は石けんを作る反応。油が空気中の酸素で傷んで劣化することは『酸敗』だね。"
-  },
-  {
-    id: "WO-012", block: "C", title: "ヒマシ油とモクロウの分類【第37回・42回国試】",
-    exp: "口紅に使われるヒマシ油は『植物性油脂』です！また、名前にロウと付く『モクロウ（木蝋）』も実はロウではなく『植物性脂肪（油脂）』です！",
-    q: "口紅やポマードによく配合される「ヒマシ油」は、起源としてどちらに分類される？",
-    choices: ["動物性油脂", "植物性油脂"], answer: 1, // 下が正解
-    hintCorrect: "素晴らしい！+2pt！ 国試の引っかけクリア！ ヒマシ油はトウゴマの種子からとれる植物油だよ！",
-    hintWrong: "過去問でよく出る引っかけ！ ヒマシ油は動物ではなく『植物性油脂』だよ。"
-  },
-
-  // D. ロウ類の化学と種類
-  {
-    id: "WO-013", block: "D", title: "ロウ類の化学構造【国試最頻出】",
-    exp: "ロウ類は『高級脂肪酸』と『高級アルコール（1価）』のエステルです！ 油脂（グリセリン＝3価アルコール結合）との違いが国試で一番狙われます！",
-    q: "化学構造における「ロウ類」の正しい定義はどっち？",
-    choices: ["高級脂肪酸と高級アルコールのエステル", "高級脂肪酸とグリセリン（3価）のエステル"], answer: 0, // 上が正解
-    hintCorrect: "大正解！+2pt！ 国試頻出の最重要ポイント！ ロウは高級アルコールとのエステルだよ！",
-    hintWrong: "グリセリンとくっつくのは油脂！ 『高級アルコール』と結合するのがロウ類の決定的な特徴だよ。"
-  },
-  {
-    id: "WO-014", block: "D", title: "植物性ロウ（ホホバ油・カルナウバロウ）",
-    exp: "カルナウバロウやキャンデリラロウは高融点で固体の植物性ロウ。ホホバの種子からとれる「ホホバ油」は珍しい『液体の植物性ロウ』です！",
-    q: "「ホホバ油」は、名前に油とついているが、化学的な分類としてはどれに該当する？",
-    choices: ["鉱物油（炭化水素）", "植物性ロウ（液体ロウ）"], answer: 1, // 下が正解
-    hintCorrect: "その通り！+2pt！ ホホバ油は油脂ではなく『液体ロウ』！ 皮脂になじみやすくサラッとしているよ！",
-    hintWrong: "石油からとれる鉱物油ではないよ。ホホバの種子からとれる貴重な『植物性ロウ（液体ロウ）』だね。"
-  },
-  {
-    id: "WO-015", block: "D", title: "動物性ロウ（ミツロウ・ラノリン）",
-    exp: "ミツバチの巣からとれる『ミツロウ』や、羊毛からとれる『ラノリン』は代表的な動物性ロウです。抱水性や保湿性に優れます。",
-    q: "羊の毛に付着する分泌物から採取・精製され、人の皮脂に似た性質をもつ動物性ロウはどっち？",
-    choices: ["ラノリン", "ワセリン"], answer: 0, // 上が正解
-    hintCorrect: "完璧！+2pt！ 羊毛からとれるのがラノリン！ ワセリンは石油からとれる炭化水素だよ！",
-    hintWrong: "ワセリンは石油由来の炭化水素。羊の毛からとれる動物性のロウは『ラノリン』だね。"
-  },
-
-  // E. 炭化水素（鉱物油と動植物油）
-  {
-    id: "WO-016", block: "E", title: "炭化水素の供給源【国試最大の罠・4回出題】",
-    exp: "炭化水素＝炭素と水素だけの化合物。石油から得られる鉱物油だけでなく、サメや植物から得られるスクワランも立派な『炭化水素』です！",
-    q: "「香粧品に用いられる炭化水素は、すべて石油から得られる鉱物油であり、動植物から得られるものはない。」この記述は正しい？",
-    choices: ["正しい（○）", "誤り（×）"], answer: 1, // 下が正解
-    hintCorrect: "見事！+2pt！ 国試最大の罠を完全撃破！ 深海鮫や植物からとれるスクワランも炭化水素だよ！",
-    hintWrong: "過去問で何度も狙われた超頻出ひっかけ！ スクワランのように動植物から得られる炭化水素もあるよ！"
-  },
-  {
-    id: "WO-017", block: "E", title: "石油由来の鉱物油（ワセリン・流動パラフィン）",
-    exp: "石油から精製される流動パラフィンやワセリンは、酸化されにくく化学的に極めて安定しているため、クレンジングやクリームの主原料になります。",
-    q: "石油から得られる炭化水素のうち、軟膏やコールドクリームの基剤として広く使われる半固形の鉱物油はどっち？",
-    choices: ["ワセリン", "セタノール"], answer: 0, // 上が正解
-    hintCorrect: "正解！+2pt！ 石油から高度に精製された安心安全な炭化水素が『ワセリン』だね！",
-    hintWrong: "セタノールは高級アルコールだよ。石油から得られる半固形の代表的な炭化水素は『ワセリン』だね。"
-  },
-  {
-    id: "WO-018", block: "E", title: "スクワランと水素添加（付加反応）【第42回・43回国試】",
-    exp: "深海鮫の肝油に含まれる不飽和炭化水素『スクワレン』は酸化しやすいため、水素を添加して安定な飽和炭化水素にしたのが『スクワラン』です！",
-    q: "スクワレンとスクワランの関係について、正しい説明はどっち？",
-    choices: ["スクワランから水素を奪ったものがスクワレンである", "スクワレンに水素を添加して安定化させたものがスクワランである"], answer: 1, // 下が正解
-    hintCorrect: "バッチリ！+2pt！ 二重結合に水素をプレゼント（水素添加）して酸化しにくくしたのがスクワラン！",
-    hintWrong: "逆だよ！ 不安定なスクワレンに『水素を添加』して化学的に安定させたのがスクワランだよ。"
-  },
-
-  // F. 高級脂肪酸・高級アルコール
-  {
-    id: "WO-019", block: "F", title: "「高級」と「価数」の違い【国試超定番】",
-    exp: "化学の『高級』は炭素数が多いこと（炭素数12以上など）！ 一方『〜価』は-OH基の個数のこと！ 高級アルコールでも-OHが1個なら1価アルコールです。",
-    q: "香粧品化学において、分子中の「炭素数が多いこと」を意味する用語はどっち？",
-    choices: ["高級", "多価"], answer: 0, // 上が正解
-    hintCorrect: "その通り！+2pt！ 炭素が多いのが『高級』、-OH基が多いのが『多価』！ 完璧に整理できたね！",
-    hintWrong: "-OH基の数は『価数』だよ。炭素原子の数が多いことを化学では『高級』というんだ。"
-  },
-  {
-    id: "WO-020", block: "F", title: "代表的な高級脂肪酸（ステアリン酸）",
-    exp: "ステアリン酸（炭素数18）は常温で固体の代表的な高級脂肪酸で、バニシングクリームの基剤や石けんの原料として重要です。",
-    q: "クリームの油性基剤として重宝され、水酸化カリウムと反応して良質な石けんを作る高級脂肪酸はどっち？",
-    choices: ["クエン酸", "ステアリン酸"], answer: 1, // 下が正解
-    hintCorrect: "正解！+2pt！ ステアリン酸はクリームやシェービング石けんに欠かせない高級脂肪酸だよ！",
-    hintWrong: "クエン酸は水溶性の有機酸。クリームの油性基剤になる代表的な高級脂肪酸は『ステアリン酸』だね。"
-  },
-  {
-    id: "WO-021", block: "F", title: "セタノールと乳化助剤【第41回・44回国試】",
-    exp: "セタノール（セチルアルコール：炭素数16の高級アルコール）は、クリームや乳液の『乳化助剤』や粘度調整に使われます。",
-    q: "香粧品において「セタノール（セチルアルコール）」が主に配合される目的はどっち？",
-    choices: ["乳化を助け、クリームの粘度を高める（乳化助剤）", "毛髪のメラニン色素を酸化分解する"], answer: 0, // 上が正解
-    hintCorrect: "完璧！+2pt！ 第41回国試的中！ セタノールは乳化を安定させて滑らかにする乳化助剤だよ！",
-    hintWrong: "メラニンを分解するのは過酸化水素水だね。セタノールはクリームの『乳化助剤』として働くよ。"
-  },
-  {
-    id: "WO-022", block: "F", title: "脂肪酸エステル（合成エステル油）",
-    exp: "高級脂肪酸と1価アルコールを合成したエステル油は、天然油のベタつきがなく、さらっとした感触で香粧品原料の中で最も種類が豊富です。",
-    q: "天然の油脂やロウの欠点を補うために合成され、ベタつきが少なく使用感の良い油性原料はどれ？",
-    choices: ["無機顔料", "脂肪酸エステル（合成エステル油）"], answer: 1, // 下が正解
-    hintCorrect: "その通り！+2pt！ 軽やかな感触で現代の化粧品・トリートメントに大量に使われているよ！",
-    hintWrong: "無機顔料はメイクアップの粉体だよ。滑らかでベタつかない油性原料は『脂肪酸エステル』だね。"
-  },
-
-  // G. シリコーンと油性原料の機能
-  {
-    id: "WO-023", block: "G", title: "シリコーン油の撥水性と特徴【第40回・41回国試】",
-    exp: "ケイ素（シロキサン結合）から合成されるシリコーン油（メチルポリシロキサン）は、水を強力にはじく『撥水性』と滑り感を与えます。",
-    q: "メチルポリシロキサンに代表されるシリコーン油の大きな特徴はどっち？",
-    choices: ["水を強力にはじく撥水性とすべり感", "水と油を均一に混ぜ合わせる親水性"], answer: 0, // 上が正解
-    hintCorrect: "大正解！+2pt！ 水を弾いてツヤとサラサラ感を与えるのがシリコーン油の特技だよ！",
-    hintWrong: "シリコーン油は親水性ではなく、水をはじく『撥水性』が最大の特徴だよ。"
-  },
-  {
-    id: "WO-024", block: "G", title: "アミノ変性シリコーンの毛髪親和性【第51回国試】",
-    exp: "アミノ変性シリコーン（アモジメチコン）は傷んだ毛髪への吸着性が高く、抜群のコンディショニング効果を発揮するためトリートメントに配合されます。",
-    q: "シャンプーやヘアトリートメントに配合され、毛髪との親和性が高く優れた保護効果を発揮する成分はどっち？",
-    choices: ["流動パラフィン", "アミノ変性シリコーン"], answer: 1, // 下が正解
-    hintCorrect: "見事！+2pt！ 第51回国試的中！ アミノ基が髪に吸着してサラサラにするアモジメチコンだね！",
-    hintWrong: "流動パラフィンも油分だけど、傷んだ髪にピタッと吸着して指通りを良くするのは『アミノ変性シリコーン』だよ。"
-  },
-  {
-    id: "WO-025", block: "G", title: "油性原料のエモリエント効果",
-    exp: "皮膚表面に油の膜（油性皮膜）を張り、角質層からの水分蒸散を防いで皮膚を柔らかくしっとり保つ働きを『エモリエント効果』といいます。",
-    q: "油性原料が肌の表面を覆うことで角質層からの水分蒸発を防ぎ、皮膚を柔軟に保つ効果を何という？",
-    choices: ["エモリエント効果", "収れん効果"], answer: 0, // 上が正解
-    hintCorrect: "素晴らしい！+2pt！ 水分を閉じ込めて肌を柔らかくするのが『エモリエント効果』だね！",
-    hintWrong: "引き締めるのは収れん効果。油分でフタをして皮膚を柔軟にしっとりさせるのは『エモリエント効果』だよ。"
-  },
-  {
-    id: "WO-026", block: "G", title: "油性原料の安全基準と条件",
-    exp: "皮膚に直接塗る香粧品の油性原料は、皮膚刺激や毒性がないこと、皮脂の生理作用を邪魔しないこと、微生物が繁殖しないことなどが求められます。",
-    q: "香粧品に配合される油性原料に求められる性質として、ふさわしくないものはどっち？",
-    choices: ["微生物が容易に繁殖しやすい栄養源となること", "皮膚に対して刺激や毒性がなく安定性が高いこと"], answer: 0, // 上が正解（ふさわしくないもの）
-    hintCorrect: "完璧！+2pt！ 全26問完全制覇！ 化粧品の中で細菌やカビが増えたら大変だからね！",
-    hintWrong: "化粧品の中で微生物が繁殖したら腐敗してしまうよ。油性原料は微生物が増えにくい清浄性が必須だよ。"
-  }
+  { id: "WO-001", block: "A", title: "溶液・溶媒・溶質の定義【第47回・51回国試】", exp: "食塩水でいうと、水が『溶媒』、溶けている食塩が『溶質』、全体が『溶液』です！", q: "物質が均一に溶け合って液体となっている溶液において、「溶けている物質」を何という？", choices: ["溶質", "溶媒"], answer: 0, hintCorrect: "大正解！+2pt！ 溶かす液体が溶媒、溶けている本体が『溶質』だよ！", hintWrong: "溶かしている液体が溶媒。溶けている物質のほうは『溶質』だね。" },
+  { id: "WO-002", block: "A", title: "水分子の極性と水素結合【第46回・51回国試】", exp: "水分子（H₂O）は酸素が電子を引き寄せるため、分子内に電気の偏り（極性）があり、炭素を含まない「無機溶媒」です。", q: "水（H₂O）は、溶媒の分類としてどちらに属する？", choices: ["有機溶媒", "無機溶媒"], answer: 1, hintCorrect: "見事！+2pt！ 炭素（C）を含まない水は立派な『無機溶媒』だね！", hintWrong: "エタノールなどは有機溶媒だけど、炭素を持たない水は『無機溶媒』だよ。" },
+  { id: "WO-003", block: "A", title: "香粧品に用いられる精製水", exp: "水道水（常水）にはカルシウムや塩素などの不純物イオンが含まれるため、イオン交換樹脂などで取り除いた精製水が基剤に使われます。", q: "香粧品の品質低下を防ぐため、水道水（常水）をイオン交換樹脂に通して不純物を取り除いた水を何という？", choices: ["精製水", "硬水"], answer: 0, hintCorrect: "その通り！+2pt！ 不純物を除いた『精製水』が化粧水などの基本ベースだよ！", hintWrong: "ミネラルが多いのは硬水。不純物イオンを取り除いた純度の高い水は『精製水』だね。" },
+  { id: "WO-004", block: "A", title: "pH（水素イオン指数）の性質", exp: "pHは水溶液中の水素イオン濃度を示す指標。pH7が中性、7未満が酸性、7超がアルカリ性です。水素イオンを出さない純エタノールのpHは測れません。", q: "水溶液の性質において、水素イオン濃度が低く、水酸化物イオン濃度が高い状態（pH>7）を何という？", choices: ["酸性", "塩基性（アルカリ性）"], answer: 1, hintCorrect: "バッチリ！+2pt！ 水酸化物イオンが多いpH7より上は『アルカリ性（塩基性）』だね！", hintWrong: "水素イオンが多いのが酸性（pH<7）。水酸化物イオンが多いのは『アルカリ性』だよ。" },
+  { id: "WO-005", block: "B", title: "エタノールの作用と収れん性【第43回・47回国試】", exp: "エタノールは水に溶けない油分や香料を溶かす有機溶媒です。皮膚に塗ると蒸発熱を奪って皮膚を引き締める『収れん作用』があります。", q: "エタノールを肌に塗布したとき、蒸発する際に熱を奪って皮膚組織を一時的に引き締める作用を何という？", choices: ["収れん作用", "エモリエント作用"], answer: 0, hintCorrect: "完璧！+2pt！ 毛穴や肌をキュッと引き締めるのがエタノールの『収れん作用』だね！", hintWrong: "油分で柔らかくするのがエモリエント。皮膚を引き締めて冷感を与えるのは『収れん作用』だよ。" },
+  { id: "WO-006", block: "B", title: "メタノールの配合禁止基準【国試最頻出】", exp: "メタノール（メチルアルコール）は体内でホルムアルデヒドやギ酸になり、視神経障害（失明）を起こす猛毒のため、化粧品への配合は全面禁止です！", q: "「メタノールは殺菌力があるため、化粧水の溶媒として自由に使用することが認められている。」この記述は正しい？", choices: ["正しい（○）", "誤り（×）"], answer: 1, hintCorrect: "大正解！+2pt！ 国試超頻出！ メタノールは失明の危険がある猛毒なので『配合禁止』だよ！", hintWrong: "絶対ダメ！ メタノールは失明や中毒を起こすため、化粧品基準で配合が固く禁止されているよ。" },
+  { id: "WO-007", block: "B", title: "2-プロパノール（イソプロパノール）", exp: "2-プロパノールはエタノールと同様に殺菌・消毒力があり安価ですが、特有の臭気があるためおしぼり等に用いられます。配合禁止ではありません。", q: "2-プロパノール（イソプロピルアルコール）に関する記述として、正しいものはどっち？", choices: ["殺菌力があり、消毒や防腐の目的で用いられる", "人体に無害無臭で、香水に最も多く汎用される"], answer: 0, hintCorrect: "正解！+2pt！ 独特の匂いはあるけれど、しっかりとした殺菌力をもつアルコールだよ！", hintWrong: "無臭ではないよ。独特な臭気があるけれど、確かな殺菌・防腐力を持っているんだ。" },
+  { id: "WO-008", block: "B", title: "ネイル製品に用いられるアセトン【第38回・46回国試】", exp: "ネイルエナメル（マニキュア）を落とす除光液（リムーバー）には、樹脂を素早く溶かす有機溶媒として『アセトン』や酢酸エチルが用いられます。", q: "ネイルエナメルリムーバー（除光液）に配合され、固まったエナメル樹脂を溶かす代表的な有機溶媒はどっち？", choices: ["精製水", "アセトン"], answer: 1, hintCorrect: "その通り！+2pt！ 水では落ちないネイル樹脂をしっかり溶かすのが『アセトン』だね！", hintWrong: "水ではネイルは溶けないよ。強力な有機溶媒である『アセトン』などが使われるね。" },
+  { id: "WO-009", block: "C", title: "油脂の構造とアルコールの「価数」【国試最頻出】", exp: "アルコールの『価数』は分子内のヒドロキシ基（-OH）の個数のこと！ グリセリンは-OHを3個もつ【3価アルコール】です。炭素数が多い『高級アルコール』と混同しないように注意！ 天然油脂は脂肪酸とグリセリンのエステル（トリグリセリド）です。", q: "アルコールにおける「3価」などの“価数”とは、分子の中に含まれる何の個数を表している？", choices: ["ヒドロキシ基（-OH）の個数", "炭素原子（C）の個数"], answer: 0, hintCorrect: "大正解！+2pt！ -OHが1個なら1価、3個なら3価！ 炭素数は高級・低級を表すよ！", hintWrong: "炭素数は『高級・低級』を決める数だよ。3価アルコールなどの価数は『-OH基の個数』を表すんだ。" },
+  { id: "WO-010", block: "C", title: "脂肪と脂肪油・不乾性油", exp: "常温で固体の油脂を「脂肪（牛脂等）」、液体の油脂を「脂肪油（オリーブ油等）」といいます。固まらない『不乾性油』が香粧品に向いています。", q: "オリーブ油やツバキ油のように、空気中で薄膜にしても固化せず、香粧品原料として安定して用いられる植物油はどっち？", choices: ["乾性油", "不乾性油"], answer: 1, hintCorrect: "見事！+2pt！ 固まらない『不乾性油』だからこそ、肌や髪を滑らかに保てるんだね！", hintWrong: "乾性油は空気中で固まってしまう油（絵の具用）。化粧品に使うのは固まらない『不乾性油』だよ。" },
+  { id: "WO-011", block: "C", title: "油脂の酸敗と防止策【国試超定番】", exp: "油脂が空気中の酸素、日光、微生物の作用で酸化・加水分解して悪臭や変質を起こす現象を『酸敗』といい、酸化防止剤（ビタミンE等）で防ぎます。", q: "油脂が酸素や光の作用によって酸化・変質し、不快な臭いや変色を起こす現象を何という？", choices: ["酸敗", "けん化"], answer: 0, hintCorrect: "正解！+2pt！ 国試超頻出語句！ 油が酸化して古くなる現象を『酸敗』というよ！", hintWrong: "けん化は石けんを作る反応。油が空気中の酸素で傷んで劣化することは『酸敗』だね。" },
+  { id: "WO-012", block: "C", title: "ヒマシ油とモクロウの分類【第37回・42回国試】", exp: "口紅に使われるヒマシ油は『植物性油脂』です！また、名前にロウと付く『モクロウ（木蝋）』も実はロウではなく『植物性脂肪（油脂）』です！", q: "口紅やポマードによく配合される「ヒマシ油」は、起源としてどちらに分類される？", choices: ["動物性油脂", "植物性油脂"], answer: 1, hintCorrect: "素晴らしい！+2pt！ 国試の引っかけクリア！ ヒマシ油はトウゴマの種子からとれる植物油だよ！", hintWrong: "過去問でよく出る引っかけ！ ヒマシ油は動物ではなく『植物性油脂』だよ。" },
+  { id: "WO-013", block: "D", title: "ロウ類の化学構造【国試最頻出】", exp: "ロウ類は『高級脂肪酸』と『高級アルコール（1価）』のエステルです！ 油脂（グリセリン＝3価アルコール結合）との違いが国試で一番狙われます！", q: "化学構造における「ロウ類」の正しい定義はどっち？", choices: ["高級脂肪酸と高級アルコールのエステル", "高級脂肪酸とグリセリン（3価）のエステル"], answer: 0, hintCorrect: "大正解！+2pt！ 国試頻出の最重要ポイント！ ロウは高級アルコールとのエステルだよ！", hintWrong: "グリセリンとくっつくのは油脂！ 『高級アルコール』と結合するのがロウ類の決定的な特徴だよ。" },
+  { id: "WO-014", block: "D", title: "植物性ロウ（ホホバ油・カルナウバロウ）", exp: "カルナウバロウやキャンデリラロウは高融点で固体の植物性ロウ。ホホバの種子からとれる「ホホバ油」は珍しい『液体の植物性ロウ』です！", q: "「ホホバ油」は、名前に油とついているが、化学的な分類としてはどれに該当する？", choices: ["鉱物油（炭化水素）", "植物性ロウ（液体ロウ）"], answer: 1, hintCorrect: "その通り！+2pt！ ホホバ油は油脂ではなく『液体ロウ』！ 皮脂になじみやすくサラッとしているよ！", hintWrong: "石油からとれる鉱物油ではないよ。ホホバの種子からとれる貴重な『植物性ロウ（液体ロウ）』だね。" },
+  { id: "WO-015", block: "D", title: "動物性ロウ（ミツロウ・ラノリン）", exp: "ミツバチの巣からとれる『ミツロウ』や、羊毛からとれる『ラノリン』は代表的な動物性ロウです。抱水性や保湿性に優れます。", q: "羊の毛に付着する分泌物から採取・精製され、人の皮脂に似た性質をもつ動物性ロウはどっち？", choices: ["ラノリン", "ワセリン"], answer: 0, hintCorrect: "完璧！+2pt！ 羊毛からとれるのがラノリン！ ワセリンは石油からとれる炭化水素だよ！", hintWrong: "ワセリンは石油由来の炭化水素。羊の毛からとれる動物性のロウは『ラノリン』だね。" },
+  { id: "WO-016", block: "E", title: "炭化水素の供給源【国試最大の罠・4回出題】", exp: "炭化水素＝炭素と水素だけの化合物。石油から得られる鉱物油だけでなく、サメや植物から得られるスクワランも立派な『炭化水素』です！", q: "「香粧品に用いられる炭化水素は、すべて石油から得られる鉱物油であり、動植物から得られるものはない。」この記述は正しい？", choices: ["正しい（○）", "誤り（×）"], answer: 1, hintCorrect: "見事！+2pt！ 国試最大の罠を完全撃破！ 深海鮫や植物からとれるスクワランも炭化水素だよ！", hintWrong: "過去問で何度も狙われた超頻出ひっかけ！ スクワランのように動植物から得られる炭化水素もあるよ！" },
+  { id: "WO-017", block: "E", title: "石油由来の鉱物油（ワセリン・流動パラフィン）", exp: "石油から精製される流動パラフィンやワセリンは、酸化されにくく化学的に極めて安定しているため、クレンジングやクリームの主原料になります。", q: "石油から得られる炭化水素のうち、軟膏やコールドクリームの基剤として広く使われる半固形の鉱物油はどっち？", choices: ["ワセリン", "セタノール"], answer: 0, hintCorrect: "正解！+2pt！ 石油から高度に精製された安心安全な炭化水素が『ワセリン』だね！", hintWrong: "セタノールは高級アルコールだよ。石油から得られる半固形の代表的な炭化水素は『ワセリン』だね。" },
+  { id: "WO-018", block: "E", title: "スクワランと水素添加（付加反応）【第42回・43回国試】", exp: "深海鮫の肝油に含まれる不飽和炭化水素『スクワレン』は酸化しやすいため、水素を添加して安定な飽和炭化水素にしたのが『スクワラン』です！", q: "スクワレンとスクワランの関係について、正しい説明はどっち？", choices: ["スクワランから水素を奪ったものがスクワレンである", "スクワレンに水素を添加して安定化させたものがスクワランである"], answer: 1, hintCorrect: "バッチリ！+2pt！ 二重結合に水素をプレゼント（水素添加）して酸化しにくくしたのがスクワラン！", hintWrong: "逆だよ！ 不安定なスクワレンに『水素を添加』して化学的に安定させたのがスクワランだよ。" },
+  { id: "WO-019", block: "F", title: "「高級」と「価数」の違い【国試超定番】", exp: "化学の『高級』は炭素数が多いこと（炭素数12以上など）！ 一方『〜価』は-OH基の個数のこと！ 高級アルコールでも-OHが1個なら1価アルコールです。", q: "香粧品化学において、分子中の「炭素数が多いこと」を意味する用語はどっち？", choices: ["高級", "多価"], answer: 0, hintCorrect: "その通り！+2pt！ 炭素が多いのが『高級』、-OH基が多いのが『多価』！ 完璧に整理できたね！", hintWrong: "-OH基の数は『価数』だよ。炭素原子の数が多いことを化学では『高級』というんだ。" },
+  { id: "WO-020", block: "F", title: "代表的な高級脂肪酸（ステアリン酸）", exp: "ステアリン酸（炭素数18）は常温で固体の代表的な高級脂肪酸で、バニシングクリームの基剤や石けんの原料として重要です。", q: "クリームの油性基剤として重宝され、水酸化カリウムと反応して良質な石けんを作る高級脂肪酸はどっち？", choices: ["クエン酸", "ステアリン酸"], answer: 1, hintCorrect: "正解！+2pt！ ステアリン酸はクリームやシェービング石けんに欠かせない高級脂肪酸だよ！", hintWrong: "クエン酸は水溶性の有機酸。クリームの油性基剤になる代表的な高級脂肪酸は『ステアリン酸』だね。" },
+  { id: "WO-021", block: "F", title: "セタノールと乳化助剤【第41回・44回国試】", exp: "セタノール（セチルアルコール：炭素数16の高級アルコール）は、クリームや乳液の『乳化助剤』や粘度調整に使われます。", q: "香粧品において「セタノール（セチルアルコール）」が主に配合される目的はどっち？", choices: ["乳化を助け、クリームの粘度を高める（乳化助剤）", "毛髪のメラニン色素を酸化分解する"], answer: 0, hintCorrect: "完璧！+2pt！ 第41回国試的中！ セタノールは乳化を安定させて滑らかにする乳化助剤だよ！", hintWrong: "メラニンを分解するのは過酸化水素水だね。セタノールはクリームの『乳化助剤』として働くよ。" },
+  { id: "WO-022", block: "F", title: "脂肪酸エステル（合成エステル油）", exp: "高級脂肪酸と1価アルコールを合成したエステル油は、天然油のベタつきがなく、さらっとした感触で香粧品原料の中で最も種類が豊富です。", q: "天然の油脂やロウの欠点を補うために合成され、ベタつきが少なく使用感の良い油性原料はどれ？", choices: ["無機顔料", "脂肪酸エステル（合成エステル油）"], answer: 1, hintCorrect: "その通り！+2pt！ 軽やかな感触で現代の化粧品・トリートメントに大量に使われているよ！", hintWrong: "無機顔料はメイクアップの粉体だよ。滑らかでベタつかない油性原料は『脂肪酸エステル』だね。" },
+  { id: "WO-023", block: "G", title: "シリコーン油の撥水性と特徴【第40回・41回国試】", exp: "ケイ素（シロキサン結合）から合成されるシリコーン油（メチルポリシロキサン）は、水を強力にはじく『撥水性』と滑り感を与えます。", q: "メチルポリシロキサンに代表されるシリコーン油の大きな特徴はどっち？", choices: ["水を強力にはじく撥水性とすべり感", "水と油を均一に混ぜ合わせる親水性"], answer: 0, hintCorrect: "大正解！+2pt！ 水を弾いてツヤとサラサラ感を与えるのがシリコーン油の特技だよ！", hintWrong: "シリコーン油は親水性ではなく、水をはじく『撥水性』が最大の特徴だよ。" },
+  { id: "WO-024", block: "G", title: "アミノ変性シリコーンの毛髪親和性【第51回国試】", exp: "アミノ変性シリコーン（アモジメチコン）は傷んだ毛髪への吸着性が高く、抜群のコンディショニング効果を発揮するためトリートメントに配合されます。", q: "シャンプーやヘアトリートメントに配合され、毛髪との親和性が高く優れた保護効果を発揮する成分はどっち？", choices: ["流動パラフィン", "アミノ変性シリコーン"], answer: 1, hintCorrect: "見事！+2pt！ 第51回国試的中！ アミノ基が髪に吸着してサラサラにするアモジメチコンだね！", hintWrong: "流動パラフィンも油分だけど、傷んだ髪にピタッと吸着して指通りを良くするのは『アミノ変性シリコーン』だよ。" },
+  { id: "WO-025", block: "G", title: "油性原料のエモリエント効果", exp: "皮膚表面に油の膜（油性皮膜）を張り、角質層からの水分蒸散を防いで皮膚を柔らかくしっとり保つ働きを『エモリエント効果』といいます。", q: "油性原料が肌の表面を覆うことで角質層からの水分蒸発を防ぎ、皮膚を柔軟に保つ効果を何という？", choices: ["エモリエント効果", "収れん効果"], answer: 0, hintCorrect: "素晴らしい！+2pt！ 水分を閉じ込めて肌を柔らかくするのが『エモリエント効果』だね！", hintWrong: "引き締めるのは収れん効果。油分でフタをして皮膚を柔軟にしっとりさせるのは『エモリエント効果』だよ。" },
+  { id: "WO-026", block: "G", title: "油性原料の安全基準と条件", exp: "皮膚に直接塗る香粧品の油性原料は、皮膚刺激や毒性がないこと、皮脂の生理作用を邪魔しないこと、微生物が繁殖しないことなどが求められます。", q: "香粧品に配合される油性原料に求められる性質として、ふさわしくないものはどっち？", choices: ["微生物が容易に繁殖しやすい栄養源となること", "皮膚に対して刺激や毒性がなく安定性が高いこと"], answer: 0, hintCorrect: "完璧！+2pt！ 全26問完全制覇！ 化粧品の中で細菌やカビが増えたら大変だからね！", hintWrong: "化粧品の中で微生物が繁殖したら腐敗してしまうよ。油性原料は微生物が増えにくい清浄性が必須だよ。" }
 ];
 
-// 【国試対策・本番4択問題 厳選10問】
 const examQuestions = [
-  {
-    id: "EX-01", block: "EXAM", title: "第37回 国家試験本番問題",
-    q: "油脂に関する次の記述のうち、正しいものの組合せはどれか。\n\nａ．油脂は、脂肪酸とグリセリンのエステルである。\nｂ．石けんは、油脂を塩化カリウムでけん化してつくる。\nｃ．ヒマシ油は、動物性の油脂である。\nｄ．油脂が酸素や日光の働きにより変質することを酸敗という。",
-    choices: [
-      "（1） ａ と ｂ",
-      "（2） ｂ と ｃ",
-      "（3） ｃ と ｄ",
-      "（4） ａ と ｄ"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ ａ（脂肪酸とグリセリンのエステル）と ｄ（酸化変質＝酸敗）が正しい記述です！",
-    hintWrong: "正解は「（4）」です。ｂは水酸化カリウム、ｃのヒマシ油は植物性油脂なので誤りです。"
-  },
-  {
-    id: "EX-02", block: "EXAM", title: "第38回 国家試験本番問題",
-    q: "有機溶媒に関する次の記述のうち、正しいものの組合せはどれか。\n\nａ．有機溶媒は、水に溶けない油分や樹脂などを溶かす溶媒として用いられる。\nｂ．ネイルエナメルリムーバー中の有機溶媒は、爪の脂分を保護する。\nｃ．有機溶媒は、顔料を溶解する。\nｄ．エタノールは、香粧品に用いられる有機溶媒の一つである。",
-    choices: [
-      "（1） ａ と ｂ",
-      "（2） ｂ と ｃ",
-      "（3） ｃ と ｄ",
-      "（4） ａ と ｄ"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ ａ（油分や樹脂を溶かす）と ｄ（エタノールは有機溶媒）が正しい記述です！",
-    hintWrong: "正解は「（4）」です。ｂは爪の脱脂を起こしやすく、ｃの顔料は溶媒に溶けない（不溶）粉体です。"
-  },
-  {
-    id: "EX-03", block: "EXAM", title: "第40回 国家試験本番問題",
-    q: "香粧品の原料に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）パラフィンは炭化水素に分類される。",
-      "（2）ポリビニルピロリドン（PVP）はアミノ酸がペプチド結合でつながった構造を持つ。",
-      "（3）水性原料としてメタノールが使用される。",
-      "（4）グリセリンは防腐剤として使用される。"
-    ],
-    answer: 0,
-    hintCorrect: "正解！+3pt！ パラフィンやワセリンは石油から得られる炭化水素です！",
-    hintWrong: "正しいのは「（1）」です。PVPは合成樹脂、メタノールは配合禁止、グリセリンは保湿剤です。"
-  },
-  {
-    id: "EX-04", block: "EXAM", title: "第41回 国家試験本番問題",
-    q: "香粧品に配合される油性原料に関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）炭化水素はクリームや口紅などに配合される。",
-      "（2）炭化水素は石油から得られるもので、動植物からは得られない。",
-      "（3）高級脂肪酸は炭素数の多い脂肪酸である。",
-      "（4）ロウ類は高級アルコールと高級脂肪酸とのエステルである。"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ 国試最大の引っかけ撃破！ スクワランなど動植物から得られる炭化水素もあります！",
-    hintWrong: "誤りは「（2）」です。深海鮫やオリーブ油から得られるスクワラン（炭化水素）が存在します。"
-  },
-  {
-    id: "EX-05", block: "EXAM", title: "第42回 国家試験本番問題",
-    q: "油性原料に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）ヒマシ油は、動物性の油脂である。",
-      "（2）油脂が空気中の酸素により変質することを、酸敗という。",
-      "（3）スクワレンは、動植物から得られるスクワランに水素を添加した炭化水素である。",
-      "（4）ロウ類は、高級脂肪酸と高級アルコールとのエステルで、常温で固体のものをいう。"
-    ],
-    answer: 1,
-    hintCorrect: "正解！+3pt！ 油脂が酸素で酸化変質することを酸敗といいます！",
-    hintWrong: "正しいのは「（2）」です。ヒマシ油は植物性、スクワレンに水素添加したのがスクワラン、ホホバ油のように液体のロウもあります。"
-  },
-  {
-    id: "EX-06", block: "EXAM", title: "第43回 国家試験本番問題",
-    q: "アルコールに関する次の記述のうち、誤っているものはどれか。",
-    choices: [
-      "（1）エタノール（エチルアルコール）は、水に溶けない油分などを溶かす有機溶媒である。",
-      "（2）イソプロパノール（イソプロピルアルコール）は殺菌力があり、防腐作用を持つ。",
-      "（3）メタノール（メチルアルコール）は、化粧品基準で配合が認められている。",
-      "（4）エタノールは、皮膚を引き締める収れん作用がある。"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ メタノールは毒性が強いため化粧品への配合が固く禁止されています！",
-    hintWrong: "誤りは「（3）」です。メタノールは失明などの毒性があるため化粧品基準で配合禁止です。"
-  },
-  {
-    id: "EX-07", block: "EXAM", title: "第46回 国家試験本番問題",
-    q: "溶媒に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）水は、有機溶媒である。",
-      "（2）メタノールは、化粧水の溶媒として用いられる。",
-      "（3）イソプロパノールには、殺菌力がない。",
-      "（4）アセトンは、エナメルリムーバーに用いられる。"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ アセトンはネイルカラーを落とすリムーバーに用いられる有機溶媒です！",
-    hintWrong: "正しいのは「（4）」です。水は無機溶媒、メタノールは配合禁止、イソプロパノールには殺菌力があります。"
-  },
-  {
-    id: "EX-08", block: "EXAM", title: "第47回 国家試験本番問題",
-    q: "香粧品の水性原料である水とエタノールに関する次の文章の（  ）内に入る語句の組合わせのうち、正しいものはどれか。\n\n「多くの化粧水のように物質が均一に溶け合って液体となった溶液において、物質を溶かしている液体を溶媒といい、溶けている物質を（ Ａ ）という。水のような炭素を含まない溶媒を（ Ｂ ）溶媒という。エタノールは水に溶けない物質を溶かす溶媒としての働きだけでなく、蒸発する際に皮膚の熱を奪って冷感を与えて皮膚組織を引き締める（ Ｃ ）作用も持っている。」",
-    choices: [
-      "（1） Ａ：溶剤 ── Ｂ：無機 ── Ｃ：保湿",
-      "（2） Ａ：溶剤 ── Ｂ：有機 ── Ｃ：収れん",
-      "（3） Ａ：溶質 ── Ｂ：有機 ── Ｃ：保湿",
-      "（4） Ａ：溶質 ── Ｂ：無機 ── Ｃ：収れん"
-    ],
-    answer: 3,
-    hintCorrect: "正解！+3pt！ Ａ＝溶質、Ｂ＝無機、Ｃ＝収れん作用の完璧な組合せです！",
-    hintWrong: "正解は「（4）」です。溶けているのが溶質、水は無機溶媒、エタノールの引き締めは収れん作用です。"
-  },
-  {
-    id: "EX-09", block: "EXAM", title: "第51回 国家試験本番問題",
-    q: "香粧品に配合される物質とそれを溶かしている水に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）物質が均一に混ざり合って液体の状態のとき、溶けている物質を溶媒という。",
-      "（2）無機塩を含む化粧水を有機化合物という。",
-      "（3）酸素原子に水素原子２個が結合した水分子内で生じている電気の偏りを極性という。",
-      "（4）水に電解質を溶かしたとき、水素イオンの濃度が高い状態を塩基性という。"
-    ],
-    answer: 2,
-    hintCorrect: "正解！+3pt！ 水分子内の酸素と水素の間の電気的な偏りを「極性」といいます！",
-    hintWrong: "正しいのは「（3）」です。溶けているのは溶質、水素イオンが多いのは酸性です。"
-  },
-  {
-    id: "EX-10", block: "EXAM", title: "第51回 国家試験本番問題（油性原料）",
-    q: "油性原料に関する次の記述のうち、正しいものはどれか。",
-    choices: [
-      "（1）毛髪と親和性の高いアミノ変性シリコーンは、すぐれたコンディショニング効果を発揮する。",
-      "（2）カルナウバロウは、羊の毛からとれる動物性ロウである。",
-      "（3）植物を原料とするスクワランは、油脂である。",
-      "（4）常温では、脂肪は脂肪油より流動性が高い。"
-    ],
-    answer: 0,
-    hintCorrect: "正解！+3pt！ アミノ変性シリコーンは毛髪親和性が高くトリートメントに最適です！",
-    hintWrong: "正しいのは「（1）」です。カルナウバロウは植物性、スクワランは炭化水素、常温で流動性が高い（液体）のは脂肪油です。"
-  }
+  { id: "EX-01", block: "EXAM", title: "第37回 国家試験本番問題", q: "油脂に関する次の記述のうち、正しいものの組合せはどれか。\n\nａ．油脂は、脂肪酸とグリセリンのエステルである。\nｂ．石けんは、油脂を塩化カリウムでけん化してつくる。\nｃ．ヒマシ油は、動物性の油脂である。\nｄ．油脂が酸素や日光の働きにより変質することを酸敗という。", choices: ["（1） ａ と ｂ", "（2） ｂ と ｃ", "（3） ｃ と ｄ", "（4） ａ と ｄ"], answer: 3, hintCorrect: "正解！+3pt！ ａ（脂肪酸とグリセリンのエステル）と ｄ（酸化変質＝酸敗）が正しい記述です！", hintWrong: "正解は「（4）」です。ｂは水酸化カリウム、ｃのヒマシ油は植物性油脂なので誤りです。" },
+  { id: "EX-02", block: "EXAM", title: "第38回 国家試験本番問題", q: "有機溶媒に関する次の記述のうち、正しいものの組合せはどれか。\n\nａ．有機溶媒は、水に溶けない油分や樹脂などを溶かす溶媒として用いられる。\nｂ．ネイルエナメルリムーバー中の有機溶媒は、爪の脂分を保護する。\nｃ．有機溶媒は、顔料を溶解する。\nｄ．エタノールは、香粧品に用いられる有機溶媒の一つである。", choices: ["（1） ａ と ｂ", "（2） ｂ と ｃ", "（3） ｃ と ｄ", "（4） ａ と ｄ"], answer: 3, hintCorrect: "正解！+3pt！ ａ（油分や樹脂を溶かす）と ｄ（エタノールは有機溶媒）が正しい記述です！", hintWrong: "正解は「（4）」です。ｂは爪の脱脂を起こしやすく、ｃの顔料は溶媒に溶けない粉体です。" },
+  { id: "EX-03", block: "EXAM", title: "第40回 国家試験本番問題", q: "香粧品の原料に関する次の記述のうち、正しいものはどれか。", choices: ["（1）パラフィンは炭化水素に分類される。", "（2）ポリビニルピロリドン（PVP）はアミノ酸がペプチド結合でつながった構造を持つ。", "（3）水性原料としてメタノールが使用される。", "（4）グリセリンは防腐剤として使用される。"], answer: 0, hintCorrect: "正解！+3pt！ パラフィンやワセリンは石油から得られる炭化水素です！", hintWrong: "正しいのは「（1）」です。PVPは合成樹脂、メタノールは配合禁止、グリセリンは保湿剤です。" },
+  { id: "EX-04", block: "EXAM", title: "第41回 国家試験本番問題", q: "香粧品に配合される油性原料に関する次の記述のうち、誤っているものはどれか。", choices: ["（1）炭化水素はクリームや口紅などに配合される。", "（2）炭化水素は石油から得られるもので、動植物からは得られない。", "（3）高級脂肪酸は炭素数の多い脂肪酸である。", "（4）ロウ類は高級アルコールと高級脂肪酸とのエステルである。"], answer: 1, hintCorrect: "正解！+3pt！ 国試最大の引っかけ撃破！ スクワランなど動植物から得られる炭化水素もあります！", hintWrong: "誤りは「（2）」です。深海鮫やオリーブ油から得られるスクワラン（炭化水素）が存在します。" },
+  { id: "EX-05", block: "EXAM", title: "第42回 国家試験本番問題", q: "油性原料に関する次の記述のうち、正しいものはどれか。", choices: ["（1）ヒマシ油は、動物性の油脂である。", "（2）油脂が空気中の酸素により変質することを、酸敗という。", "（3）スクワレンは、動植物から得られるスクワランに水素を添加した炭化水素である。", "（4）ロウ類は、高級脂肪酸と高級アルコールとのエステルで、常温で固体のものをいう。"], answer: 1, hintCorrect: "正解！+3pt！ 油脂が酸素で酸化変質することを酸敗といいます！", hintWrong: "正しいのは「（2）」です。ヒマシ油は植物性、スクワレンに水素添加したのがスクワラン、液体のロウもあります。" },
+  { id: "EX-06", block: "EXAM", title: "第43回 国家試験本番問題", q: "アルコールに関する次の記述のうち、誤っているものはどれか。", choices: ["（1）エタノール（エチルアルコール）は、水に溶けない油分などを溶かす有機溶媒である。", "（2）イソプロパノール（イソプロピルアルコール）は殺菌力があり、防腐作用を持つ。", "（3）メタノール（メチルアルコール）は、化粧品基準で配合が認められている。", "（4）エタノールは、皮膚を引き締める収れん作用がある。"], answer: 2, hintCorrect: "正解！+3pt！ メタノールは毒性が強いため化粧品への配合が固く禁止されています！", hintWrong: "誤りは「（3）」です。メタノールは失明などの毒性があるため化粧品基準で配合禁止です。" },
+  { id: "EX-07", block: "EXAM", title: "第46回 国家試験本番問題", q: "溶媒に関する次の記述のうち、正しいものはどれか。", choices: ["（1）水は、有機溶媒である。", "（2）メタノールは、化粧水の溶媒として用いられる。", "（3）イソプロパノールには、殺菌力がない。", "（4）アセトンは、エナメルリムーバーに用いられる。"], answer: 3, hintCorrect: "正解！+3pt！ アセトンはネイルカラーを落とすリムーバーに用いられる有機溶媒です！", hintWrong: "正しいのは「（4）」です。水は無機溶媒、メタノールは配合禁止、イソプロパノールには殺菌力があります。" },
+  { id: "EX-08", block: "EXAM", title: "第47回 国家試験本番問題", q: "香粧品の水性原料である水とエタノールに関する次の文章の（  ）内に入る語句の組合わせのうち、正しいものはどれか。\n\n「多くの化粧水のように物質が均一に溶け合って液体となった溶液において、物質を溶かしている液体を溶媒といい、溶けている物質を（ Ａ ）という。水のような炭素を含まない溶媒を（ Ｂ ）溶媒という。エタノールは水に溶けない物質を溶かす溶媒としての働きだけでなく、蒸発する際に皮膚の熱を奪って冷感を与えて皮膚組織を引き締める（ Ｃ ）作用も持っている。」", choices: ["（1） Ａ：溶剤 ── Ｂ：無機 ── Ｃ：保湿", "（2） Ａ：溶剤 ── Ｂ：有機 ── Ｃ：収れん", "（3） Ａ：溶質 ── Ｂ：有機 ── Ｃ：保湿", "（4） Ａ：溶質 ── Ｂ：無機 ── Ｃ：収れん"], answer: 3, hintCorrect: "正解！+3pt！ Ａ＝溶質、Ｂ＝無機、Ｃ＝収れん作用の完璧な組合せです！", hintWrong: "正解は「（4）」です。溶けているのが溶質、水は無機溶媒、エタノールの引き締めは収れん作用です。" },
+  { id: "EX-09", block: "EXAM", title: "第51回 国家試験本番問題（水）", q: "香粧品に配合される物質とそれを溶かしている水に関する次の記述のうち、正しいものはどれか。", choices: ["（1）物質が均一に混ざり合って液体の状態のとき、溶けている物質を溶媒という。", "（2）無機塩を含む化粧水を有機化合物という。", "（3）酸素原子に水素原子２個が結合した水分子内で生じている電気の偏りを極性という。", "（4）水に電解質を溶かしたとき、水素イオンの濃度が高い状態を塩基性という。"], answer: 2, hintCorrect: "正解！+3pt！ 水分子内の酸素と水素の間の電気的な偏りを「極性」といいます！", hintWrong: "正しいのは「（3）」です。溶けているのは溶質、水素イオンが多いのは酸性です。" },
+  { id: "EX-10", block: "EXAM", title: "第51回 国家試験本番問題（油性原料）", q: "油性原料に関する次の記述のうち、正しいものはどれか。", choices: ["（1）毛髪と親和性の高いアミノ変性シリコーンは、すぐれたコンディショニング効果を発揮する。", "（2）カルナウバロウは、羊の毛からとれる動物性ロウである。", "（3）植物を原料とするスクワランは、油脂である。", "（4）常温では、脂肪は脂肪油より流動性が高い。"], answer: 0, hintCorrect: "正解！+3pt！ アミノ変性シリコーンは毛髪親和性が高くトリートメントに最適です！", hintWrong: "正しいのは「（1）」です。カルナウバロウは植物性、スクワランは炭化水素、常温で流動性が高いのは脂肪油です。" }
 ];
 
-// 状態管理
-const STORAGE_KEY = "water_oil_tutor_save_data_v2";
-let state = {
-  mode: "BASE", // "BASE" または "EXAM"
-  currentQuestionIndex: 0,
-  answers: {},
-  wrongQuestionIds: [],
-  isRetryMode: false,
-  isFinished: false
-};
+const STORAGE_KEY = "water_oil_tutor_save_data_v3";
+let state = { mode: "BASE", currentQuestionIndex: 0, answers: {}, wrongQuestionIds: [], isRetryMode: false, isFinished: false };
 
-function getActiveQuestions() {
-  if (state.mode === "EXAM") {
-    return examQuestions;
-  }
-  return baseQuestions;
-}
-
-function getBlockStartIndex(blockCode) {
-  const qs = getActiveQuestions();
-  return qs.findIndex(q => q.block === blockCode);
-}
+function getActiveQuestions() { return (state.mode === "EXAM") ? examQuestions : baseQuestions; }
+function getBlockStartIndex(blockCode) { return getActiveQuestions().findIndex(q => q.block === blockCode); }
 
 function loadProgress() {
   const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    try {
-      state = JSON.parse(saved);
-    } catch(e) {
-      console.error(e);
-    }
-  }
+  if (saved) { try { state = JSON.parse(saved); } catch(e) {} }
 }
+function saveProgress() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
-function saveProgress() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-// 得点と正解率の計算
 function calculateScore(mode) {
   const qs = (mode === "EXAM") ? examQuestions : baseQuestions;
   const pointPerQ = (mode === "EXAM") ? 3 : 2;
@@ -865,25 +270,17 @@ function updateSpineMap() {
   const blocks = ["A", "B", "C", "D", "E", "F", "G"];
   const currentQ = getCurrentQuestion();
   const currentBlock = currentQ ? currentQ.block : null;
-
   blocks.forEach(b => {
     const node = document.getElementById(`node-${b}`);
     if (!node) return;
     node.className = "spine-node";
-
-    const blockQuestions = baseQuestions.filter(q => q.block === b);
-    const isAllCorrect = blockQuestions.every(q => state.answers[q.id] === true);
-
-    if (isAllCorrect) node.classList.add("cleared");
+    const bQs = baseQuestions.filter(q => q.block === b);
+    if (bQs.every(q => state.answers[q.id] === true)) node.classList.add("cleared");
     if (b === currentBlock && state.mode === "BASE" && !state.isFinished) node.classList.add("active");
   });
-
   const examNode = document.getElementById("node-EXAM");
-  if (state.mode === "EXAM" && !state.isFinished) {
-    examNode.classList.add("active");
-  } else {
-    examNode.classList.remove("active");
-  }
+  if (state.mode === "EXAM" && !state.isFinished) examNode.classList.add("active");
+  else examNode.classList.remove("active");
 }
 
 function getCurrentQuestion() {
@@ -898,11 +295,7 @@ function getCurrentQuestion() {
 function renderQuestion() {
   state.isFinished = false;
   const item = getCurrentQuestion();
-  if (!item) {
-    showResultScreen();
-    return;
-  }
-
+  if (!item) { showResultScreen(); return; }
   updateSpineMap();
 
   const scoreData = calculateScore(state.mode);
@@ -911,20 +304,12 @@ function renderQuestion() {
   if (state.mode === "EXAM") {
     expBox.style.display = "none";
     document.getElementById("status-field").innerText = "🎯 国試本番4択演習";
-    if (state.isRetryMode) {
-      document.getElementById("progress-text").innerText = `🔥 弱点集中特訓：${state.currentQuestionIndex + 1} / ${state.wrongQuestionIds.length}`;
-    } else {
-      document.getElementById("progress-text").innerText = `国試問 ${state.currentQuestionIndex + 1} / ${examQuestions.length}`;
-    }
+    document.getElementById("progress-text").innerText = state.isRetryMode ? `🔥 弱点特訓：${state.currentQuestionIndex + 1}/${state.wrongQuestionIds.length}` : `国試問 ${state.currentQuestionIndex + 1} / ${examQuestions.length}`;
   } else {
     expBox.style.display = "block";
     document.getElementById("status-field").innerText = fieldNames[item.block] || "水性・油性原料";
     document.getElementById("lesson-exp").innerText = item.exp;
-    if (state.isRetryMode) {
-      document.getElementById("progress-text").innerText = `🔥 弱点集中特訓：${state.currentQuestionIndex + 1} / ${state.wrongQuestionIds.length}`;
-    } else {
-      document.getElementById("progress-text").innerText = `問 ${state.currentQuestionIndex + 1} / ${baseQuestions.length}`;
-    }
+    document.getElementById("progress-text").innerText = state.isRetryMode ? `🔥 弱点特訓：${state.currentQuestionIndex + 1}/${state.wrongQuestionIds.length}` : `問 ${state.currentQuestionIndex + 1} / ${baseQuestions.length}`;
   }
 
   document.getElementById("status-score").innerText = `正解率: ${scoreData.rate}% (${scoreData.currentPoints}/${scoreData.maxPoints}点)`;
@@ -951,30 +336,22 @@ function selectAnswer(selectedIndex) {
   const feedback = document.getElementById("feedback-area");
   const feedbackDesc = document.getElementById("feedback-desc");
   const buttons = document.querySelectorAll(".btn-choice");
-
   buttons.forEach(b => b.disabled = true);
 
   const isCorrect = (selectedIndex === item.answer);
-
   if (isCorrect) {
     buttons[selectedIndex].classList.add("correct-highlight");
     feedback.className = "feedback-box feedback-correct";
     feedbackDesc.innerText = item.hintCorrect;
     state.answers[item.id] = true;
-
-    if (state.isRetryMode) {
-      state.wrongQuestionIds = state.wrongQuestionIds.filter(id => id !== item.id);
-    }
+    if (state.isRetryMode) state.wrongQuestionIds = state.wrongQuestionIds.filter(id => id !== item.id);
   } else {
     buttons[selectedIndex].classList.add("wrong-highlight");
     buttons[item.answer].classList.add("correct-highlight");
     feedback.className = "feedback-box feedback-wrong";
     feedbackDesc.innerText = item.hintWrong;
     state.answers[item.id] = false;
-
-    if (!state.wrongQuestionIds.includes(item.id)) {
-      state.wrongQuestionIds.push(item.id);
-    }
+    if (!state.wrongQuestionIds.includes(item.id)) state.wrongQuestionIds.push(item.id);
   }
 
   saveProgress();
@@ -986,15 +363,12 @@ function selectAnswer(selectedIndex) {
 }
 
 function nextQuestion() {
-  const qs = getActiveQuestions();
-  const total = state.isRetryMode ? state.wrongQuestionIds.length : qs.length;
+  const total = state.isRetryMode ? state.wrongQuestionIds.length : getActiveQuestions().length;
   if (state.currentQuestionIndex < total - 1) {
     state.currentQuestionIndex++;
     saveProgress();
     renderQuestion();
-  } else {
-    showResultScreen();
-  }
+  } else { showResultScreen(); }
 }
 
 function prevQuestion() {
@@ -1006,13 +380,9 @@ function prevQuestion() {
 }
 
 function jumpToBlock(blockCode) {
-  if (state.mode === "EXAM") {
-    state.mode = "BASE";
-    state.isRetryMode = false;
-  } else if (state.isRetryMode) {
-    if (!confirm("弱点リトライを中断して通常問題へ戻りますか？")) return;
-    state.isRetryMode = false;
-  }
+  if (state.mode === "EXAM") { state.mode = "BASE"; state.isRetryMode = false; }
+  else if (state.isRetryMode && !confirm("弱点リトライを中断して戻りますか？")) return;
+  state.isRetryMode = false;
   const targetIndex = getBlockStartIndex(blockCode);
   if (targetIndex !== -1) {
     restoreCardStructure();
@@ -1023,10 +393,8 @@ function jumpToBlock(blockCode) {
 }
 
 function startExamMode() {
-  if (state.isRetryMode) {
-    if (!confirm("弱点リトライを終了して国試4択演習へ移動しますか？")) return;
-    state.isRetryMode = false;
-  }
+  if (state.isRetryMode && !confirm("弱点リトライを終了して国試演習へ移動しますか？")) return;
+  state.isRetryMode = false;
   state.mode = "EXAM";
   state.currentQuestionIndex = 0;
   saveProgress();
@@ -1043,43 +411,34 @@ function startBaseMode() {
   renderQuestion();
 }
 
+function pauseQuiz() {
+  saveProgress();
+  alert("⏸️ 学習を一時中断し、進捗を保存しました。\n次回もこの問題から再開できます。");
+  document.getElementById("btn-resume").style.display = "inline-block";
+}
+function resumeQuiz() {
+  document.getElementById("btn-resume").style.display = "none";
+  alert("▶️ 学習を再開します。");
+}
+function quitQuiz() {
+  if (confirm("学習を終了しますか？\n\n[OK]：成績結果を表示する\n[キャンセル]：そのまま続ける")) showResultScreen();
+}
+
 function generateStatsHtml() {
   const blocks = ["A", "B", "C", "D", "E", "F", "G"];
-  let lowestRate = 101;
-  let lowestBlock = "";
-  let graphHtml = "";
-
+  let lowestRate = 101, lowestBlock = "", graphHtml = "";
   blocks.forEach(b => {
     const questions = baseQuestions.filter(q => q.block === b);
-    const total = questions.length;
     const correctCount = questions.filter(q => state.answers[q.id] === true).length;
-    const rate = Math.round((correctCount / total) * 100);
-
-    if (rate < lowestRate) {
-      lowestRate = rate;
-      lowestBlock = fieldNames[b];
-    }
-
-    let barClass = "bar-high";
-    if (rate < 50) {
-      barClass = "bar-low";
-    } else if (rate < 80) {
-      barClass = "bar-mid";
-    }
-
+    const rate = Math.round((correctCount / questions.length) * 100);
+    if (rate < lowestRate) { lowestRate = rate; lowestBlock = fieldNames[b]; }
+    let barClass = (rate < 50) ? "bar-low" : (rate < 80) ? "bar-mid" : "bar-high";
     graphHtml += `
       <div class="graph-item" onclick="jumpToBlock('${b}')" title="クリックしてこの分野を復習">
-        <div class="graph-label-row">
-          <span>${fieldNames[b]}</span>
-          <span>${correctCount}/${total}問 (${rate}%)</span>
-        </div>
-        <div class="graph-bar-bg">
-          <div class="graph-bar-fill ${barClass}" style="width: ${rate}%;"></div>
-        </div>
-      </div>
-    `;
+        <div class="graph-label-row"><span>${fieldNames[b]}</span><span>${correctCount}/${questions.length}問 (${rate}%)</span></div>
+        <div class="graph-bar-bg"><div class="graph-bar-fill ${barClass}" style="width: ${rate}%;"></div></div>
+      </div>`;
   });
-
   return { graphHtml, lowestBlock, lowestRate };
 }
 
@@ -1091,7 +450,6 @@ function showResultScreen() {
   const scoreData = calculateScore(state.mode);
   const currentWrongCount = scoreData.total - scoreData.correctCount;
   const isPerfect = (currentWrongCount === 0);
-
   let resultHtml = "";
 
   if (state.mode === "EXAM") {
@@ -1104,40 +462,23 @@ function showResultScreen() {
           <div style="background:var(--primary-light); color:var(--primary); font-size:1.1rem; font-weight:bold; padding:10px 20px; border-radius:16px; display:inline-block; margin:8px 0; border:1px solid #a7f3d0;">
             正解率: ${scoreData.rate}% （獲得 ${scoreData.currentPoints}点 / 満点 ${scoreData.maxPoints}点）
           </div>
-          <div style="font-size:0.85rem; color:#64748b;">
-            正解数: ${scoreData.correctCount} / ${scoreData.total} 問
-          </div>
+          <div style="font-size:0.85rem; color:#64748b;">正解数: ${scoreData.correctCount} / ${scoreData.total} 問</div>
         </div>
         <div class="advice-box">
           💡 <strong>AI先生の国試診断：</strong><br>
-          ${isPerfect 
-            ? '本番過去問10問を全問正解！炭化水素の供給源やロウ類の構造など、国家試験特有の引っかけを完全に見抜けています！' 
-            : `間違えた問題が ${currentWrongCount} 問あります。「炭化水素は動植物からも得られる」「油脂はグリセリン、ロウは高級アルコール」「メタノール配合禁止」の3大鉄則を再確認しましょう。`}
+          ${isPerfect ? '本番過去問10問を全問正解！炭化水素の供給源やロウ類の構造など、国試特有の引っかけを完全に見抜けています！' : `間違えた問題が ${currentWrongCount} 問あります。「炭化水素は動植物からも得られる」「油脂はグリセリン、ロウは高級アルコール」「メタノール配合禁止」の3大鉄則を再確認しましょう。`}
         </div>
-        ${!isPerfect ? `
-          <button class="btn-action btn-retry" onclick="startRetryMode()">
-            🔥 間違えた問題だけを集中リトライする
-          </button>
-        ` : ''}
-        <button class="btn-action btn-restart" onclick="startExamMode()">
-          🔄 国試4択演習をもう一度解く
-        </button>
-        <button class="btn-action btn-switch-exam" onclick="startBaseMode()">
-          📚 基礎演習（2択・26問）へ戻る
-        </button>
-      </div>
-    `;
+        ${!isPerfect ? `<button class="btn-action btn-retry" onclick="startRetryMode()">🔥 間違えた問題だけを集中リトライする</button>` : ''}
+        <button class="btn-action btn-restart" onclick="startExamMode()">🔄 国試4択演習をもう一度解く</button>
+        <button class="btn-action btn-switch-exam" onclick="startBaseMode()">📚 基礎演習（2択・26問）へ戻る</button>
+
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <a href="index.html#units" class="btn-action" style="background:#0284c7; color:white; text-decoration:none; text-align:center; flex:1;">📚 単元メニューへ</a>
+          <a href="index.html" class="btn-action" style="background:#475569; color:white; text-decoration:none; text-align:center; flex:1;">🏠 ポータルトップへ</a>
+        </div>
+      </div>`;
   } else {
     const stats = generateStatsHtml();
-    let adviceText = "";
-    if (isPerfect) {
-      adviceText = "全分野で100%達成！次は下の「国試4択演習」ボタンを押して本番形式にチャレンジしてみましょう！";
-    } else if (stats.lowestRate < 80) {
-      adviceText = `特に<strong>「${stats.lowestBlock}」</strong>の正答率が低めです。下のグラフをタップして集中的に再学習してみましょう！`;
-    } else {
-      adviceText = "全体的によく理解できています。間違えた問題だけをリトライして満点を目指しましょう！";
-    }
-
     resultHtml = `
       <div class="result-card">
         <div class="result-header">
@@ -1147,39 +488,20 @@ function showResultScreen() {
           <div style="background:var(--primary-light); color:var(--primary); font-size:1.1rem; font-weight:bold; padding:10px 20px; border-radius:16px; display:inline-block; margin:8px 0; border:1px solid #a7f3d0;">
             正解率: ${scoreData.rate}% （獲得 ${scoreData.currentPoints}点 / 満点 ${scoreData.maxPoints}点）
           </div>
-          <div style="font-size:0.85rem; color:#64748b;">
-            正解数: ${scoreData.correctCount} / ${scoreData.total} 問
-          </div>
+          <div style="font-size:0.85rem; color:#64748b;">正解数: ${scoreData.correctCount} / ${scoreData.total} 問</div>
         </div>
+        <div class="graph-container"><div class="graph-title"><span>📊 分野別 正答率</span><span style="font-size:0.75rem; color:#64748b; font-weight:normal;">タップで各分野へ移動</span></div>${stats.graphHtml}</div>
+        <div class="advice-box">💡 <strong>AI先生の分析診断：</strong><br>${isPerfect ? '全分野で100%達成！次は下の「国試4択演習」ボタンを押して本番形式にチャレンジしてみましょう！' : `特に<strong>「${stats.lowestBlock}」</strong>の正答率が低めです。上のグラフをタップして集中的に復習しましょう！`}</div>
+        <button class="btn-action btn-switch-exam" onclick="startExamMode()">🎯 本番力試し！「国試4択演習（10問）」へ進む</button>
+        ${!isPerfect ? `<button class="btn-action btn-retry" onclick="startRetryMode()">🔥 間違えた問題だけを集中特訓する</button>` : ''}
+        <button class="btn-action btn-restart" onclick="confirmResetAll()">🔄 最初からやり直す</button>
 
-        <div class="graph-container">
-          <div class="graph-title">
-            <span>📊 分野別 正答率</span>
-            <span style="font-size:0.75rem; color:#64748b; font-weight:normal;">タップで各分野へ移動</span>
-          </div>
-          ${stats.graphHtml}
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <a href="index.html#units" class="btn-action" style="background:#0284c7; color:white; text-decoration:none; text-align:center; flex:1;">📚 単元メニューへ</a>
+          <a href="index.html" class="btn-action" style="background:#475569; color:white; text-decoration:none; text-align:center; flex:1;">🏠 ポータルトップへ</a>
         </div>
-
-        <div class="advice-box">
-          💡 <strong>AI先生の分析診断：</strong><br>
-          ${adviceText}
-        </div>
-
-        <button class="btn-action btn-switch-exam" onclick="startExamMode()">
-          🎯 本番力試し！「国試4択演習（10問）」へ進む
-        </button>
-        ${!isPerfect ? `
-          <button class="btn-action btn-retry" onclick="startRetryMode()">
-            🔥 間違えた問題だけを集中特訓する
-          </button>
-        ` : ''}
-        <button class="btn-action btn-restart" onclick="confirmResetAll()">
-          🔄 最初からやり直す
-        </button>
-      </div>
-    `;
+      </div>`;
   }
-
   document.getElementById("main-card").innerHTML = resultHtml;
 }
 
@@ -1196,14 +518,7 @@ function startRetryMode() {
 function confirmResetAll() {
   if (confirm("学習記録をリセットして最初からやり直しますか？")) {
     localStorage.removeItem(STORAGE_KEY);
-    state = {
-      mode: "BASE",
-      currentQuestionIndex: 0,
-      answers: {},
-      wrongQuestionIds: [],
-      isRetryMode: false,
-      isFinished: false
-    };
+    state = { mode: "BASE", currentQuestionIndex: 0, answers: {}, wrongQuestionIds: [], isRetryMode: false, isFinished: false };
     restoreCardStructure();
     renderQuestion();
   }
@@ -1213,30 +528,16 @@ function restoreCardStructure() {
   document.getElementById("main-card").innerHTML = `
     <div class="q-progress" id="progress-text"></div>
     <h2 id="lesson-title"></h2>
-    <div class="exp-box" id="exp-container">
-      <span class="exp-tag">💡 香粧品AI先生のポイント</span>
-      <div id="lesson-exp"></div>
-    </div>
+    <div class="exp-box" id="exp-container"><span class="exp-tag">💡 香粧品AI先生のポイント</span><div id="lesson-exp"></div></div>
     <div class="question-box" id="question-text"></div>
     <div class="btn-group" id="choices-container"></div>
-    <div class="feedback-box" id="feedback-area">
-      <div class="feedback-header">🧑‍🏫 AI先生の個別指導</div>
-      <div id="feedback-desc"></div>
-    </div>
-    <div class="nav-controls">
-      <button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button>
-      <button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button>
-    </div>
-  `;
+    <div class="feedback-box" id="feedback-area"><div class="feedback-header">🧑‍🏫 AI先生の個別指導</div><div id="feedback-desc"></div></div>
+    <div class="nav-controls"><button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button><button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button></div>`;
 }
 
-// 起動
 loadProgress();
-if (state.isFinished) {
-  showResultScreen();
-} else {
-  renderQuestion();
-}
+if (state.isFinished) showResultScreen();
+else renderQuestion();
 </script>
 
 </body>
