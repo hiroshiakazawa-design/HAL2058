@@ -1,0 +1,306 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>香粧品化学 国家試験対策ラーニングポータル</title>
+<style>
+  :root {
+    --primary: #1e3a8a;
+    --primary-light: #eff6ff;
+    --text: #1f2937;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --border: #cbd5e1;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Meiryo", sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 12px 14px;
+    line-height: 1.5;
+  }
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* ポータルヘッダー */
+  .portal-header {
+    text-align: center;
+    padding: 16px 12px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+  }
+  .portal-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #1e40af;
+    background: #dbeafe;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 6px;
+  }
+  h1 {
+    font-size: 1.25rem;
+    margin: 0 0 6px 0;
+    color: #0f172a;
+    line-height: 1.35;
+  }
+  .portal-desc {
+    font-size: 0.84rem;
+    color: #64748b;
+    margin: 0;
+  }
+
+  /* メインメニュー選択カード（第1層） */
+  .menu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .main-menu-card {
+    background: #ffffff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .main-menu-card:active { transform: scale(0.98); }
+  .main-menu-card:hover {
+    border-color: #2563eb;
+    background: #f8fafc;
+  }
+  .menu-icon { font-size: 2.2rem; flex-shrink: 0; }
+  .menu-text-wrap { flex-grow: 1; }
+  .menu-tag {
+    font-size: 0.72rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+  .tag-new { background: #dcfce7; color: #15803d; }
+  .tag-archive { background: #fef3c7; color: #b45309; }
+  .menu-title {
+    font-size: 1.05rem;
+    font-weight: bold;
+    color: #0f172a;
+    margin-bottom: 2px;
+  }
+  .menu-sub { font-size: 0.8rem; color: #64748b; }
+
+  /* 単元別メニュー（第2層） */
+  #sub-menu-view {
+    display: none;
+    animation: fadeIn 0.25s ease;
+  }
+  .sub-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .btn-back {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    font-weight: bold;
+    color: #475569;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .btn-back:hover { background: #f1f5f9; }
+  .sub-header-title { font-size: 0.92rem; font-weight: bold; color: #334155; }
+
+  /* 単元カード */
+  .unit-card {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-left: 6px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 13px 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .unit-card:active { transform: scale(0.98); }
+  .unit-card:hover {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+    background: #fcfcfd;
+  }
+  .unit-info-left { flex-grow: 1; padding-right: 10px; }
+  .unit-badge { font-size: 0.7rem; font-weight: bold; color: #64748b; margin-bottom: 2px; }
+  .unit-name { font-size: 0.98rem; font-weight: bold; color: #0f172a; line-height: 1.35; margin-bottom: 3px; }
+  .unit-desc { font-size: 0.78rem; color: #64748b; }
+  .unit-arrow { font-size: 1.2rem; color: #94a3b8; font-weight: bold; }
+
+  /* 各単元のテーマカラー枠線 */
+  .border-1 { border-left-color: #1e3a8a !important; }
+  .border-2 { border-left-color: #059669 !important; }
+  .border-3 { border-left-color: #0284c7 !important; }
+  .border-4 { border-left-color: #c026d3 !important; }
+  .border-5 { border-left-color: #0d9488 !important; }
+  .border-6 { border-left-color: #1e40af !important; }
+  .border-7 { border-left-color: #9333ea !important; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- ポータルヘッダー -->
+  <div class="portal-header">
+    <span class="portal-badge">理容師・美容師 国家試験対策</span>
+    <h1>香粧品化学 ラーニングポータル</h1>
+    <p class="portal-desc">学習したいコースを選択してください</p>
+  </div>
+
+  <!-- 【第1層】メインメニュー選択画面 -->
+  <div id="main-menu-view" class="menu-grid">
+    <!-- コースA：新・単元別マスター問題集（全7単元） -->
+    <div class="main-menu-card" onclick="openSubMenu()">
+      <div class="menu-icon">📚</div>
+      <div class="menu-text-wrap">
+        <span class="menu-tag tag-new">教科書準拠・全7単元完全網羅</span>
+        <div class="menu-title">新・単元別マスター問題集</div>
+        <div class="menu-sub">教科書の体系（第1編〜第2編）に沿った基礎＆国試実戦演習</div>
+      </div>
+      <div class="unit-arrow">▶</div>
+    </div>
+
+    <!-- コースB：以前の国試対策問題集 -->
+    <a href="0kokusi_taisaku.html" class="main-menu-card">
+      <div class="menu-icon">🎯</div>
+      <div class="menu-text-wrap">
+        <span class="menu-tag tag-archive">総合演習</span>
+        <div class="menu-title">国試対策 香粧品化学問題集</div>
+        <div class="menu-sub">全単元を網羅した総合的な国家試験過去問トレーニング</div>
+      </div>
+      <div class="unit-arrow">▶</div>
+    </a>
+  </div>
+
+  <!-- 【第2層】単元別マスター問題集の選択画面（全7単元・教科書順） -->
+  <div id="sub-menu-view">
+    <div class="sub-header-bar">
+      <button class="btn-back" onclick="closeSubMenu()">◀ メニューに戻る</button>
+      <span class="sub-header-title">単元を選択（全7単元）</span>
+    </div>
+
+    <!-- ① 第1単元：総論・法規・安全 -->
+    <a href="1gairon_tutor.html" class="unit-card border-1">
+      <div class="unit-info-left">
+        <div class="unit-badge">第1編 第1・2章／第3章 1節</div>
+        <div class="unit-name">第1単元：香粧品総論・安全性・法規編</div>
+        <div class="unit-desc">化粧品と部外品の定義・効能56項目・3年ルール・全成分表示［基礎26問＋国試10問］</div>
+      </div>
+      <div class="unit-arrow">▶</div>
+    </a>
+
+    <!-- ② 第2単元：水性原料・油性原料 -->
+    <a href="2Water&Oil_tutor.html" class="unit-card border-2">
+      <div class="unit-info-left">
+        <div class="unit-badge">第1編 第3章 2・3節</div>
+        <div class="unit-name">第2単元：水性原料・油性原料編</div>
+        <div class="unit-desc">精製水・エタノール・油脂の酸敗・ロウ・炭化水素スクワラン［基礎26問＋国試10問］</div>
+      </div>
+      <div class="unit-arrow">▶</div>
+    </a>
+
+    <!-- ③ 第3単元：界面活性剤・高分子化合物 -->
+    <a href="3surfactant.html" class="unit-card border-3">
+      <div class="unit-info-left">
+        <div class="unit-badge">第1編 第3章 4・5節</div>
+        <div class="unit-name">第3単元：界面活性剤・高分子化合物編</div>
+        <div class="unit-desc">石けん（陰）・第四級塩（陽）・レシチン（両性）・キトサン・PVP［基礎26問＋国試10問］</div>
+      </div>
+      <div class="unit-arrow">▶</div>
+    </a>
+
+    <!-- ④ 第4単元：色材・香料・配合原料・雑貨原料 -->
+    <a href="4hokanogenryou_tutor.html" class="unit-card border-4">
+      <div class="unit-info-left">
+        <div class="unit-badge">第1編 第3章 6〜10節</div>
+        <div class="unit-name">第4単元：色材・香料・配合原料・雑貨原料編</div>
+        <div class="unit-desc">顔料と染料・BHT・EDTA・UV-A/B・ネイル・まつエク［基礎28問＋国試20問］</div>
+      </div>
+      <div class="unit-arrow">▶</div>
+    </a>
+
+    <!-- ⑤ 第5単元：スキンケア・メイク・ヘアケア -->
+    <a href="5salonseihin_tutor.html" class="unit-card border-5">
+      <div class="unit-info-left">
+        <div class="unit-badge">第2編 第1・2章／第3章 1〜3節</div>
+        <div class="unit-name">第5単元：スキンケア・メイク・ヘアケア編</div>
+        <div class="unit-desc">クレンジング・クリーム油分・シャンプー・リンス・スタイリング［基礎28問＋国試10問］</div>
+      </div>
+      <div class="unit-arrow">▶</div>
+    </a>
+
+    <!-- ⑥ 第6単元：パーマ剤・縮毛矯正 -->
+    <a href="6parma_tutor.html" class="unit-card border-6">
+      <div class="unit-info-left">
+        <div class="unit-badge">第2編 第3章 4節</div>
+        <div class="unit-name">第6単元：パーマ剤・縮毛矯正の化学編</div>
+        <div class="unit-desc">還元剤（チオ/シス）・酸化剤・S-S結合・アイロン基準［基礎25問＋国試8問］</div>
+      </div>
+      <div class="unit-arrow">▶</div>
+    </a>
+
+    <!-- ⑦ 第7単元：ヘアカラー・スキャルプケア -->
+    <a href="7haircolor_tutor.html" class="unit-card border-7">
+      <div class="unit-info-left">
+        <div class="unit-badge">第2編 第3章 5・6節</div>
+        <div class="unit-name">第7単元：ヘアカラー・脱色・スキャルプケア編</div>
+        <div class="unit-desc">酸化染毛剤・酸性染料・脱染・パッチテスト・育毛剤［基礎28問＋国試10問］</div>
+      </div>
+      <div class="unit-arrow">▶</div>
+    </a>
+  </div>
+</div>
+
+<script>
+function openSubMenu() {
+  document.getElementById("main-menu-view").style.display = "none";
+  document.getElementById("sub-menu-view").style.display = "block";
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeSubMenu() {
+  document.getElementById("sub-menu-view").style.display = "none";
+  document.getElementById("main-menu-view").style.display = "flex";
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>

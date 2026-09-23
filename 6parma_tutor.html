@@ -1,0 +1,1209 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>香粧品化学 AI個別指導チューター - パーマ編</title>
+<style>
+  :root {
+    --primary: #1e40af;
+    --primary-light: #eff6ff;
+    --primary-hover: #1d4ed8;
+    --accent: #f59e0b;
+    --accent-bg: #fffbeb;
+    --success: #15803d;
+    --success-bg: #dcfce7;
+    --danger: #b91c1c;
+    --danger-bg: #fee2e2;
+    --text: #1f2937;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --border: #cbd5e1;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Meiryo", sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 8px 10px;
+    line-height: 1.5;
+  }
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* 上部ステータス（3点表示） */
+  .top-status-bar {
+    background: var(--card);
+    border-radius: 8px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .status-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .status-student {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #475569;
+  }
+  .status-field {
+    font-size: 0.8rem;
+    font-weight: bold;
+    background: #e0e7ff;
+    color: #3730a3;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .status-score {
+    font-size: 0.82rem;
+    font-weight: bold;
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 1px solid #bfdbfe;
+    white-space: nowrap;
+  }
+
+  /* メイン問題カード */
+  .card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    margin-bottom: 14px;
+  }
+  .q-progress {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #64748b;
+    margin-bottom: 4px;
+  }
+  h2 {
+    font-size: 1.12rem;
+    margin: 0 0 12px 0;
+    line-height: 1.35;
+    color: #0f172a;
+  }
+
+  /* 解説枠 */
+  .exp-box {
+    background: var(--accent-bg);
+    border-left: 4px solid var(--accent);
+    padding: 10px 12px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+    font-size: 0.92rem;
+  }
+  .exp-tag {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #b45309;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* 設問枠 */
+  .question-box {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    padding: 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+
+  /* 選択肢ボタン */
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .btn-choice {
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--text);
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s;
+    outline: none;
+    line-height: 1.4;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-choice:active { transform: scale(0.98); }
+  .btn-choice:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--primary-light);
+  }
+  .btn-choice:disabled { cursor: default; }
+
+  .btn-choice.correct-highlight {
+    background: var(--success-bg) !important;
+    border-color: var(--success) !important;
+    color: var(--success) !important;
+  }
+  .btn-choice.wrong-highlight {
+    background: var(--danger-bg) !important;
+    border-color: var(--danger) !important;
+    color: var(--danger) !important;
+  }
+
+  /* AIフィードバック */
+  .feedback-box {
+    display: none;
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    animation: fadeIn 0.25s ease;
+  }
+  .feedback-correct {
+    background: var(--success-bg);
+    border: 1px solid #86efac;
+    color: var(--success);
+  }
+  .feedback-wrong {
+    background: var(--danger-bg);
+    border: 1px solid #fca5a5;
+    color: var(--danger);
+  }
+  .feedback-header {
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+
+  /* 操作ボタン */
+  .nav-controls {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .btn-prev {
+    flex: 1;
+    padding: 12px;
+    background: #ffffff;
+    color: #475569;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .btn-prev:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .btn-next {
+    flex: 2;
+    padding: 12px;
+    background: var(--primary);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.98rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: none;
+  }
+  .btn-next:hover { background: var(--primary-hover); }
+
+  /* 下部メニュー */
+  .bottom-menu-box {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+  .bottom-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .bottom-title {
+    font-size: 0.78rem;
+    font-weight: bold;
+    color: #64748b;
+  }
+  .btn-reset {
+    font-size: 0.74rem;
+    color: #dc2626;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+  }
+  .spine-steps {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .spine-node {
+    flex: 1;
+    min-width: 58px;
+    text-align: center;
+    padding: 6px 2px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: bold;
+    color: #64748b;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .spine-node.active {
+    background: var(--primary);
+    color: #ffffff !important;
+    border-color: var(--primary);
+  }
+  .spine-node.cleared {
+    background: var(--success-bg);
+    color: var(--success);
+    border-color: #86efac;
+  }
+  .spine-node.exam-node {
+    background: #fef3c7;
+    border-color: #f59e0b;
+    color: #b45309;
+  }
+  .spine-node.exam-node.active {
+    background: #d97706 !important;
+    color: white !important;
+  }
+
+  /* 成績グラフ表示スタイル */
+  .result-card {
+    padding: 10px 4px;
+  }
+  .result-header {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .graph-container {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 12px;
+    margin: 16px 0;
+  }
+  .graph-title {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #334155;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .graph-item {
+    margin-bottom: 10px;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+  .graph-item:hover {
+    background: #e2e8f0;
+  }
+  .graph-label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 3px;
+  }
+  .graph-bar-bg {
+    background: #e2e8f0;
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .graph-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.6s ease;
+  }
+  .bar-high { background-color: #22c55e; }
+  .bar-mid  { background-color: #eab308; }
+  .bar-low  { background-color: #ef4444; }
+
+  .advice-box {
+    background: #eff6ff;
+    border-left: 4px solid var(--primary);
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 0.88rem;
+    margin-bottom: 16px;
+    text-align: left;
+  }
+
+  .btn-action {
+    width: 100%;
+    padding: 13px;
+    border-radius: 8px;
+    font-size: 0.98rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    margin-top: 8px;
+  }
+  .btn-retry { background: #d97706; color: white; }
+  .btn-restart { background: var(--primary); color: white; }
+  .btn-switch-exam { background: #0284c7; color: white; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 上部ステータス（3点表示） -->
+  <div class="top-status-bar">
+    <div class="status-left">
+      <span class="status-student">出席：12番</span>
+      <span class="status-field" id="status-field">基本原理</span>
+    </div>
+    <div class="status-score" id="status-score">正解率: 0% (0/50点)</div>
+  </div>
+
+  <!-- メイン問題カード -->
+  <div class="card" id="main-card">
+    <div class="q-progress" id="progress-text">問 1 / 25</div>
+    <h2 id="lesson-title">問題タイトル</h2>
+
+    <!-- 解説（国試4択モードでは非表示） -->
+    <div class="exp-box" id="exp-container">
+      <span class="exp-tag">💡 香粧品AI先生のポイント</span>
+      <div id="lesson-exp">解説</div>
+    </div>
+
+    <!-- 設問 -->
+    <div class="question-box" id="question-text">
+      設問
+    </div>
+
+    <!-- 選択肢 -->
+    <div class="btn-group" id="choices-container"></div>
+
+    <!-- フィードバック -->
+    <div class="feedback-box" id="feedback-area">
+      <div class="feedback-header">🧑‍🏫 AI先生の個別指導</div>
+      <div id="feedback-desc"></div>
+    </div>
+
+    <!-- 操作ボタン -->
+    <div class="nav-controls">
+      <button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button>
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button>
+    </div>
+  </div>
+
+  <!-- 下部：分野ジャンプメニュー -->
+  <div class="bottom-menu-box">
+    <div class="bottom-header">
+      <span class="bottom-title">🗺️ 分野・モード切替（タップで移動）</span>
+      <button class="btn-reset" onclick="confirmResetAll()">履歴リセット</button>
+    </div>
+    <div class="spine-steps">
+      <div class="spine-node" id="node-A" onclick="jumpToBlock('A')">基本原理</div>
+      <div class="spine-node" id="node-B" onclick="jumpToBlock('B')">毛髪結合</div>
+      <div class="spine-node" id="node-C" onclick="jumpToBlock('C')">第1剤</div>
+      <div class="spine-node" id="node-D" onclick="jumpToBlock('D')">アルカリ</div>
+      <div class="spine-node" id="node-E" onclick="jumpToBlock('E')">第2剤</div>
+      <div class="spine-node" id="node-F" onclick="jumpToBlock('F')">施術安全</div>
+      <div class="spine-node" id="node-G" onclick="jumpToBlock('G')">制度法規</div>
+      <div class="spine-node exam-node" id="node-EXAM" onclick="startExamMode()">🎯 国試4択</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const fieldNames = {
+  "A": "パーマの基本原理",
+  "B": "毛髪の4大結合",
+  "C": "第1剤（還元剤）",
+  "D": "アルカリ剤と膨潤",
+  "E": "第2剤（酸化剤）",
+  "F": "施術工程と安全管理",
+  "G": "制度・法規・自主基準",
+  "EXAM": "国試本番実戦演習（4択）"
+};
+
+// 基礎25問マスターデータ（正解位置をランダム均等に分散）
+const baseQuestions = [
+  // A. 基本原理
+  {
+    id: "Q01", block: "A", title: "酸化・還元の化学的定義",
+    exp: "香粧品化学では水素（H）が主役！ 水素を相手にあげるのが『還元』、相手から水素を奪うのが『酸化』です。",
+    q: "化学反応において、反応する相手に「水素（H）を与える」物質はどっち？",
+    choices: ["酸化剤", "還元剤"], answer: 1,
+    hintCorrect: "大正解！+2pt！ 水素を渡すから還元剤。パーマは毛髪に水素をあげる反応だよ！",
+    hintWrong: "中学校の酸素の記憶と混ざったかな？ 香粧品では『水素をプレゼントする側＝還元剤』だよ。"
+  },
+  {
+    id: "Q02", block: "A", title: "パーマの背骨サイクル",
+    exp: "パーマは【1剤で切る】➔【ロッドでずらす】➔【2剤でつなぐ】という背骨で固定されます。",
+    q: "カーリングロッドに巻かれて「ずれた状態」の毛髪に作用させ、切れていたシスチン結合をつなぎ直してウェーブを固定するのはどっち？",
+    choices: ["第1剤", "第2剤"], answer: 1,
+    hintCorrect: "その通り！+2pt！ 1剤で切って、2剤で固定する。この背骨リズムを忘れずに！",
+    hintWrong: "1剤はハサミ役（還元切断）だよ。ずらした状態をカチッと固める接着剤は『第2剤』だね。"
+  },
+  {
+    id: "Q03", block: "A", title: "物理的変形の必要性",
+    exp: "パーマは化学反応だけでは完成しません。ロッドに巻いてケラチンの架橋構造をずらす『物理的作用』が不可欠です。",
+    q: "「パーマは薬剤の化学反応だけで形成されるため、ロッドに巻くなどの物理的変形を加える必要はない。」この記述は正しい？",
+    choices: ["誤り（×）", "正しい（○）"], answer: 0,
+    hintCorrect: "見事！+2pt！ 薬の力（化学）＋ロッドの巻き（物理）の両輪でウェーブが生まれるんだ！",
+    hintWrong: "薬を塗るだけでは髪の形は変わらないよね。ロッドで物理的にずらす作業が絶対必要だよ。"
+  },
+
+  // B. 毛髪結合
+  {
+    id: "Q04", block: "B", title: "毛髪の主鎖（骨格）",
+    exp: "ポリペプチド鎖を結ぶ『ペプチド結合』は髪の縦の柱（命綱）。パーマ剤で絶対に切断してはいけません。",
+    q: "毛髪の骨格そのものであり、通常のパーマ施術で切断してはならない主鎖の結合はどっち？",
+    choices: ["ペプチド結合", "シスチン結合"], answer: 0,
+    hintCorrect: "完璧！+2pt！ 主鎖のペプチド結合が切れると髪がちぎれて（断毛）しまうからね！",
+    hintWrong: "あぶない！ シスチン結合はパーマで切る側鎖だよ。切っちゃダメな命綱は『ペプチド結合』だね。"
+  },
+  {
+    id: "Q05", block: "B", title: "水素結合と寝ぐせ",
+    exp: "水素結合は水や湿気で簡単に切れ、乾燥すると再結合します。朝の寝ぐせやブローの原理です。",
+    q: "朝起きたときについている「寝ぐせ」は、水分や寝汗によってどの結合がいったん切れて曲がった状態で乾いたため？",
+    choices: ["シスチン結合", "水素結合"], answer: 1,
+    hintCorrect: "大正解！+2pt！ 水で切れて乾くと固定される。だからシャワーで濡らすと寝ぐせが直るんだね！",
+    hintWrong: "シスチン結合は水や汗くらいでは切れない頑丈なボルトだよ。水で切れちゃうのは『水素結合』だね。"
+  },
+  {
+    id: "Q06", block: "B", title: "イオン結合とアルカリ",
+    exp: "イオン結合（塩結合）はアルカリによって切断され、キューティクルを開いて毛髪を膨潤・軟化させます。",
+    q: "パーマ剤に含まれる「アルカリ剤」の作用によって切断され、毛髪を膨潤・軟化させる結合はどっち？",
+    choices: ["イオン結合", "水素結合"], answer: 0,
+    hintCorrect: "その通り！+2pt！ アルカリでイオン結合が緩むから、還元剤が髪の奥まで入れるんだ！",
+    hintWrong: "水で切れるのが水素結合、アルカリで切れて毛髪をふやかすのが『イオン結合』だよ。"
+  },
+  {
+    id: "Q07", block: "B", title: "シスチン結合（架橋構造）",
+    exp: "毛髪ケラチン特有の強固な架橋構造がシスチン結合（-S-S-）。還元剤の化学反応でのみ切断できます。",
+    q: "毛髪の強い耐薬性と弾力を生み出し、パーマ第1剤の還元剤によって切断される結合はどっち？",
+    choices: ["ペプチド結合", "シスチン結合"], answer: 1,
+    hintCorrect: "素晴らしい！+2pt！ この強固なS-S結合を切ってつなぎ直すのがパーマの醍醐味だね！",
+    hintWrong: "ペプチド結合は切断厳禁の主鎖！ パーマのターゲットは側鎖の『シスチン結合』だよ。"
+  },
+
+  // C. 第1剤還元
+  {
+    id: "Q08", block: "C", title: "第1剤の有効成分の役割【国試最頻出】",
+    exp: "パーマ剤の第1剤の役割は、毛髪に水素を与えてシスチン結合を切断する『還元剤』です。",
+    q: "パーマ剤の「第1剤」に配合される有効成分の役割として正しいものはどっち？",
+    choices: ["還元剤", "酸化剤"], answer: 0,
+    hintCorrect: "バッチリ！+2pt！ 国試直球！ 『1剤＝還元剤』は絶対に落とせない超重要ルール！",
+    hintWrong: "ここは国試の最頻出ポイント！ 1剤は切断する『還元剤』、2剤がつなぐ『酸化剤』だよ。"
+  },
+  {
+    id: "Q09", block: "C", title: "第1剤の代表成分名【国試最頻出】",
+    exp: "第1剤の還元剤として代表的な成分は『チオグリコール酸』と『システイン』です。",
+    q: "パーマ剤の第1剤に含まれ、シスチン結合を切断する「還元剤」はどっち？",
+    choices: ["臭素酸ナトリウム", "チオグリコール酸"], answer: 1,
+    hintCorrect: "正解！+2pt！ チオグリコール酸は1剤の還元剤。臭素酸ナトリウムは2剤の酸化剤だね！",
+    hintWrong: "臭素酸ナトリウムは第2剤の酸化剤だよ。1剤の代表選手は『チオグリコール酸』だね。"
+  },
+  {
+    id: "Q10", block: "C", title: "システインの分類【国試最頻出】",
+    exp: "システインはチオール基（-SH）を持つアミノ酸で、第1剤の還元剤として働きます。",
+    q: "「システイン」は、パーマ剤においてどちらの成分として配合される？",
+    choices: ["第1剤の還元剤", "第2剤の酸化剤"], answer: 0,
+    hintCorrect: "見事！+2pt！ システインもチオール基を持つ立派な第1剤の還元剤だよ！",
+    hintWrong: "システインは第1剤の還元剤だよ。2剤（酸化剤）ではないから注意しよう！"
+  },
+  {
+    id: "Q11", block: "C", title: "チオ vs シスのウェーブ力比較",
+    exp: "同一条件で比較した場合、ウェーブ形成力はチオグリコール酸のほうが強く、システインはおだやかで損傷毛向きです。",
+    q: "同一濃度・同一pHで比較した場合、還元力がより強く、しっかりとしたウェーブを作れる還元剤はどっち？",
+    choices: ["システイン", "チオグリコール酸"], answer: 1,
+    hintCorrect: "その通り！+2pt！ チオは健康毛向けパワー派、シスはおだやかトリートメント系だね！",
+    hintWrong: "名前に『シス』が付くけれど、しっかりかかるパワー派は『チオグリコール酸』だよ。"
+  },
+  {
+    id: "Q12", block: "C", title: "金属イオン封鎖剤の役割",
+    exp: "還元剤は鉄や銅などの金属イオンに触れると効果（効き目）を失ってしまいます。そのためキレート剤を配合し、金属製ロッドは使いません。",
+    q: "第1剤の還元剤が金属イオンと反応して効果（効き目）を失ってしまうのを防ぐために配合される成分はどっち？",
+    choices: ["金属イオン封鎖剤（キレート剤）", "調色剤（カップラー）"], answer: 0,
+    hintCorrect: "大正解！+2pt！ 金属イオンを捕まえて還元剤を守るのがキレート剤の役目だよ！",
+    hintWrong: "調色剤はヘアカラーの成分だね。金属から還元剤を守るのは『金属イオン封鎖剤』だよ。"
+  },
+
+  // D. アルカリ
+  {
+    id: "Q13", block: "D", title: "pHと毛髪の膨潤度",
+    exp: "第1剤のアルカリ性が強くなる（pHが高くなる）ほど、毛髪は大きく膨潤して還元剤が浸透しやすくなります。",
+    q: "第1剤のpHが高くなると、毛髪の膨潤度（ふくらみ・軟化）はどうなる？",
+    choices: ["小さくなる", "大きくなる"], answer: 1,
+    hintCorrect: "正解！+2pt！ 高pH＝大きく膨潤。ただし開きすぎると髪が傷むからバランスが大切！",
+    hintWrong: "アルカリが強い（高pH）ほど、髪はスポンジのように『大きく』膨らむよ。"
+  },
+  {
+    id: "Q14", block: "D", title: "アンモニア水の特徴【第44回国試】",
+    exp: "アンモニア水は揮発性があるため、放置時間中に空気中に蒸発して作用が徐々に弱まる特徴があります。",
+    q: "施術中の放置時間中に空気中へ蒸発（揮発）していき、アルカリ作用が自然に弱まる成分はどっち？",
+    choices: ["アンモニア水", "モノエタノールアミン"], answer: 0,
+    hintCorrect: "完璧！+2pt！ アンモニアはツンと臭うけれど、勝手に飛んで過剰作用を防いでくれるよ！",
+    hintWrong: "モノエタノールアミンは蒸発しないよ。空気中に逃げて作用が弱まるのは『アンモニア水』だね。"
+  },
+  {
+    id: "Q15", block: "D", title: "モノエタノールアミンの特徴【第44回国試】",
+    exp: "モノエタノールアミンは不揮発性で無臭ですが、蒸発せず毛髪や皮膚に残りやすいため手荒れや過剰軟化に注意が必要です。",
+    q: "刺激臭はないが、揮発性がないため作用が持続し、手荒れに特に注意が必要なアルカリ剤はどっち？",
+    choices: ["アンモニア水", "モノエタノールアミン"], answer: 1,
+    hintCorrect: "その通り！+2pt！ 『無臭＝優しい』と油断大敵！ モノエタは残留しやすいんだ！",
+    hintWrong: "臭いが少なくても蒸発せず髪や手に残り続けるのは『モノエタノールアミン』だよ。"
+  },
+
+  // E. 第2剤酸化
+  {
+    id: "Q16", block: "E", title: "第2剤の有効成分の役割【国試最頻出】",
+    exp: "パーマ剤の第2剤の役割は、毛髪から水素を奪ってシスチン結合を再結合させる『酸化剤』です。",
+    q: "パーマ剤の「第2剤」に配合される有効成分の役割として正しいものはどっち？",
+    choices: ["還元剤", "酸化剤"], answer: 1,
+    hintCorrect: "大正解！+2pt！ 国試直球！ 『2剤＝酸化剤』も絶対に迷ってはいけない超基本！",
+    hintWrong: "1剤が還元剤、2剤が『酸化剤』だよ！ 役割が逆にならないようにしっかり叩き込もう。"
+  },
+  {
+    id: "Q17", block: "E", title: "臭素酸ナトリウムの分類【国試最頻出】",
+    exp: "臭素酸ナトリウムは水溶性が高く、パーマ液状第2剤の酸化剤として広く用いられています。",
+    q: "パーマ剤の第2剤に含まれ、ウェーブを固定する「酸化剤」はどっち？",
+    choices: ["臭素酸ナトリウム", "チオグリコール酸"], answer: 0,
+    hintCorrect: "正解！+2pt！ 臭素酸ナトリウム（ブロム酸塩）は第2剤の代表的な酸化剤だね！",
+    hintWrong: "チオグリコール酸は1剤の還元剤だよ。2剤の酸化剤は『臭素酸ナトリウム』だね。"
+  },
+  {
+    id: "Q18", block: "E", title: "過酸化水素水の分類【国試最頻出】",
+    exp: "過酸化水素水はヘアカラー第2剤だけでなく、パーマ第2剤の酸化剤としても使用されます。",
+    q: "ヘアカラーの2剤だけでなく、パーマ第2剤の酸化剤としても使われる成分はどっち？",
+    choices: ["モノエタノールアミン", "過酸化水素水"], answer: 1,
+    hintCorrect: "バッチリ！+2pt！ 過酸化水素水はパーマでもカラーでも『2剤の酸化剤』だよ！",
+    hintWrong: "モノエタノールアミンは1剤のアルカリ剤！ 2剤の酸化剤は『過酸化水素水』だね。"
+  },
+  {
+    id: "Q19", block: "E", title: "酸化剤の強弱比較【第43回国試ひっかけ】",
+    exp: "酸化作用の強さは『過酸化水素水 ＞ 臭素酸ナトリウム』です。過酸化水素水はスピーディーに反応します。",
+    q: "パーマ第2剤に用いられる酸化剤のうち、酸化作用がより強く、放置時間が短くてすむのはどっち？",
+    choices: ["過酸化水素水", "臭素酸ナトリウム"], answer: 0,
+    hintCorrect: "見事！+2pt！ 国試のひっかけクリア！ 過酸化水素水のほうが酸化力が強いんだ！",
+    hintWrong: "過去問の頻出ひっかけ！ 臭素酸塩はおだやか、強力でスピーディーなのは『過酸化水素水』だよ。"
+  },
+  {
+    id: "Q20", block: "E", title: "過酸化水素水のリスクと中間水洗",
+    exp: "過酸化水素水はアルカリが残っていると急激に分解し、メラニン脱色や毛髪損傷を起こすため、中間水洗が必須です。",
+    q: "第1剤のアルカリ剤が残存していると、急激に分解してメラニン脱色や毛髪損傷を起こしやすい酸化剤はどっち？",
+    choices: ["臭素酸ナトリウム", "過酸化水素水"], answer: 1,
+    hintCorrect: "その通り！+2pt！ だから過酸化水素水を使う前はお湯でしっかり洗う中間水洗が絶対に必要なんだ！",
+    hintWrong: "アルカリで大暴走して髪の色を抜いてしまうのは『過酸化水素水』だよ。"
+  },
+  {
+    id: "Q21", block: "E", title: "第2剤の混合禁止",
+    exp: "臭素酸塩を含む第2剤と、過酸化水素水を含む第2剤を混ぜると、化学反応で有毒ガスが発生するため混合厳禁です。",
+    q: "「臭素酸塩を有効成分とする第2剤と、過酸化水素水を含む第2剤は、自由に混ぜて使用できる。」この記述は正しい？",
+    choices: ["正しい（○）", "誤り（×）"], answer: 1,
+    hintCorrect: "完璧！+2pt！ 混ぜると有毒ガスが出て危険！ 現場でも絶対に混ぜてはいけないよ！",
+    hintWrong: "絶対にダメ！ 2種類の酸化剤を混ぜると有毒ガスが発生する重大事故になるよ。"
+  },
+
+  // F. 施術安全
+  {
+    id: "Q22", block: "F", title: "アイロンの上限温度基準【最頻出数値】",
+    exp: "縮毛矯正の高温アイロンは『180℃以下（1カ所約2秒間）』、加温式パーマは『60℃以下』が厳守ルールです。",
+    q: "縮毛矯正で用いる高温整髪用アイロンの管理基準として定められている上限温度はどっち？",
+    choices: ["180℃以下", "220℃以下"], answer: 0,
+    hintCorrect: "正解！+2pt！ アイロンは180℃以下・1カ所2秒！ お客様の髪を熱変性から守ろう！",
+    hintWrong: "220℃は髪が炭化してボロボロになっちゃうよ！ 正しい上限は『180℃以下』だね。"
+  },
+  {
+    id: "Q23", block: "F", title: "コールド式パーマの扱い",
+    exp: "コールド式パーマ剤は室温（1〜30℃）で使用する前提で承認されているため、ドライヤー等での加温は禁止です。",
+    q: "「コールド式として承認されているパーマ剤は、施術時間を早めるために遠赤外線などで加温してよい。」この記述は正しい？",
+    choices: ["誤り（×）", "正しい（○）"], answer: 0,
+    hintCorrect: "その通り！+2pt！ コールド式は加温厳禁！ 加温できるのは加温式（60℃以下）だけだよ！",
+    hintWrong: "コールド式の薬剤を無理やり加温するのは禁止行為だよ。薬の承認通りの温度を守ろう。"
+  },
+
+  // G. 制度法規
+  {
+    id: "Q24", block: "G", title: "まつ毛パーマの全面禁止【厚労省通知】",
+    exp: "失明事故を防ぐため、厚生労働省の通知により、医薬部外品・化粧品を問わずまつ毛へのパーマ・カーリングは全面禁止です。",
+    q: "「まつ毛パーマ」について、厚生労働省通知における法的な取り扱いはどっち？",
+    choices: ["化粧品登録品なら可能", "化粧品も含め全面禁止"], answer: 1,
+    hintCorrect: "大正解！+2pt！ お客様の目を守る絶対ルール！ どんな製品でもまつ毛は全面禁止だよ！",
+    hintWrong: "『化粧品だから安全』は通用しないよ！ 目に入ると失明の危険があるため全面禁止なんだ。"
+  },
+  {
+    id: "Q25", block: "G", title: "化粧品第2剤の配合制限",
+    exp: "化粧品基準において過酸化水素の配合は認められていないため、化粧品カーリング料の第2剤には臭素酸塩が使われます。",
+    q: "「化粧品として分類されるカーリング料の第2剤には、過酸化水素水を配合することが認められている。」この記述は正しい？",
+    choices: ["誤り（×）", "正しい（○）"], answer: 0,
+    hintCorrect: "素晴らしい！+2pt！ 全25問完全制覇！ 化粧品2剤に過酸化水素は配合禁止（臭素酸Na使用）だね！",
+    hintWrong: "化粧品基準では過酸化水素は使えないよ。だから化粧品カーリング料の2剤は臭素酸塩なんだ。"
+  }
+];
+
+// 【国試対策・本番4択問題 厳選8問】
+const examQuestions = [
+  {
+    id: "PM-EX-01", block: "EXAM", title: "第１問：パーマの基本作用機構",
+    q: "パーマネントウェーブ用剤の作用機構に関する次の記述のうち、正しいものはどれか。",
+    choices: [
+      "（1）第１剤は毛髪から水素を奪い、シスチン結合を切断する。",
+      "（2）第１剤の還元作用により、毛髪のシスチン結合が切断される。",
+      "（3）第２剤は毛髪に水素を与え、シスチン結合を再結合させる。",
+      "（4）第２剤による酸化作用は、ロッドに巻く前に行わなければならない。"
+    ],
+    answer: 1,
+    hintCorrect: "正解！+3pt！ 第１剤は還元剤であり、毛髪に水素を与えてシスチン結合を切断します！",
+    hintWrong: "正しいのは「（2）」です。1剤は還元（水素を与える）、2剤は酸化（水素を奪って固定）です。"
+  },
+  {
+    id: "PM-EX-02", block: "EXAM", title: "第２問：毛髪の化学結合とパーマ",
+    q: "毛髪の化学結合とパーマに関する次の記述のうち、誤っているものはどれか。",
+    choices: [
+      "（1）毛髪の主鎖であるペプチド結合は、パーマの第１剤によって切断される。",
+      "（2）シスチン結合は、毛髪ケラチンの側鎖間に形成された共有結合である。",
+      "（3）水素結合は水によって容易に切断され、乾燥によって再結合する。",
+      "（4）イオン結合（塩結合）は、アルカリ剤の作用によって切断される。"
+    ],
+    answer: 0,
+    hintCorrect: "正解！+3pt！ ペプチド結合は毛髪の骨格（主鎖）であり、パーマ剤で切断してはなりません！",
+    hintWrong: "誤りは「（1）」です。パーマで切断するのは側鎖のシスチン結合であり、主鎖のペプチド結合を切ると断毛します。"
+  },
+  {
+    id: "PM-EX-03", block: "EXAM", title: "第３問：第１剤の有効成分",
+    q: "コールド式パーマネントウェーブ用剤の第１剤に含まれる成分とそのはたらきに関する次の記述のうち、正しいものはどれか。",
+    choices: [
+      "（1）臭素酸ナトリウムは、シスチン結合を切断する還元剤である。",
+      "（2）過酸化水素水は、毛髪を膨潤させるアルカリ剤である。",
+      "（3）チオグリコール酸は、シスチン結合を切断する還元剤である。",
+      "（4）システインは、毛髪を酸化してウェーブを固定する酸化剤である。"
+    ],
+    answer: 2,
+    hintCorrect: "正解！+3pt！ チオグリコール酸やシステインは、第１剤の有効成分である還元剤です！",
+    hintWrong: "正しいのは「（3）」です。チオグリコール酸とシステインは第１剤の還元剤です。"
+  },
+  {
+    id: "PM-EX-04", block: "EXAM", title: "第４問：アルカリ剤の性質【第44回国試】",
+    q: "パーマネントウェーブ用剤第１剤に含まれるアルカリ剤に関する次の記述のうち、誤っているものはどれか。",
+    choices: [
+      "（1）アルカリ剤は、毛髪を膨潤させて有効成分の浸透を助ける。",
+      "（2）アンモニア水は揮発性があるため、放置時間中に空気中に蒸発して作用が弱まる。",
+      "（3）モノエタノールアミンは不揮発性であり、アンモニア水に比べて毛髪や皮膚に残りやすい。",
+      "（4）アンモニア水は刺激臭がないため、手荒れを起こす心配が全くない。"
+    ],
+    answer: 3,
+    hintCorrect: "正解！+3pt！ アンモニア水には強いツンとした刺激臭があります！",
+    hintWrong: "誤りは「（4）」です。刺激臭がないのはモノエタノールアミンです。アンモニア水には特有の強い刺激臭があります。"
+  },
+  {
+    id: "PM-EX-05", block: "EXAM", title: "第５問：第２剤の酸化剤と取扱い",
+    q: "パーマネントウェーブ用剤の第２剤に関する次の記述のうち、正しいものはどれか。",
+    choices: [
+      "（1）第２剤の主な有効成分には、臭素酸塩や過酸化水素水がある。",
+      "（2）酸化作用の強さは、臭素酸ナトリウムのほうが過酸化水素水よりも強い。",
+      "（3）第２剤の放置時間は、過酸化水素水を用いる場合のほうが臭素酸ナトリウムより長くする。",
+      "（4）臭素酸塩を含む第２剤と、過酸化水素を含む第２剤は、自由に混ぜて使用してよい。"
+    ],
+    answer: 0,
+    hintCorrect: "正解！+3pt！ 第２剤の代表的な酸化剤は臭素酸塩（臭素酸Na等）と過酸化水素水です！",
+    hintWrong: "正しいのは「（1）」です。過酸化水素のほうが酸化力が強く短時間ですみます。また2剤同士の混合は有毒ガス発生の危険があるため禁止です。"
+  },
+  {
+    id: "PM-EX-06", block: "EXAM", title: "第６問：施術工程と安全管理基準",
+    q: "パーマや縮毛矯正の施術工程および温度管理に関する次の記述のうち、誤っているものはどれか。",
+    choices: [
+      "（1）縮毛矯正で用いる高温整髪用アイロンの上限温度基準は、180℃以下である。",
+      "（2）加温式パーマネントウェーブ用剤を加温する場合の上限温度は、60℃以下である。",
+      "（3）コールド式パーマネントウェーブ用剤は、作用を促進するため遠赤外線等で加温してよい。",
+      "（4）第２剤に過酸化水素を用いる場合、アルカリによるメラニン脱色を防ぐため中間水洗が重要である。"
+    ],
+    answer: 2,
+    hintCorrect: "正解！+3pt！ コールド式は室温で使用する薬剤のため、加温は禁止されています！",
+    hintWrong: "誤りは「（3）」です。コールド式として承認された薬剤を器具等で加温することは禁止されています。"
+  },
+  {
+    id: "PM-EX-07", block: "EXAM", title: "第７問：成分と配合目的【第48回国試】",
+    q: "パーマ剤やヘアカラーの成分とその配合目的に関する次の組合せのうち、正しいものはどれか。",
+    choices: [
+      "（1）アンモニア水 ──────── 調色剤（カップラー）",
+      "（2）過酸化水素 ───────── 還元剤",
+      "（3）レゾルシン ───────── アルカリ剤",
+      "（4）チオグリコール酸 ───── 還元剤"
+    ],
+    answer: 3,
+    hintCorrect: "正解！+3pt！ 第48回国試的中！ チオグリコール酸は第１剤の還元剤です！",
+    hintWrong: "正しいのは「（4）」です。アンモニア＝アルカリ剤、過酸化水素＝酸化剤、レゾルシン＝調色剤です。"
+  },
+  {
+    id: "PM-EX-08", block: "EXAM", title: "第８問：制度・法規・自主基準",
+    q: "パーマ剤やカーリング料に関する法令・基準に関する次の記述のうち、正しいものはどれか。",
+    choices: [
+      "（1）まつ毛パーマは、化粧品として登録されたカーリング料を用いれば施術してよい。",
+      "（2）厚生労働省の通知により、医薬部外品・化粧品を問わずまつ毛へのパーマ施術は全面禁止されている。",
+      "（3）化粧品カーリング料の第２剤には、有効成分として過酸化水素水を配合することができる。",
+      "（4）パーマの施術直後に、同じ日に医薬部外品のヘアカラー（酸化染毛剤）を行ってもよい。"
+    ],
+    answer: 1,
+    hintCorrect: "正解！+3pt！ 失明事故を防ぐため、どんな製品であってもまつ毛へのパーマ・カールは全面禁止です！",
+    hintWrong: "正しいのは「（2）」です。まつ毛パーマは全面禁止、化粧品2剤に過酸化水素は不可、カラーとの間隔は前後1週間です。"
+  }
+];
+
+// 状態管理
+const STORAGE_KEY = "perm_tutor_save_data_v7";
+let state = {
+  mode: "BASE", // "BASE" または "EXAM"
+  currentQuestionIndex: 0,
+  answers: {},
+  wrongQuestionIds: [],
+  isRetryMode: false,
+  isFinished: false
+};
+
+function getActiveQuestions() {
+  if (state.mode === "EXAM") {
+    return examQuestions;
+  }
+  return baseQuestions;
+}
+
+function getBlockStartIndex(blockCode) {
+  const qs = getActiveQuestions();
+  return qs.findIndex(q => q.block === blockCode);
+}
+
+function loadProgress() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      state = JSON.parse(saved);
+    } catch(e) {
+      console.error(e);
+    }
+  }
+}
+
+function saveProgress() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+// 得点と正解率の計算
+function calculateScore(mode) {
+  const qs = (mode === "EXAM") ? examQuestions : baseQuestions;
+  const pointPerQ = (mode === "EXAM") ? 3 : 2;
+  const maxPoints = qs.length * pointPerQ;
+  const correctCount = qs.filter(q => state.answers[q.id] === true).length;
+  const currentPoints = correctCount * pointPerQ;
+  const rate = Math.round((correctCount / qs.length) * 100) || 0;
+  return { correctCount, currentPoints, maxPoints, rate, total: qs.length };
+}
+
+function updateSpineMap() {
+  const blocks = ["A", "B", "C", "D", "E", "F", "G"];
+  const currentQ = getCurrentQuestion();
+  const currentBlock = currentQ ? currentQ.block : null;
+
+  blocks.forEach(b => {
+    const node = document.getElementById(`node-${b}`);
+    if (!node) return;
+    node.className = "spine-node";
+
+    const blockQuestions = baseQuestions.filter(q => q.block === b);
+    const isAllCorrect = blockQuestions.every(q => state.answers[q.id] === true);
+
+    if (isAllCorrect) node.classList.add("cleared");
+    if (b === currentBlock && state.mode === "BASE" && !state.isFinished) node.classList.add("active");
+  });
+
+  const examNode = document.getElementById("node-EXAM");
+  if (state.mode === "EXAM" && !state.isFinished) {
+    examNode.classList.add("active");
+  } else {
+    examNode.classList.remove("active");
+  }
+}
+
+function getCurrentQuestion() {
+  const qs = getActiveQuestions();
+  if (state.isRetryMode) {
+    const id = state.wrongQuestionIds[state.currentQuestionIndex];
+    return qs.find(q => q.id === id);
+  }
+  return qs[state.currentQuestionIndex];
+}
+
+function renderQuestion() {
+  state.isFinished = false;
+  const item = getCurrentQuestion();
+  if (!item) {
+    showResultScreen();
+    return;
+  }
+
+  updateSpineMap();
+
+  const scoreData = calculateScore(state.mode);
+  const expBox = document.getElementById("exp-container");
+
+  if (state.mode === "EXAM") {
+    expBox.style.display = "none";
+    document.getElementById("status-field").innerText = "🎯 国試本番4択演習";
+    if (state.isRetryMode) {
+      document.getElementById("progress-text").innerText = `🔥 弱点集中特訓：${state.currentQuestionIndex + 1} / ${state.wrongQuestionIds.length}`;
+    } else {
+      document.getElementById("progress-text").innerText = `国試問 ${state.currentQuestionIndex + 1} / ${examQuestions.length}`;
+    }
+  } else {
+    expBox.style.display = "block";
+    document.getElementById("status-field").innerText = fieldNames[item.block] || "パーマの化学";
+    document.getElementById("lesson-exp").innerText = item.exp;
+    if (state.isRetryMode) {
+      document.getElementById("progress-text").innerText = `🔥 弱点集中特訓：${state.currentQuestionIndex + 1} / ${state.wrongQuestionIds.length}`;
+    } else {
+      document.getElementById("progress-text").innerText = `問 ${state.currentQuestionIndex + 1} / ${baseQuestions.length}`;
+    }
+  }
+
+  document.getElementById("status-score").innerText = `正解率: ${scoreData.rate}% (${scoreData.currentPoints}/${scoreData.maxPoints}点)`;
+  document.getElementById("lesson-title").innerText = item.title;
+  document.getElementById("question-text").innerText = item.q;
+
+  const container = document.getElementById("choices-container");
+  container.innerHTML = "";
+  item.choices.forEach((choice, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "btn-choice";
+    btn.innerText = choice;
+    btn.onclick = () => selectAnswer(idx);
+    container.appendChild(btn);
+  });
+
+  document.getElementById("btn-prev").disabled = (state.currentQuestionIndex === 0);
+  document.getElementById("feedback-area").style.display = "none";
+  document.getElementById("btn-next").style.display = "none";
+}
+
+function selectAnswer(selectedIndex) {
+  const item = getCurrentQuestion();
+  const feedback = document.getElementById("feedback-area");
+  const feedbackDesc = document.getElementById("feedback-desc");
+  const buttons = document.querySelectorAll(".btn-choice");
+
+  buttons.forEach(b => b.disabled = true);
+
+  const isCorrect = (selectedIndex === item.answer);
+
+  if (isCorrect) {
+    buttons[selectedIndex].classList.add("correct-highlight");
+    feedback.className = "feedback-box feedback-correct";
+    feedbackDesc.innerText = item.hintCorrect;
+    state.answers[item.id] = true;
+
+    if (state.isRetryMode) {
+      state.wrongQuestionIds = state.wrongQuestionIds.filter(id => id !== item.id);
+    }
+  } else {
+    buttons[selectedIndex].classList.add("wrong-highlight");
+    buttons[item.answer].classList.add("correct-highlight");
+    feedback.className = "feedback-box feedback-wrong";
+    feedbackDesc.innerText = item.hintWrong;
+    state.answers[item.id] = false;
+
+    if (!state.wrongQuestionIds.includes(item.id)) {
+      state.wrongQuestionIds.push(item.id);
+    }
+  }
+
+  saveProgress();
+  const scoreData = calculateScore(state.mode);
+  document.getElementById("status-score").innerText = `正解率: ${scoreData.rate}% (${scoreData.currentPoints}/${scoreData.maxPoints}点)`;
+  feedback.style.display = "block";
+  document.getElementById("btn-next").style.display = "block";
+  updateSpineMap();
+}
+
+function nextQuestion() {
+  const qs = getActiveQuestions();
+  const total = state.isRetryMode ? state.wrongQuestionIds.length : qs.length;
+  if (state.currentQuestionIndex < total - 1) {
+    state.currentQuestionIndex++;
+    saveProgress();
+    renderQuestion();
+  } else {
+    showResultScreen();
+  }
+}
+
+function prevQuestion() {
+  if (state.currentQuestionIndex > 0) {
+    state.currentQuestionIndex--;
+    saveProgress();
+    renderQuestion();
+  }
+}
+
+function jumpToBlock(blockCode) {
+  if (state.mode === "EXAM") {
+    state.mode = "BASE";
+    state.isRetryMode = false;
+  } else if (state.isRetryMode) {
+    if (!confirm("弱点リトライを中断して通常問題へ戻りますか？")) return;
+    state.isRetryMode = false;
+  }
+  const targetIndex = getBlockStartIndex(blockCode);
+  if (targetIndex !== -1) {
+    restoreCardStructure();
+    state.currentQuestionIndex = targetIndex;
+    saveProgress();
+    renderQuestion();
+  }
+}
+
+function startExamMode() {
+  if (state.isRetryMode) {
+    if (!confirm("弱点リトライを終了して国試4択演習へ移動しますか？")) return;
+    state.isRetryMode = false;
+  }
+  state.mode = "EXAM";
+  state.currentQuestionIndex = 0;
+  saveProgress();
+  restoreCardStructure();
+  renderQuestion();
+}
+
+function startBaseMode() {
+  state.mode = "BASE";
+  state.currentQuestionIndex = 0;
+  state.isRetryMode = false;
+  saveProgress();
+  restoreCardStructure();
+  renderQuestion();
+}
+
+function generateStatsHtml() {
+  const blocks = ["A", "B", "C", "D", "E", "F", "G"];
+  let lowestRate = 101;
+  let lowestBlock = "";
+  let graphHtml = "";
+
+  blocks.forEach(b => {
+    const questions = baseQuestions.filter(q => q.block === b);
+    const total = questions.length;
+    const correctCount = questions.filter(q => state.answers[q.id] === true).length;
+    const rate = Math.round((correctCount / total) * 100);
+
+    if (rate < lowestRate) {
+      lowestRate = rate;
+      lowestBlock = fieldNames[b];
+    }
+
+    let barClass = "bar-high";
+    if (rate < 50) {
+      barClass = "bar-low";
+    } else if (rate < 80) {
+      barClass = "bar-mid";
+    }
+
+    graphHtml += `
+      <div class="graph-item" onclick="jumpToBlock('${b}')" title="クリックしてこの分野を復習">
+        <div class="graph-label-row">
+          <span>${fieldNames[b]}</span>
+          <span>${correctCount}/${total}問 (${rate}%)</span>
+        </div>
+        <div class="graph-bar-bg">
+          <div class="graph-bar-fill ${barClass}" style="width: ${rate}%;"></div>
+        </div>
+      </div>
+    `;
+  });
+
+  return { graphHtml, lowestBlock, lowestRate };
+}
+
+function showResultScreen() {
+  state.isFinished = true;
+  saveProgress();
+  updateSpineMap();
+
+  const scoreData = calculateScore(state.mode);
+  const currentWrongCount = scoreData.total - scoreData.correctCount;
+  const isPerfect = (currentWrongCount === 0);
+
+  let resultHtml = "";
+
+  if (state.mode === "EXAM") {
+    resultHtml = `
+      <div class="result-card">
+        <div class="result-header">
+          <h2 style="color:${isPerfect ? 'var(--success)' : '#d97706'}; font-size:1.3rem; margin-bottom:6px;">
+            ${isPerfect ? '🎉 パーマ国試本番レベル満点達成！' : '🏁 国試4択実戦演習が終了しました！'}
+          </h2>
+          <div style="background:var(--primary-light); color:var(--primary); font-size:1.1rem; font-weight:bold; padding:10px 20px; border-radius:16px; display:inline-block; margin:8px 0; border:1px solid #bfdbfe;">
+            正解率: ${scoreData.rate}% （獲得 ${scoreData.currentPoints}点 / 満点 ${scoreData.maxPoints}点）
+          </div>
+          <div style="font-size:0.85rem; color:#64748b;">
+            正解数: ${scoreData.correctCount} / ${scoreData.total} 問
+          </div>
+        </div>
+        <div class="advice-box">
+          💡 <strong>AI先生の国試診断：</strong><br>
+          ${isPerfect 
+            ? '素晴らしい！パーマの重要過去問8問を全問正解！国家試験本番でも確実に得点源にできます！' 
+            : `間違えた問題が ${currentWrongCount} 問あります。アンモニア水の揮発性やコールド式の加温禁止など、定番の引っかけ箇所を復習しましょう。`}
+        </div>
+        ${!isPerfect ? `
+          <button class="btn-action btn-retry" onclick="startRetryMode()">
+            🔥 間違えた問題だけを集中リトライする
+          </button>
+        ` : ''}
+        <button class="btn-action btn-restart" onclick="startExamMode()">
+          🔄 国試4択演習をもう一度解く
+        </button>
+        <button class="btn-action btn-switch-exam" onclick="startBaseMode()">
+          📚 基礎演習（2択・25問）へ戻る
+        </button>
+      </div>
+    `;
+  } else {
+    const stats = generateStatsHtml();
+    let adviceText = "";
+    if (isPerfect) {
+      adviceText = "全分野で100%達成！次は下の「国試4択演習」ボタンを押して本番形式にチャレンジしてみましょう！";
+    } else if (stats.lowestRate < 80) {
+      adviceText = `特に<strong>「${stats.lowestBlock}」</strong>の正答率が低めです。下のグラフをタップして集中的に再学習してみましょう！`;
+    } else {
+      adviceText = "全体的によく理解できています。間違えた問題だけをリトライして満点を目指しましょう！";
+    }
+
+    resultHtml = `
+      <div class="result-card">
+        <div class="result-header">
+          <h2 style="color:${isPerfect ? 'var(--success)' : '#d97706'}; font-size:1.3rem; margin-bottom:6px;">
+            ${isPerfect ? '🎉 基礎25問クリア！完全制覇です！' : '🏁 基礎演習が終了しました！'}
+          </h2>
+          <div style="background:var(--primary-light); color:var(--primary); font-size:1.1rem; font-weight:bold; padding:10px 20px; border-radius:16px; display:inline-block; margin:8px 0; border:1px solid #bfdbfe;">
+            正解率: ${scoreData.rate}% （獲得 ${scoreData.currentPoints}点 / 満点 ${scoreData.maxPoints}点）
+          </div>
+          <div style="font-size:0.85rem; color:#64748b;">
+            正解数: ${scoreData.correctCount} / ${scoreData.total} 問
+          </div>
+        </div>
+
+        <div class="graph-container">
+          <div class="graph-title">
+            <span>📊 分野別 正答率</span>
+            <span style="font-size:0.75rem; color:#64748b; font-weight:normal;">タップで各分野へ移動</span>
+          </div>
+          ${stats.graphHtml}
+        </div>
+
+        <div class="advice-box">
+          💡 <strong>AI先生の分析診断：</strong><br>
+          ${adviceText}
+        </div>
+
+        <button class="btn-action btn-switch-exam" onclick="startExamMode()">
+          🎯 本番力試し！「国試4択演習（8問）」へ進む
+        </button>
+        ${!isPerfect ? `
+          <button class="btn-action btn-retry" onclick="startRetryMode()">
+            🔥 間違えた問題だけを集中特訓する
+          </button>
+        ` : ''}
+        <button class="btn-action btn-restart" onclick="confirmResetAll()">
+          🔄 最初からやり直す
+        </button>
+      </div>
+    `;
+  }
+
+  document.getElementById("main-card").innerHTML = resultHtml;
+}
+
+function startRetryMode() {
+  const qs = getActiveQuestions();
+  state.wrongQuestionIds = qs.filter(q => state.answers[q.id] === false).map(q => q.id);
+  state.isRetryMode = true;
+  state.currentQuestionIndex = 0;
+  saveProgress();
+  restoreCardStructure();
+  renderQuestion();
+}
+
+function confirmResetAll() {
+  if (confirm("学習記録をリセットして最初からやり直しますか？")) {
+    localStorage.removeItem(STORAGE_KEY);
+    state = {
+      mode: "BASE",
+      currentQuestionIndex: 0,
+      answers: {},
+      wrongQuestionIds: [],
+      isRetryMode: false,
+      isFinished: false
+    };
+    restoreCardStructure();
+    renderQuestion();
+  }
+}
+
+function restoreCardStructure() {
+  document.getElementById("main-card").innerHTML = `
+    <div class="q-progress" id="progress-text"></div>
+    <h2 id="lesson-title"></h2>
+    <div class="exp-box" id="exp-container">
+      <span class="exp-tag">💡 香粧品AI先生のポイント</span>
+      <div id="lesson-exp"></div>
+    </div>
+    <div class="question-box" id="question-text"></div>
+    <div class="btn-group" id="choices-container"></div>
+    <div class="feedback-box" id="feedback-area">
+      <div class="feedback-header">🧑‍🏫 AI先生の個別指導</div>
+      <div id="feedback-desc"></div>
+    </div>
+    <div class="nav-controls">
+      <button class="btn-prev" id="btn-prev" onclick="prevQuestion()">◀ 前へ</button>
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">次へ進む ▶</button>
+    </div>
+  `;
+}
+
+// 起動
+loadProgress();
+if (state.isFinished) {
+  showResultScreen();
+} else {
+  renderQuestion();
+}
+</script>
+
+</body>
+</html>
