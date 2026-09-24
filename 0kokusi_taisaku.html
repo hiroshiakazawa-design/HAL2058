@@ -49,6 +49,7 @@
   .action-right {
     display: flex;
     gap: 6px;
+    flex-wrap: wrap;
   }
   .btn-action-sm {
     padding: 5px 10px;
@@ -60,7 +61,10 @@
     background: #ffffff;
     color: var(--text);
     text-decoration: none;
+    transition: background 0.15s;
   }
+  .btn-action-sm:hover { background: #f8fafc; }
+  .btn-unit-select { border-color: #0284c7; color: #0369a1; background: #f0f9ff; }
   .btn-pause { border-color: #f59e0b; color: #b45309; }
   .btn-resume { border-color: #10b981; color: #047857; background: #ecfdf5; display: none; }
   .btn-quit { border-color: #ef4444; color: #b91c1c; }
@@ -87,6 +91,48 @@
   h2 { font-size: 1.15rem; margin: 0 0 10px 0; color: #1e293b; }
   .q-text { font-size: 0.98rem; font-weight: bold; margin-bottom: 14px; white-space: pre-wrap; line-height: 1.5; }
 
+  /* 単元選択画面スタイル */
+  .unit-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .unit-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    background: #ffffff;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #1e293b;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+  }
+  .unit-btn:hover {
+    border-color: var(--primary);
+    background: #f0f7ff;
+    transform: translateY(-1px);
+  }
+  .unit-btn.all-unit {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    color: #1e40af;
+  }
+  .unit-count {
+    font-size: 0.8rem;
+    font-weight: normal;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  /* 選択肢ボタン */
   .btn-choice {
     display: block;
     width: 100%;
@@ -143,8 +189,23 @@
     text-decoration: none;
     border-radius: 8px;
     font-weight: bold;
+    margin-top: 8px;
+    box-sizing: border-box;
+  }
+  .btn-menu-unit {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: #0284c7;
+    color: white;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: bold;
     margin-top: 10px;
     box-sizing: border-box;
+    cursor: pointer;
+    border: none;
+    font-size: 0.95rem;
   }
 </style>
 </head>
@@ -155,17 +216,19 @@
   <div class="action-bar">
     <div class="action-left" id="progress-info">問題 読み込み中...</div>
     <div class="action-right">
-      <button class="btn-action-sm btn-pause" onclick="pauseOldQuiz()">⏸️ 中断</button>
+      <button class="btn-action-sm btn-unit-select" onclick="showUnitSelectionScreen()">📚 単元選択</button>
+      <button class="btn-action-sm btn-pause" id="btn-pause-action" onclick="pauseOldQuiz()">⏸️ 中断</button>
       <button class="btn-action-sm btn-resume" id="btn-old-resume" onclick="resumeOldQuiz()">▶️ 再開</button>
-      <button class="btn-action-sm btn-quit" onclick="quitOldQuiz()">⏹️ 終了</button>
+      <button class="btn-action-sm btn-quit" id="btn-quit-action" onclick="quitOldQuiz()">⏹️ 終了</button>
       <a href="index.html" class="btn-action-sm btn-home">🏠 ポータル</a>
     </div>
   </div>
 
+  <!-- メインカード（単元選択または問題表示） -->
   <div class="card" id="quiz-card">
     <div id="unit-badge-area"></div>
     <h2 id="q-title">香粧品化学 総合演習</h2>
-    <div class="q-text" id="q-text">問題を準備しています...</div>
+    <div class="q-text" id="q-text">問題データを準備しています...</div>
     <div id="choices-area"></div>
     <div class="feedback-box" id="feedback-box"></div>
     <button class="btn-next" id="btn-next" onclick="nextOldQuestion()">次の問題へ ▶</button>
@@ -173,8 +236,10 @@
 </div>
 
 <script>
-const STORAGE_KEY = "old_kokushi_save_data_v2";
-let quizData = [];
+// 全問題データと単元別管理
+let allMasterData = [];
+let currentQuizList = [];
+let currentUnitName = "ALL";
 let currentIndex = 0;
 let score = 0;
 
@@ -191,14 +256,14 @@ window.addEventListener("DOMContentLoaded", function() {
       const sheet = workbook.Sheets[sheetName];
       const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
       
-      quizData = [];
+      allMasterData = [];
       // 1行目は見出し行のためスキップ（i = 1 から開始）
       for (let i = 1; i < json.length; i++) {
         const row = json[i];
         if (!row || !row[2]) continue; // 問題文が空ならスキップ
 
         const no = row[0] || i;
-        const unitName = row[1] || "香粧品化学";
+        const unitName = row[1] ? String(row[1]).trim() : "一般香粧品";
         const qText = String(row[2]).trim();
 
         // 選択肢1〜3の取り出し
@@ -217,7 +282,7 @@ window.addEventListener("DOMContentLoaded", function() {
           row[9] ? String(row[9]).trim() : ""
         ];
 
-        quizData.push({
+        allMasterData.push({
           id: no,
           unit: unitName,
           title: `第${no}問 【${unitName}】`,
@@ -228,41 +293,94 @@ window.addEventListener("DOMContentLoaded", function() {
         });
       }
 
-      if (quizData.length === 0) {
+      if (allMasterData.length === 0) {
         document.getElementById("q-text").innerText = "MD.xlsx に有効な問題データが見つかりませんでした。";
         return;
       }
 
-      // 進捗の復元
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          currentIndex = parsed.currentIndex || 0;
-          score = parsed.score || 0;
-          if (currentIndex >= quizData.length) {
-            currentIndex = 0;
-            score = 0;
-          }
-        } catch(e) {}
-      }
-
-      renderOldQuestion();
+      // 読み込み完了後、単元選択画面を表示する
+      showUnitSelectionScreen();
     })
     .catch(err => {
       console.error(err);
-      document.getElementById("q-text").innerText = "問題データ（MD.xlsx）の読み込みに失敗しました。ファイルが同じフォルダにあるかご確認ください。";
+      document.getElementById("q-text").innerText = "問題データ（MD.xlsx）の読み込みに失敗しました。ファイルが同じ場所に配置されているかご確認ください。";
     });
 });
 
+// 単元選択画面の描画
+function showUnitSelectionScreen() {
+  document.getElementById("progress-info").innerText = `学習単元を選択してください（全 ${allMasterData.length} 問）`;
+  document.getElementById("btn-pause-action").style.display = "none";
+  document.getElementById("btn-old-resume").style.display = "none";
+  document.getElementById("btn-quit-action").style.display = "none";
+
+  // 単元ごとの問題数を集計
+  const unitMap = {};
+  allMasterData.forEach(item => {
+    unitMap[item.unit] = (unitMap[item.unit] || 0) + 1;
+  });
+
+  let buttonsHtml = `
+    <button class="unit-btn all-unit" onclick="startSelectedUnit('ALL')">
+      <span>🌟 全単元まとめて演習（全問題）</span>
+      <span class="unit-count">${allMasterData.length}問</span>
+    </button>
+  `;
+
+  for (const [unitName, count] of Object.entries(unitMap)) {
+    buttonsHtml += `
+      <button class="unit-btn" onclick="startSelectedUnit('${unitName}')">
+        <span>📖 ${unitName}</span>
+        <span class="unit-count">${count}問</span>
+      </button>
+    `;
+  }
+
+  document.getElementById("quiz-card").innerHTML = `
+    <h2 style="color:#1e3a8a; border-bottom:2px solid #e2e8f0; padding-bottom:8px;">🎯 学習する単元を選択してください</h2>
+    <div style="font-size:0.88rem; color:#64748b; margin-bottom:12px;">学習したい分野をタップすると演習が始まります。</div>
+    <div class="unit-list">${buttonsHtml}</div>
+    <a href="index.html" class="btn-menu-back" style="margin-top:16px;">🏠 ポータルトップへ戻る</a>
+  `;
+}
+
+// 選択した単元の演習開始
+function startSelectedUnit(unitName) {
+  currentUnitName = unitName;
+  if (unitName === "ALL") {
+    currentQuizList = [...allMasterData];
+  } else {
+    currentQuizList = allMasterData.filter(item => item.unit === unitName);
+  }
+
+  currentIndex = 0;
+  score = 0;
+
+  // カードの基本骨格を元に戻す
+  document.getElementById("quiz-card").innerHTML = `
+    <div id="unit-badge-area"></div>
+    <h2 id="q-title"></h2>
+    <div class="q-text" id="q-text"></div>
+    <div id="choices-area"></div>
+    <div class="feedback-box" id="feedback-box"></div>
+    <button class="btn-next" id="btn-next" onclick="nextOldQuestion()">次の問題へ ▶</button>
+  `;
+
+  document.getElementById("btn-pause-action").style.display = "inline-block";
+  document.getElementById("btn-quit-action").style.display = "inline-block";
+
+  renderOldQuestion();
+}
+
 function renderOldQuestion() {
-  if (currentIndex >= quizData.length) {
+  if (currentIndex >= currentQuizList.length) {
     showOldResult();
     return;
   }
 
-  const item = quizData[currentIndex];
-  document.getElementById("progress-info").innerText = `問 ${currentIndex + 1} / ${quizData.length} （正解: ${score}点）`;
+  const item = currentQuizList[currentIndex];
+  const unitLabel = currentUnitName === "ALL" ? "全単元演習" : currentUnitName;
+  document.getElementById("progress-info").innerText = `【${unitLabel}】問 ${currentIndex + 1} / ${currentQuizList.length} （正解: ${score}点）`;
   document.getElementById("unit-badge-area").innerHTML = `<span class="unit-badge">${item.unit}</span>`;
   document.getElementById("q-title").innerText = item.title;
   document.getElementById("q-text").innerText = item.question;
@@ -282,7 +400,7 @@ function renderOldQuestion() {
 }
 
 function selectOldAnswer(selectedIdx) {
-  const item = quizData[currentIndex];
+  const item = currentQuizList[currentIndex];
   const buttons = document.querySelectorAll(".btn-choice");
   buttons.forEach(b => b.disabled = true);
 
@@ -303,7 +421,6 @@ function selectOldAnswer(selectedIdx) {
     fb.innerText = `❌ 不正解です。（正解：${item.answer + 1}. ${item.choices[item.answer]}）\n${selectedExp ? selectedExp + '\n' : ''}${correctExp}`;
   }
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ currentIndex: currentIndex + 1, score: score }));
   fb.style.display = "block";
   document.getElementById("btn-next").style.display = "block";
 }
@@ -314,8 +431,7 @@ function nextOldQuestion() {
 }
 
 function pauseOldQuiz() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ currentIndex: currentIndex, score: score }));
-  alert("⏸️ 学習を一時保存しました。\n次回もこの問題から再開できます。");
+  alert("⏸️ 演習を一時停止しました。\n「再開」ボタンで続きから解くことができます。");
   document.getElementById("btn-old-resume").style.display = "inline-block";
 }
 
@@ -325,31 +441,32 @@ function resumeOldQuiz() {
 }
 
 function quitOldQuiz() {
-  if (confirm("学習を終了して結果を表示しますか？")) {
+  if (confirm("現在の演習を終了して結果を表示しますか？")) {
     showOldResult();
   }
 }
 
 function showOldResult() {
-  const total = quizData.length || 1;
+  const total = currentQuizList.length || 1;
   const rate = Math.round((score / total) * 100);
+  const unitLabel = currentUnitName === "ALL" ? "全単元演習" : currentUnitName;
+
+  document.getElementById("progress-info").innerText = `演習終了：${unitLabel}`;
+  document.getElementById("btn-pause-action").style.display = "none";
+  document.getElementById("btn-old-resume").style.display = "none";
+  document.getElementById("btn-quit-action").style.display = "none";
+
   document.getElementById("quiz-card").innerHTML = `
-    <h2 style="text-align:center; color:#1e40af;">🏁 演習が終了しました</h2>
+    <h2 style="text-align:center; color:#1e40af;">🏁 【${unitLabel}】が終了しました</h2>
     <div style="text-align:center; margin:16px 0;">
       <div style="font-size:1.2rem; font-weight:bold; background:#eff6ff; color:#1e3a8a; padding:12px; border-radius:10px; border:1px solid #bfdbfe;">
         正解率: ${rate}% （獲得 ${score}点 / 満点 ${total}点）
       </div>
     </div>
-    <button class="btn-next" style="display:block; background:#1e3a8a;" onclick="restartOldQuiz()">🔄 もう一度最初から解く</button>
+    <button class="btn-next" style="display:block; background:#1e3a8a;" onclick="startSelectedUnit('${currentUnitName}')">🔄 この単元をもう一度解く</button>
+    <button class="btn-menu-unit" onclick="showUnitSelectionScreen()">📚 別の単元を選択する</button>
     <a href="index.html" class="btn-menu-back">🏠 ポータルトップへ戻る</a>
   `;
-}
-
-function restartOldQuiz() {
-  localStorage.removeItem(STORAGE_KEY);
-  currentIndex = 0;
-  score = 0;
-  location.reload();
 }
 </script>
 
