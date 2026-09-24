@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>香粧品化学問題集（総合国試対策）</title>
+<!-- Excelファイルを読み解くためのライブラリ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root {
@@ -73,6 +74,16 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     margin-bottom: 15px;
   }
+  .unit-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #1e40af;
+    background: #dbeafe;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+  }
   h2 { font-size: 1.15rem; margin: 0 0 10px 0; color: #1e293b; }
   .q-text { font-size: 0.98rem; font-weight: bold; margin-bottom: 14px; white-space: pre-wrap; line-height: 1.5; }
 
@@ -89,6 +100,7 @@
     cursor: pointer;
     box-sizing: border-box;
     transition: all 0.15s;
+    line-height: 1.4;
   }
   .btn-choice:hover:not(:disabled) { border-color: var(--primary); background: #f0f7ff; }
   .btn-choice.correct { background: #dcfce7 !important; border-color: var(--success) !important; color: #15803d !important; font-weight: bold; }
@@ -101,6 +113,8 @@
     margin-top: 12px;
     font-size: 0.9rem;
     font-weight: bold;
+    white-space: pre-wrap;
+    line-height: 1.5;
   }
   .feedback-correct { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
   .feedback-wrong { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
@@ -149,6 +163,7 @@
   </div>
 
   <div class="card" id="quiz-card">
+    <div id="unit-badge-area"></div>
     <h2 id="q-title">香粧品化学 総合演習</h2>
     <div class="q-text" id="q-text">問題を準備しています...</div>
     <div id="choices-area"></div>
@@ -158,8 +173,7 @@
 </div>
 
 <script>
-// 状態管理（LocalStorage）
-const STORAGE_KEY = "old_kokushi_save_data";
+const STORAGE_KEY = "old_kokushi_save_data_v2";
 let quizData = [];
 let currentIndex = 0;
 let score = 0;
@@ -167,56 +181,77 @@ let score = 0;
 // MD.xlsx の自動読み込み
 window.addEventListener("DOMContentLoaded", function() {
   fetch("MD.xlsx")
-    .then(res => res.arrayBuffer())
+    .then(res => {
+      if (!res.ok) throw new Error("MD.xlsxの取得に失敗しました");
+      return res.arrayBuffer();
+    })
     .then(buffer => {
       const workbook = XLSX.read(buffer, { type: "array" });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
       
-      // データ整形（1行目は見出し）
       quizData = [];
+      // 1行目は見出し行のためスキップ（i = 1 から開始）
       for (let i = 1; i < json.length; i++) {
         const row = json[i];
-        if (row && row[1]) {
-          const rawText = String(row[1]).trim();
-          const lines = rawText.split("\n").map(l => l.trim()).filter(l => l);
-          const ansIndex = parseInt(row[0]) - 1; // 0-indexed
+        if (!row || !row[2]) continue; // 問題文が空ならスキップ
 
-          // 問題文と選択肢の分離
-          let qBody = lines[0];
-          let choices = [];
-          if (lines.length >= 5) {
-            qBody = lines.slice(0, lines.length - 4).join("\n");
-            choices = lines.slice(lines.length - 4);
-          } else {
-            choices = lines.slice(1);
-          }
+        const no = row[0] || i;
+        const unitName = row[1] || "香粧品化学";
+        const qText = String(row[2]).trim();
 
-          quizData.push({
-            id: i,
-            title: `第${i}問 国家試験過去問`,
-            question: qBody,
-            choices: choices,
-            answer: ansIndex
-          });
-        }
+        // 選択肢1〜3の取り出し
+        const choices = [];
+        if (row[3] !== undefined && row[3] !== null && String(row[3]).trim() !== "") choices.push(String(row[3]).trim());
+        if (row[4] !== undefined && row[4] !== null && String(row[4]).trim() !== "") choices.push(String(row[4]).trim());
+        if (row[5] !== undefined && row[5] !== null && String(row[5]).trim() !== "") choices.push(String(row[5]).trim());
+
+        // 正答番号（1始まりを0始まりのインデックスに調整）
+        const ansIndex = parseInt(row[6], 10) - 1;
+
+        // 各選択肢の解説（列H:7, 列I:8, 列J:9）
+        const explanations = [
+          row[7] ? String(row[7]).trim() : "",
+          row[8] ? String(row[8]).trim() : "",
+          row[9] ? String(row[9]).trim() : ""
+        ];
+
+        quizData.push({
+          id: no,
+          unit: unitName,
+          title: `第${no}問 【${unitName}】`,
+          question: qText,
+          choices: choices,
+          answer: ansIndex,
+          explanations: explanations
+        });
       }
 
-      // 進捗復元
+      if (quizData.length === 0) {
+        document.getElementById("q-text").innerText = "MD.xlsx に有効な問題データが見つかりませんでした。";
+        return;
+      }
+
+      // 進捗の復元
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
           currentIndex = parsed.currentIndex || 0;
           score = parsed.score || 0;
+          if (currentIndex >= quizData.length) {
+            currentIndex = 0;
+            score = 0;
+          }
         } catch(e) {}
       }
 
       renderOldQuestion();
     })
     .catch(err => {
-      document.getElementById("q-text").innerText = "問題データ（MD.xlsx）の読み込みに失敗しました。ファイルが同じフォルダにあるか確認してください。";
+      console.error(err);
+      document.getElementById("q-text").innerText = "問題データ（MD.xlsx）の読み込みに失敗しました。ファイルが同じフォルダにあるかご確認ください。";
     });
 });
 
@@ -228,6 +263,7 @@ function renderOldQuestion() {
 
   const item = quizData[currentIndex];
   document.getElementById("progress-info").innerText = `問 ${currentIndex + 1} / ${quizData.length} （正解: ${score}点）`;
+  document.getElementById("unit-badge-area").innerHTML = `<span class="unit-badge">${item.unit}</span>`;
   document.getElementById("q-title").innerText = item.title;
   document.getElementById("q-text").innerText = item.question;
 
@@ -236,7 +272,7 @@ function renderOldQuestion() {
   item.choices.forEach((c, idx) => {
     const btn = document.createElement("button");
     btn.className = "btn-choice";
-    btn.innerText = c;
+    btn.innerText = `${idx + 1}. ${c}`;
     btn.onclick = () => selectOldAnswer(idx);
     area.appendChild(btn);
   });
@@ -252,17 +288,19 @@ function selectOldAnswer(selectedIdx) {
 
   const fb = document.getElementById("feedback-box");
   const isCorrect = (selectedIdx === item.answer);
+  const selectedExp = item.explanations[selectedIdx] || "";
 
   if (isCorrect) {
     buttons[selectedIdx].classList.add("correct");
     fb.className = "feedback-box feedback-correct";
-    fb.innerText = "⭕ 正解です！";
+    fb.innerText = `⭕ 正解です！\n${selectedExp}`;
     score++;
   } else {
     buttons[selectedIdx].classList.add("wrong");
     if (buttons[item.answer]) buttons[item.answer].classList.add("correct");
     fb.className = "feedback-box feedback-wrong";
-    fb.innerText = `❌ 不正解です。（正解：選択肢 ${item.answer + 1}）`;
+    const correctExp = item.explanations[item.answer] || "";
+    fb.innerText = `❌ 不正解です。（正解：${item.answer + 1}. ${item.choices[item.answer]}）\n${selectedExp ? selectedExp + '\n' : ''}${correctExp}`;
   }
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify({ currentIndex: currentIndex + 1, score: score }));
