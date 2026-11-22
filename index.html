@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プログラム実行メニュー</title>
+  <style>
+    body {
+      font-family: "Meiryo", "Hiragino Kaku Gothic ProN", sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.6;
+      background-color: #fafafa;
+      color: #333;
+    }
+    h1 {
+      border-bottom: 2px solid #2c3e50;
+      padding-bottom: 10px;
+      font-size: 1.4rem;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 12px 0;
+    }
+    a {
+      display: block;
+      padding: 14px 18px;
+      background: #ffffff;
+      color: #0056b3;
+      text-decoration: none;
+      border: 1px solid #dcdcdc;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: background-color 0.2s, transform 0.1s;
+    }
+    a:hover {
+      background: #eef5fc;
+      border-color: #0056b3;
+    }
+    .sub-name {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: normal;
+      color: #666;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+  <h1>ファイル実行メニュー</h1>
+  <ul id="file-list">読み込み中...</ul>
+
+  <script>
+    const userName = "hiroshiakazawa-design";
+    const repoName = "HAL2058";
+
+    // 日本語表示にしたいファイルの対応表（左に実際のファイル名、右に表示したい日本語名）
+    const titleMap = {
+      "shogi_Clock.html": "将棋対局クロック",
+      "shikenn_taisaku.html": "香粧品試験対策問題集"
+    };
+
+    const apiUrl = `https://api.github.com/repos/${userName}/${repoName}/contents/`;
+    const listElement = document.getElementById("file-list");
+
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("ネットワーク応答が正常ではありません");
+        }
+        return response.json();
+      })
+      .then(files => {
+        listElement.innerHTML = "";
+        // .htmlで終わるファイル（このメニュー自身のindex.htmlは除く）を抽出
+        const htmlFiles = files.filter(file => file.name.endsWith(".html") && file.name !== "index.html");
+
+        if (htmlFiles.length === 0) {
+          listElement.innerHTML = "<li>表示できるHTMLファイルがありません。</li>";
+          return;
+        }
+
+        htmlFiles.forEach(file => {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = file.name;
+
+          // 対応表に一致するファイル名があれば日本語名を表示、なければ元のファイル名を表示
+          if (titleMap[file.name]) {
+            a.innerHTML = `${titleMap[file.name]}<span class="sub-name">(${file.name})</span>`;
+          } else {
+            a.textContent = file.name;
+          }
+
+          li.appendChild(a);
+          listElement.appendChild(li);
+        });
+      })
+      .catch(error => {
+        listElement.innerHTML = "<li>一覧の読み込みに失敗しました。少し時間を置いてから再読み込みしてください。</li>";
+        console.error(error);
+      });
+  </script>
+</body>
+</html>
