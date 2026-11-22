@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>将棋対局時計（5方式・4音声タイプ対応）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* 基本設定と誤操作防止（テキスト選択・ダブルタップ拡大防止） */
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            touch-action: manipulation;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #2b2e33; /* 落ち着いたニュートラルダークグレー */
+            color: #f3f4f6;
+        }
+
+        /* 待機側パネル（落ち着いたダークグレー） */
+        .panel-inactive {
+            background: linear-gradient(155deg, #383c42 0%, #2b2e33 100%);
+            color: #9ca3af;
+            box-shadow: inset 0 0 32px rgba(17, 19, 23, 0.5);
+            transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        /* 手番側パネル（明るく視認性の高いライトグレー） */
+        .panel-active {
+            background: linear-gradient(155deg, #e5e7eb 0%, #d1d5db 100%);
+            color: #1a1d21;
+            box-shadow: inset 0 0 0 6px #6b7280, inset 0 0 28px rgba(17, 19, 23, 0.12);
+            transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        /* 残り10秒以内の赤文字強調 */
+        .panel-active .time-urgent {
+            color: #d91e18 !important;
+            text-shadow: 0 0 16px rgba(217, 30, 24, 0.22);
+        }
+        .panel-inactive .time-urgent {
+            color: #ff5252 !important;
+            text-shadow: 0 0 16px rgba(255, 82, 82, 0.28);
+        }
+
+        /* 数字の等幅表示（カウントダウン時の横揺れ防止） */
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* パネル押下時のフィードバック */
+        .panel-pressed {
+            transform: scale(0.985);
+            filter: brightness(0.94);
+        }
+
+        /* 案内カードの緩やかな脈動 */
+        @keyframes pulseSoft {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.015); }
+        }
+        .animate-pulse-soft {
+            animation: pulseSoft 2.2s infinite ease-in-out;
+        }
+
+        /* 設定画面のスクロールバー調整 */
+        .setup-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .setup-scroll::-webkit-scrollbar-thumb {
+            background-color: #6b7280;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="relative w-full h-full overflow-hidden">
+
+    <!-- ==========================================
+         1. 対局設定画面（ステップ1：方式・時間・音声選択）
+         ========================================== -->
+    <div id="setup-screen" class="fixed inset-0 z-30 bg-[#1f2226]/95 flex items-center justify-center p-2 sm:p-4 overflow-y-auto setup-scroll">
+        <div class="w-full max-w-3xl bg-[#2b2e33] border border-gray-600 rounded-2xl shadow-2xl p-4 sm:p-6 my-auto">
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b border-gray-600">
+                <div>
+                    <h1 class="text-lg sm:text-2xl font-black text-gray-100 tracking-wide">将棋 対局時計 設定</h1>
+                    <p class="text-xs sm:text-sm text-gray-400">対局方式・時間・音声タイプを選んでください</p>
+                </div>
+                <span class="text-xs font-bold px-3 py-1 rounded-full bg-[#383c42] text-gray-300 border border-gray-600">
+                    将棋盤の横に置いて使用
+                </span>
+            </div>
+
+            <!-- ① 5つの対局方式選択 -->
+            <div class="mb-4">
+                <label class="block text-xs sm:text-sm font-bold text-gray-300 mb-2">① 対局方式を選択</label>
+                <div id="mode-buttons" class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                    <button type="button" data-mode="sudden" class="mode-btn p-2.5 rounded-xl border-2 text-left transition active:scale-95 border-gray-100 bg-gray-100 text-gray-900 font-bold">
+                        <div class="text-xs opacity-75">方式1</div>
+                        <div class="text-sm sm:text-base font-black">切れ負け</div>
+                    </button>
+                    <button type="button" data-mode="byoyomi" class="mode-btn p-2.5 rounded-xl border-2 text-left transition active:scale-95 border-gray-600 bg-[#383c42] text-gray-200 hover:bg-[#42474f]">
+                        <div class="text-xs opacity-75">方式2</div>
+                        <div class="text-sm sm:text-base font-black">秒読み</div>
+                    </button>
+                    <button type="button" data-mode="nhk" class="mode-btn p-2.5 rounded-xl border-2 text-left transition active:scale-95 border-gray-600 bg-[#383c42] text-gray-200 hover:bg-[#42474f]">
+                        <div class="text-xs opacity-75">方式3</div>
+                        <div class="text-sm sm:text-base font-black">NHK方式</div>
+                    </button>
+                    <button type="button" data-mode="per_move" class="mode-btn p-2.5 rounded-xl border-2 text-left transition active:scale-95 border-gray-600 bg-[#383c42] text-gray-200 hover:bg-[#42474f]">
+                        <div class="text-xs opacity-75">方式4</div>
+                        <div class="text-sm sm:text-base font-black">1手ごと</div>
+                    </button>
+                    <button type="button" data-mode="fischer" class="mode-btn col-span-2 sm:col-span-1 p-2.5 rounded-xl border-2 text-left transition active:scale-95 border-gray-600 bg-[#383c42] text-gray-200 hover:bg-[#42474f]">
+                        <div class="text-xs opacity-75">方式5</div>
+                        <div class="text-sm sm:text-base font-black">自動加算</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ② 方式ごとの時間設定エリア -->
+            <div class="mb-4 bg-[#222529] border border-gray-600 rounded-xl p-3 sm:p-4">
+                <label class="block text-xs sm:text-sm font-bold text-gray-300 mb-2">② 時間設定</label>
+
+                <!-- 方式1：切れ負け（30分・20分・10分・3分） -->
+                <div id="opt-sudden" class="mode-option">
+                    <div class="grid grid-cols-4 gap-2">
+                        <button type="button" data-val="30" class="sudden-min-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-100 bg-gray-100 text-gray-900">30分</button>
+                        <button type="button" data-val="20" class="sudden-min-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-600 bg-[#383c42] text-gray-200">20分</button>
+                        <button type="button" data-val="10" class="sudden-min-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-600 bg-[#383c42] text-gray-200">10分</button>
+                        <button type="button" data-val="3" class="sudden-min-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-600 bg-[#383c42] text-gray-200">3分</button>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-400">持ち時間を使い切ると時間切れ負けになります。</p>
+                </div>
+
+                <!-- 方式2：秒読み（持ち時間 30分・20分・10分・5分・0分 ＋ 秒読み 1分・30秒） -->
+                <div id="opt-byoyomi" class="mode-option hidden space-y-3">
+                    <div>
+                        <span class="block text-xs text-gray-400 mb-1.5">持ち時間（0分＝最初から秒読み）</span>
+                        <div class="grid grid-cols-5 gap-1.5">
+                            <button type="button" data-val="30" class="byo-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-600 bg-[#383c42] text-gray-200">30分</button>
+                            <button type="button" data-val="20" class="byo-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-600 bg-[#383c42] text-gray-200">20分</button>
+                            <button type="button" data-val="10" class="byo-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-100 bg-gray-100 text-gray-900">10分</button>
+                            <button type="button" data-val="5" class="byo-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-600 bg-[#383c42] text-gray-200">5分</button>
+                            <button type="button" data-val="0" class="byo-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-600 bg-[#383c42] text-gray-200">0分</button>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="block text-xs text-gray-400 mb-1.5">秒読み時間（1手ごと）</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button" data-val="60" class="byo-sec-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-600 bg-[#383c42] text-gray-200">1分（60秒）</button>
+                            <button type="button" data-val="30" class="byo-sec-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-100 bg-gray-100 text-gray-900">30秒</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 方式3：NHK方式（持ち時間 10分・5分・3分・0分 ＋ 考慮1分×10回 ＋ 秒読み30秒） -->
+                <div id="opt-nhk" class="mode-option hidden space-y-2.5">
+                    <div>
+                        <span class="block text-xs text-gray-400 mb-1.5">初期持ち時間</span>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button type="button" data-val="10" class="nhk-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-100 bg-gray-100 text-gray-900">10分</button>
+                            <button type="button" data-val="5" class="nhk-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-600 bg-[#383c42] text-gray-200">5分</button>
+                            <button type="button" data-val="3" class="nhk-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-600 bg-[#383c42] text-gray-200">3分</button>
+                            <button type="button" data-val="0" class="nhk-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-600 bg-[#383c42] text-gray-200">0分</button>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-300 bg-[#2b2e33] px-3 py-2 rounded-lg border border-gray-600">
+                        持ち時間終了後：<span class="font-bold text-white">考慮時間 1分×10回</span> → 使い切り後は <span class="font-bold text-white">1手30秒秒読み</span>
+                    </p>
+                </div>
+
+                <!-- 方式4：すべての指し手が制限時間以内（1分・30秒・10秒） -->
+                <div id="opt-per_move" class="mode-option hidden">
+                    <span class="block text-xs text-gray-400 mb-1.5">1手あたりの制限時間（指すたびにリセット）</span>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" data-val="60" class="per-move-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-100 bg-gray-100 text-gray-900">1分</button>
+                        <button type="button" data-val="30" class="per-move-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-600 bg-[#383c42] text-gray-200">30秒</button>
+                        <button type="button" data-val="10" class="per-move-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-600 bg-[#383c42] text-gray-200">10秒</button>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-400">持ち時間はなく、すべての指し手を上記の時間以内に指します。</p>
+                </div>
+
+                <!-- 方式5：フィッシャー方式（持ち時間 10分・5分・2分・1分 ＋ 1手ごと 10秒・5秒加算） -->
+                <div id="opt-fischer" class="mode-option hidden space-y-3">
+                    <div>
+                        <span class="block text-xs text-gray-400 mb-1.5">初期持ち時間</span>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button type="button" data-val="10" class="fischer-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-600 bg-[#383c42] text-gray-200">10分</button>
+                            <button type="button" data-val="5" class="fischer-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-100 bg-gray-100 text-gray-900">5分</button>
+                            <button type="button" data-val="2" class="fischer-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-600 bg-[#383c42] text-gray-200">2分</button>
+                            <button type="button" data-val="1" class="fischer-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-600 bg-[#383c42] text-gray-200">1分</button>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="block text-xs text-gray-400 mb-1.5">1手指すごとの自動加算時間</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button" data-val="10" class="fischer-inc-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-100 bg-gray-100 text-gray-900">+10秒加算</button>
+                            <button type="button" data-val="5" class="fischer-inc-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-600 bg-[#383c42] text-gray-200">+5秒加算</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ③ 音声案内設定（元気な女性・落ち着いた女性・男性・なし） -->
+            <div class="mb-5 bg-[#222529] border border-gray-600 rounded-xl p-3 sm:p-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <label class="text-xs sm:text-sm font-bold text-gray-300">③ 音声案内（読み上げ）</label>
+                    <div class="flex items-center gap-2">
+                        <select id="voice-device-select" title="端末の音声エンジンを個別に選ぶ場合" class="bg-[#2b2e33] text-gray-300 text-xs rounded-lg px-2 py-1 border border-gray-600 max-w-[140px] sm:max-w-[180px] focus:outline-none">
+                            <option value="">端末音声：自動選択</option>
+                        </select>
+                        <button id="btn-test-voice" type="button" class="px-3 py-1 rounded-lg bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold active:scale-95 transition whitespace-nowrap">
+                            ♪ 試聴
+                        </button>
+                    </div>
+                </div>
+
+                <div id="voice-profile-buttons" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <button type="button" data-profile="female_energetic" class="voice-prof-btn p-2.5 rounded-xl border-2 text-center transition active:scale-95 border-gray-100 bg-gray-100 text-gray-900 font-bold">
+                        <div class="text-sm font-black">元気な女性</div>
+                        <div class="text-[11px] opacity-75">明るく少し早め</div>
+                    </button>
+                    <button type="button" data-profile="female_calm" class="voice-prof-btn p-2.5 rounded-xl border-2 text-center transition active:scale-95 border-gray-600 bg-[#383c42] text-gray-200 hover:bg-[#42474f]">
+                        <div class="text-sm font-black">落ち着いた女性</div>
+                        <div class="text-[11px] opacity-75">アナウンサー風</div>
+                    </button>
+                    <button type="button" data-profile="male" class="voice-prof-btn p-2.5 rounded-xl border-2 text-center transition active:scale-95 border-gray-600 bg-[#383c42] text-gray-200 hover:bg-[#42474f]">
+                        <div class="text-sm font-black">男性</div>
+                        <div class="text-[11px] opacity-75">低めで聞きやすい声</div>
+                    </button>
+                    <button type="button" data-profile="none" class="voice-prof-btn p-2.5 rounded-xl border-2 text-center transition active:scale-95 border-gray-600 bg-[#383c42] text-gray-200 hover:bg-[#42474f]">
+                        <div class="text-sm font-black">なし</div>
+                        <div class="text-[11px] opacity-75">読み上げオフ</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 次へ（先手設定画面へ進む） -->
+            <button id="btn-to-sente" type="button" class="w-full py-3.5 sm:py-4 rounded-2xl bg-gray-100 hover:bg-white text-gray-900 font-black text-lg sm:text-xl shadow-lg active:scale-98 transition tracking-wider">
+                次へ（先手の側を設定）
+            </button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         2. 対局時計メイン画面（左右2分割グレーデザイン）
+         ========================================== -->
+    <!-- 上部中央コントロールバー（一時停止・リセット・設定に戻る） -->
+    <header class="fixed top-2.5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2 bg-[#1f2226]/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-gray-600 shadow-xl">
+        <span id="header-rule-badge" class="hidden md:inline-block text-xs font-bold text-gray-300 px-2 border-r border-gray-600">
+            30分切れ負け
+        </span>
+        <button id="btn-pause" type="button" disabled class="text-xs sm:text-sm font-bold text-gray-100 disabled:opacity-40 hover:bg-gray-700 px-2.5 sm:px-3 py-1 rounded-full bg-[#383c42] border border-gray-600 active:scale-95 transition whitespace-nowrap">
+            一時停止
+        </button>
+        <button id="btn-reset-turn" type="button" class="text-xs sm:text-sm font-bold text-gray-200 hover:bg-gray-700 px-2.5 sm:px-3 py-1 rounded-full bg-[#383c42] border border-gray-600 active:scale-95 transition whitespace-nowrap">
+            リセット
+        </button>
+        <button id="btn-back-setup" type="button" class="text-xs sm:text-sm font-bold text-gray-300 hover:bg-red-900/80 hover:text-white px-2.5 sm:px-3 py-1 rounded-full bg-[#383c42] border border-gray-600 active:scale-95 transition whitespace-nowrap">
+            設定変更
+        </button>
+    </header>
+
+    <!-- 左右2分割メインパネル -->
+    <main class="w-full h-full grid grid-cols-2 divide-x-4 divide-[#1f2226]">
+        
+        <!-- 左側プレイヤーパネル -->
+        <section id="panel-left" role="button" tabindex="0" aria-label="左側の対局時計"
+            class="panel-inactive relative w-full h-full flex flex-col items-center justify-center p-3 sm:p-6 cursor-pointer overflow-hidden">
+            <div class="w-full h-full flex flex-col items-center justify-center text-center">
+                <!-- 先手・後手ラベル ＆ 手数 -->
+                <div class="mb-2 sm:mb-3 flex items-center justify-center gap-2">
+                    <span id="role-left" class="px-4 sm:px-6 py-1 rounded-full text-base sm:text-2xl md:text-3xl font-black tracking-widest bg-black/15 border border-current/20">
+                        先手 ☗
+                    </span>
+                    <span id="moves-left" class="px-2.5 py-1 rounded-full text-xs sm:text-base font-bold bg-black/10 opacity-85">
+                        0手
+                    </span>
+                </div>
+
+                <!-- モード別サブ情報（秒読み・考慮時間回数・加算ルールなど） -->
+                <div id="subinfo-left" class="min-h-[1.75rem] sm:min-h-[2.25rem] flex items-center justify-center gap-1.5 text-xs sm:text-base md:text-lg font-bold opacity-90">
+                    持ち時間
+                </div>
+
+                <!-- メイン残り時間表示（〇分〇秒） -->
+                <div id="time-left" class="tabular-nums font-black tracking-tight leading-none my-2 sm:my-4 text-4xl sm:text-6xl md:text-7xl lg:text-8xl whitespace-nowrap transition-colors duration-150">
+                    30分00秒
+                </div>
+
+                <!-- 手番案内バッジ -->
+                <div id="status-left" class="mt-2 sm:mt-4 h-8 sm:h-10 flex items-center justify-center text-sm sm:text-xl font-bold">
+                    <span>待機中</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 右側プレイヤーパネル -->
+        <section id="panel-right" role="button" tabindex="0" aria-label="右側の対局時計"
+            class="panel-inactive relative w-full h-full flex flex-col items-center justify-center p-3 sm:p-6 cursor-pointer overflow-hidden">
+            <div class="w-full h-full flex flex-col items-center justify-center text-center">
+                <!-- 先手・後手ラベル ＆ 手数 -->
+                <div class="mb-2 sm:mb-3 flex items-center justify-center gap-2">
+                    <span id="role-right" class="px-4 sm:px-6 py-1 rounded-full text-base sm:text-2xl md:text-3xl font-black tracking-widest bg-black/15 border border-current/20">
+                        後手 ☖
+                    </span>
+                    <span id="moves-right" class="px-2.5 py-1 rounded-full text-xs sm:text-base font-bold bg-black/10 opacity-85">
+                        0手
+                    </span>
+                </div>
+
+                <!-- モード別サブ情報（秒読み・考慮時間回数・加算ルールなど） -->
+                <div id="subinfo-right" class="min-h-[1.75rem] sm:min-h-[2.25rem] flex items-center justify-center gap-1.5 text-xs sm:text-base md:text-lg font-bold opacity-90">
+                    持ち時間
+                </div>
+
+                <!-- メイン残り時間表示（〇分〇秒） -->
+                <div id="time-right" class="tabular-nums font-black tracking-tight leading-none my-2 sm:my-4 text-4xl sm:text-6xl md:text-7xl lg:text-8xl whitespace-nowrap transition-colors duration-150">
+                    30分00秒
+                </div>
+
+                <!-- 手番案内バッジ -->
+                <div id="status-right" class="mt-2 sm:mt-4 h-8 sm:h-10 flex items-center justify-center text-sm sm:text-xl font-bold">
+                    <span>待機中</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 先手選択・開始待機・一時停止・時間切れオーバーレイ -->
+    <div id="overlay" class="hidden fixed inset-0 z-10 flex items-center justify-center pointer-events-none px-4">
+        <div class="animate-pulse-soft bg-[#1f2226]/92 text-gray-100 border-2 border-gray-400 rounded-2xl px-6 py-5 sm:px-10 sm:py-7 shadow-2xl text-center max-w-lg w-full">
+            <p id="overlay-title" class="text-xl sm:text-3xl font-black tracking-wide leading-snug">
+                先手の側をタッチしてください
+            </p>
+            <p id="overlay-sub" class="mt-2 sm:mt-3 text-sm sm:text-lg text-gray-300 font-bold">
+                左側または右側の画面をタッチして先手を決めます
+            </p>
+        </div>
+    </div>
+
+    <!-- 確認ダイアログ（リセット / 設定変更共通） -->
+    <div id="confirm-modal" class="hidden fixed inset-0 z-40 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-[#2b2e33] text-gray-100 border-2 border-gray-500 rounded-2xl p-6 max-w-sm w-full shadow-2xl text-center">
+            <h2 id="confirm-title" class="text-xl sm:text-2xl font-black mb-2">確認</h2>
+            <p id="confirm-desc" class="text-sm text-gray-300 mb-6">
+                操作を実行しますか？
+            </p>
+            <div class="flex gap-3 justify-center">
+                <button id="btn-confirm-cancel" type="button" class="flex-1 py-3 px-4 rounded-xl bg-gray-600 hover:bg-gray-500 text-white font-bold text-base active:scale-95 transition">
+                    キャンセル
+                </button>
+                <button id="btn-confirm-ok" type="button" class="flex-1 py-3 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-base active:scale-95 transition">
+                    実行する
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * 将棋対局時計（5方式・4音声タイプ対応）
+         * 1. sudden   : 〇分切れ負け（30分 / 20分 / 10分 / 3分）
+         * 2. byoyomi  : 持ち時間（30/20/10/5/0分）＋ 秒読み（1分 / 30秒）
+         * 3. nhk      : NHK方式（持ち時間 10/5/3/0分 ＋ 考慮時間1分×10回 ＋ 秒読み30秒）
+         * 4. per_move : 1手ごと制限時間（1分 / 30秒 / 10秒）
+         * 5. fischer  : 自動加算（持ち時間 10/5/2/1分 ＋ 1手ごと 10秒 / 5秒加算）
+         */
+        (() => {
+            const AUTO_RETURN_DELAY_MS = 5000;
+
+            // ==========================================
+            // 設定および対局状態
+            // ==========================================
+            const config = {
+                mode: 'sudden',                 // 'sudden' | 'byoyomi' | 'nhk' | 'per_move' | 'fischer'
+                suddenMin: 30,                  // 30, 20, 10, 3
+                byoMainMin: 10,                 // 30, 20, 10, 5, 0
+                byoSec: 30,                     // 60, 30
+                nhkMainMin: 10,                 // 10, 5, 3, 0
+                perMoveSec: 60,                 // 60, 30, 10
+                fischerMainMin: 5,              // 10, 5, 2, 1
+                fischerIncSec: 10,              // 10, 5
+                voiceProfile: 'female_energetic', // 'female_energetic' | 'female_calm' | 'male' | 'none'
+                selectedVoiceURI: '',
+                senteSide: 'left'               // 'left' | 'right'
+            };
+
+            // 各プレイヤーの初期状態生成
+            function createPlayerState() {
+                if (config.mode === 'sudden') {
+                    return {
+                        stage: 'MAIN',
+                        mainMs: config.suddenMin * 60 * 1000,
+                        subMs: 0,
+                        nhkConsiderLeft: 0,
+                        moves: 0
+                    };
+                }
+                if (config.mode === 'byoyomi') {
+                    const hasMain = config.byoMainMin > 0;
+                    return {
+                        stage: hasMain ? 'MAIN' : 'BYOYOMI',
+                        mainMs: config.byoMainMin * 60 * 1000,
+                        subMs: config.byoSec * 1000,
+                        nhkConsiderLeft: 0,
+                        moves: 0
+                    };
+                }
+                if (config.mode === 'nhk') {
+                    const hasMain = config.nhkMainMin > 0;
+                    return {
+                        stage: hasMain ? 'MAIN' : 'NHK_CONSIDER',
+                        mainMs: config.nhkMainMin * 60 * 1000,
+                        subMs: hasMain ? 0 : 60 * 1000,
+                        nhkConsiderLeft: 10,
+                        moves: 0
+                    };
+                }
+                if (config.mode === 'per_move') {
+                    return {
+                        stage: 'BYOYOMI',
+                        mainMs: 0,
+                        subMs: config.perMoveSec * 1000,
+                        nhkConsiderLeft: 0,
+                        moves: 0
+                    };
+                }
+                if (config.mode === 'fischer') {
+                    return {
+                        stage: 'MAIN',
+                        mainMs: config.fischerMainMin * 60 * 1000,
+                        subMs: 0,
+                        nhkConsiderLeft: 0,
+                        moves: 0
+                    };
+                }
+            }
+
+            const state = {
+                phase: 'SETUP', // 'SETUP' | 'SELECT_SENTE' | 'READY' | 'PLAYING' | 'PAUSED' | 'TIMEOUT'
+                activeSide: null,
+                players: {
+                    left: null,
+                    right: null
+                },
+                lastAnnouncedKey: {
+                    left: '',
+                    right: ''
+                },
+                lastTickTime: null,
+                timerId: null,
+                autoReturnTimeoutId: null,
+                wakeLock: null,
+                pendingAction: null
+            };
+
+            // ==========================================
+            // DOM要素の取得
+            // ==========================================
+            const els = {
+                setupScreen: document.getElementById('setup-screen'),
+                modeBtns: document.querySelectorAll('.mode-btn'),
+                modeOptions: document.querySelectorAll('.mode-option'),
+                suddenMinBtns: document.querySelectorAll('.sudden-min-btn'),
+                byoMinBtns: document.querySelectorAll('.byo-min-btn'),
+                byoSecBtns: document.querySelectorAll('.byo-sec-btn'),
+                nhkMinBtns: document.querySelectorAll('.nhk-min-btn'),
+                perMoveBtns: document.querySelectorAll('.per-move-btn'),
+                fischerMinBtns: document.querySelectorAll('.fischer-min-btn'),
+                fischerIncBtns: document.querySelectorAll('.fischer-inc-btn'),
+
+                voiceDeviceSelect: document.getElementById('voice-device-select'),
+                btnTestVoice: document.getElementById('btn-test-voice'),
+                voiceProfBtns: document.querySelectorAll('.voice-prof-btn'),
+                btnToSente: document.getElementById('btn-to-sente'),
+
+                headerRuleBadge: document.getElementById('header-rule-badge'),
+                btnPause: document.getElementById('btn-pause'),
+                btnResetTurn: document.getElementById('btn-reset-turn'),
+                btnBackSetup: document.getElementById('btn-back-setup'),
+
+                panelLeft: document.getElementById('panel-left'),
+                panelRight: document.getElementById('panel-right'),
+                roleLeft: document.getElementById('role-left'),
+                roleRight: document.getElementById('role-right'),
+                movesLeft: document.getElementById('moves-left'),
+                movesRight: document.getElementById('moves-right'),
+                subinfoLeft: document.getElementById('subinfo-left'),
+                subinfoRight: document.getElementById('subinfo-right'),
+                timeLeft: document.getElementById('time-left'),
+                timeRight: document.getElementById('time-right'),
+                statusLeft: document.getElementById('status-left'),
+                statusRight: document.getElementById('status-right'),
+
+                overlay: document.getElementById('overlay'),
+                overlayTitle: document.getElementById('overlay-title'),
+                overlaySub: document.getElementById('overlay-sub'),
+
+                confirmModal: document.getElementById('confirm-modal'),
+                confirmTitle: document.getElementById('confirm-title'),
+                confirmDesc: document.getElementById('confirm-desc'),
+                btnConfirmCancel: document.getElementById('btn-confirm-cancel'),
+                btnConfirmOk: document.getElementById('btn-confirm-ok')
+            };
+
+            // ==========================================
+            // 音声合成（4タイプ対応）＆ 駒音（Web Audio API）
+            // ==========================================
+            let audioCtx = null;
+            let allJaVoices = [];
+
+            const FEMALE_KEYWORDS = ['nanami', 'haruka', 'ayumi', 'kyoko', 'o-ren', 'sayaka', 'google 日本語', 'female', 'woman'];
+            const MALE_KEYWORDS = ['ichiro', 'keita', 'otoya', 'hattori', 'male', 'man'];
+
+            function populateVoices() {
+                if (!('speechSynthesis' in window)) return;
+                const voices = window.speechSynthesis.getVoices();
+                allJaVoices = voices.filter(v => v.lang === 'ja-JP' || v.lang.startsWith('ja'));
+
+                const currentVal = els.voiceDeviceSelect.value;
+                els.voiceDeviceSelect.innerHTML = '<option value="">端末音声：自動選択</option>';
+                allJaVoices.forEach(v => {
+                    const opt = document.createElement('option');
+                    opt.value = v.voiceURI;
+                    opt.textContent = v.name.replace(/Microsoft |Google |Apple /g, '');
+                    els.voiceDeviceSelect.appendChild(opt);
+                });
+                if (currentVal) {
+                    els.voiceDeviceSelect.value = currentVal;
+                }
+            }
+
+            if ('speechSynthesis' in window) {
+                populateVoices();
+                window.speechSynthesis.onvoiceschanged = populateVoices;
+            }
+
+            /**
+             * 選択された音声タイプ（元気な女性・落ち着いた女性・男性）に最適なボイスを選択
+             */
+            function resolveVoiceForProfile(profile) {
+                if (allJaVoices.length === 0) populateVoices();
+                if (config.selectedVoiceURI) {
+                    const manual = allJaVoices.find(v => v.voiceURI === config.selectedVoiceURI);
+                    if (manual) return { voice: manual, isNativeGenderMatch: true };
+                }
+                if (allJaVoices.length === 0) return { voice: null, isNativeGenderMatch: false };
+
+                if (profile === 'male') {
+                    const maleVoice = allJaVoices.find(v => MALE_KEYWORDS.some(k => v.name.toLowerCase().includes(k)));
+                    if (maleVoice) return { voice: maleVoice, isNativeGenderMatch: true };
+                    return { voice: allJaVoices[0], isNativeGenderMatch: false };
+                } else {
+                    const femaleVoice = allJaVoices.find(v => FEMALE_KEYWORDS.some(k => v.name.toLowerCase().includes(k)));
+                    if (femaleVoice) return { voice: femaleVoice, isNativeGenderMatch: true };
+                    return { voice: allJaVoices[0], isNativeGenderMatch: false };
+                }
+            }
+
+            function unlockAudioAndSpeech() {
+                try {
+                    if (!audioCtx) {
+                        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                        if (AudioContextClass) audioCtx = new AudioContextClass();
+                    }
+                    if (audioCtx && audioCtx.state === 'suspended') {
+                        audioCtx.resume();
+                    }
+                } catch (e) {}
+
+                if ('speechSynthesis' in window && config.voiceProfile !== 'none') {
+                    try {
+                        window.speechSynthesis.cancel();
+                        const silent = new SpeechSynthesisUtterance('');
+                        silent.lang = 'ja-JP';
+                        silent.volume = 0;
+                        window.speechSynthesis.speak(silent);
+                    } catch (e) {}
+                }
+            }
+
+            /**
+             * 4つの音声プロファイルに応じた読み上げ実行
+             * - female_energetic : 若い女性・少し早め（pitch 1.24, rate 1.18）
+             * - female_calm      : 落ち着いたアナウンサー風（pitch 1.02, rate 1.00）
+             * - male             : 男性声（男性ボイス優先、汎用音声時は低ピッチ 0.78 で男性化）
+             * - none             : 読み上げなし
+             */
+            function speak(text, isUrgentCount = false) {
+                if (config.voiceProfile === 'none') return;
+                if (!('speechSynthesis' in window)) return;
+
+                try {
+                    window.speechSynthesis.cancel();
+                    const utter = new SpeechSynthesisUtterance(text);
+                    utter.lang = 'ja-JP';
+
+                    const { voice, isNativeGenderMatch } = resolveVoiceForProfile(config.voiceProfile);
+                    if (voice) {
+                        utter.voice = voice;
+                    }
+
+                    if (config.voiceProfile === 'female_energetic') {
+                        utter.pitch = 1.24;
+                        utter.rate = isUrgentCount ? 1.26 : 1.18;
+                    } else if (config.voiceProfile === 'female_calm') {
+                        utter.pitch = 1.02;
+                        utter.rate = isUrgentCount ? 1.12 : 1.00;
+                    } else if (config.voiceProfile === 'male') {
+                        // ネイティブ男性ボイスがあれば自然な0.95、女性/中性ボイスしか無ければ0.76で低い男性声に調整
+                        utter.pitch = isNativeGenderMatch ? 0.95 : 0.76;
+                        utter.rate = isUrgentCount ? 1.14 : 1.03;
+                    }
+
+                    utter.volume = 1.0;
+                    window.speechSynthesis.speak(utter);
+                } catch (e) {}
+            }
+
+            /**
+             * 将棋の駒音・時計タッチ音（Web Audio API）
+             */
+            function playWoodClick(type = 'tap') {
+                try {
+                    if (!audioCtx) {
+                        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                        if (AudioContextClass) audioCtx = new AudioContextClass();
+                    }
+                    if (!audioCtx) return;
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                    const now = audioCtx.currentTime;
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+
+                    osc.type = 'triangle';
+                    if (type === 'start') {
+                        osc.frequency.setValueAtTime(540, now);
+                        osc.frequency.exponentialRampToValueAtTime(190, now + 0.08);
+                    } else if (type === 'end') {
+                        osc.frequency.setValueAtTime(320, now);
+                        osc.frequency.exponentialRampToValueAtTime(110, now + 0.22);
+                    } else if (type === 'plus') {
+                        osc.frequency.setValueAtTime(480, now);
+                        osc.frequency.setValueAtTime(620, now + 0.035);
+                        osc.frequency.exponentialRampToValueAtTime(220, now + 0.09);
+                    } else {
+                        osc.frequency.setValueAtTime(460, now);
+                        osc.frequency.exponentialRampToValueAtTime(150, now + 0.065);
+                    }
+
+                    gain.gain.setValueAtTime(0.45, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + (type === 'end' ? 0.23 : 0.085));
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + (type === 'end' ? 0.24 : 0.09));
+                } catch (e) {}
+            }
+
+            // ==========================================
+            // 画面スリープ防止 (Wake Lock)
+            // ==========================================
+            async function requestWakeLock() {
+                if ('wakeLock' in navigator) {
+                    try {
+                        if (!state.wakeLock) {
+                            state.wakeLock = await navigator.wakeLock.request('screen');
+                            state.wakeLock.addEventListener('release', () => { state.wakeLock = null; });
+                        }
+                    } catch (e) {}
+                }
+            }
+
+            // ==========================================
+            // 設定画面 UI 操作ロジック
+            // ==========================================
+            function updateSetupUI() {
+                // モードボタン
+                els.modeBtns.forEach(btn => {
+                    const isSelected = btn.dataset.mode === config.mode;
+                    const extraCol = btn.dataset.mode === 'fischer' ? 'col-span-2 sm:col-span-1 ' : '';
+                    btn.className = isSelected
+                        ? `mode-btn ${extraCol}p-2.5 rounded-xl border-2 text-left transition active:scale-95 border-gray-100 bg-gray-100 text-gray-900 font-bold shadow-md`
+                        : `mode-btn ${extraCol}p-2.5 rounded-xl border-2 text-left transition active:scale-95 border-gray-600 bg-[#383c42] text-gray-200 hover:bg-[#42474f]`;
+                });
+
+                // モード別サブ設定表示
+                els.modeOptions.forEach(opt => opt.classList.add('hidden'));
+                const targetOpt = document.getElementById(`opt-${config.mode}`);
+                if (targetOpt) targetOpt.classList.remove('hidden');
+
+                // 方式1：切れ負け分数
+                els.suddenMinBtns.forEach(btn => {
+                    const active = Number(btn.dataset.val) === config.suddenMin;
+                    btn.className = active
+                        ? 'sudden-min-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-100 bg-gray-100 text-gray-900'
+                        : 'sudden-min-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-600 bg-[#383c42] text-gray-200';
+                });
+
+                // 方式2：秒読み持ち時間
+                els.byoMinBtns.forEach(btn => {
+                    const active = Number(btn.dataset.val) === config.byoMainMin;
+                    btn.className = active
+                        ? 'byo-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-100 bg-gray-100 text-gray-900'
+                        : 'byo-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-600 bg-[#383c42] text-gray-200';
+                });
+
+                // 方式2：秒読み秒数
+                els.byoSecBtns.forEach(btn => {
+                    const active = Number(btn.dataset.val) === config.byoSec;
+                    btn.className = active
+                        ? 'byo-sec-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-100 bg-gray-100 text-gray-900'
+                        : 'byo-sec-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-600 bg-[#383c42] text-gray-200';
+                });
+
+                // 方式3：NHK持ち時間
+                els.nhkMinBtns.forEach(btn => {
+                    const active = Number(btn.dataset.val) === config.nhkMainMin;
+                    btn.className = active
+                        ? 'nhk-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-100 bg-gray-100 text-gray-900'
+                        : 'nhk-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-600 bg-[#383c42] text-gray-200';
+                });
+
+                // 方式4：1手ごと制限時間（1分・30秒・10秒）
+                els.perMoveBtns.forEach(btn => {
+                    const active = Number(btn.dataset.val) === config.perMoveSec;
+                    btn.className = active
+                        ? 'per-move-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-100 bg-gray-100 text-gray-900'
+                        : 'per-move-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-600 bg-[#383c42] text-gray-200';
+                });
+
+                // 方式5：フィッシャー持ち時間（10分・5分・2分・1分）
+                els.fischerMinBtns.forEach(btn => {
+                    const active = Number(btn.dataset.val) === config.fischerMainMin;
+                    btn.className = active
+                        ? 'fischer-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-100 bg-gray-100 text-gray-900'
+                        : 'fischer-min-btn py-2 rounded-lg font-bold text-xs sm:text-sm border border-gray-600 bg-[#383c42] text-gray-200';
+                });
+
+                // 方式5：フィッシャー加算秒数（10秒・5秒）
+                els.fischerIncBtns.forEach(btn => {
+                    const active = Number(btn.dataset.val) === config.fischerIncSec;
+                    btn.className = active
+                        ? 'fischer-inc-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-100 bg-gray-100 text-gray-900'
+                        : 'fischer-inc-btn py-2.5 rounded-xl font-black text-sm sm:text-base border-2 border-gray-600 bg-[#383c42] text-gray-200';
+                });
+
+                // 音声プロファイル選択ボタン
+                els.voiceProfBtns.forEach(btn => {
+                    const active = btn.dataset.profile === config.voiceProfile;
+                    btn.className = active
+                        ? 'voice-prof-btn p-2.5 rounded-xl border-2 text-center transition active:scale-95 border-gray-100 bg-gray-100 text-gray-900 font-bold shadow-md'
+                        : 'voice-prof-btn p-2.5 rounded-xl border-2 text-center transition active:scale-95 border-gray-600 bg-[#383c42] text-gray-200 hover:bg-[#42474f]';
+                });
+
+                els.btnTestVoice.disabled = config.voiceProfile === 'none';
+                els.btnTestVoice.classList.toggle('opacity-40', config.voiceProfile === 'none');
+            }
+
+            // 設定画面イベント登録
+            els.modeBtns.forEach(btn => btn.addEventListener('click', () => {
+                config.mode = btn.dataset.mode;
+                updateSetupUI();
+            }));
+            els.suddenMinBtns.forEach(btn => btn.addEventListener('click', () => {
+                config.suddenMin = Number(btn.dataset.val);
+                updateSetupUI();
+            }));
+            els.byoMinBtns.forEach(btn => btn.addEventListener('click', () => {
+                config.byoMainMin = Number(btn.dataset.val);
+                updateSetupUI();
+            }));
+            els.byoSecBtns.forEach(btn => btn.addEventListener('click', () => {
+                config.byoSec = Number(btn.dataset.val);
+                updateSetupUI();
+            }));
+            els.nhkMinBtns.forEach(btn => btn.addEventListener('click', () => {
+                config.nhkMainMin = Number(btn.dataset.val);
+                updateSetupUI();
+            }));
+            els.perMoveBtns.forEach(btn => btn.addEventListener('click', () => {
+                config.perMoveSec = Number(btn.dataset.val);
+                updateSetupUI();
+            }));
+            els.fischerMinBtns.forEach(btn => btn.addEventListener('click', () => {
+                config.fischerMainMin = Number(btn.dataset.val);
+                updateSetupUI();
+            }));
+            els.fischerIncBtns.forEach(btn => btn.addEventListener('click', () => {
+                config.fischerIncSec = Number(btn.dataset.val);
+                updateSetupUI();
+            }));
+
+            els.voiceProfBtns.forEach(btn => btn.addEventListener('click', () => {
+                config.voiceProfile = btn.dataset.profile;
+                updateSetupUI();
+            }));
+            els.voiceDeviceSelect.addEventListener('change', () => {
+                config.selectedVoiceURI = els.voiceDeviceSelect.value;
+            });
+            els.btnTestVoice.addEventListener('click', () => {
+                if (config.voiceProfile === 'none') return;
+                unlockAudioAndSpeech();
+                speak('対局開始！残り10分です', false);
+            });
+
+            // 「次へ（先手の側を設定）」ボタン押下 → 先手選択ステップへ
+            els.btnToSente.addEventListener('click', () => {
+                unlockAudioAndSpeech();
+                requestWakeLock();
+                playWoodClick('tap');
+                enterSenteSelection();
+            });
+
+            // ==========================================
+            // 対局準備・表示フォーマット・描画ロジック
+            // ==========================================
+            function getRuleTitleText() {
+                switch (config.mode) {
+                    case 'sudden':   return `${config.suddenMin}分切れ負け`;
+                    case 'byoyomi':  return `${config.byoMainMin}分＋秒読み${config.byoSec === 60 ? '1分' : '30秒'}`;
+                    case 'nhk':      return `NHK方式（${config.nhkMainMin}分＋考慮10回＋30秒）`;
+                    case 'per_move': return `1手${config.perMoveSec === 60 ? '1分' : config.perMoveSec + '秒'}`;
+                    case 'fischer':  return `${config.fischerMainMin}分＋1手${config.fischerIncSec}秒加算`;
+                    default:         return '';
+                }
+            }
+
+            /**
+             * ステップ2：先手の側をタッチして決める状態に入る
+             */
+            function enterSenteSelection() {
+                stopTimerLoop();
+                clearTimeout(state.autoReturnTimeoutId);
+                if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+                state.players.left = createPlayerState();
+                state.players.right = createPlayerState();
+                state.lastAnnouncedKey.left = '';
+                state.lastAnnouncedKey.right = '';
+                state.activeSide = null;
+                state.phase = 'SELECT_SENTE';
+
+                els.headerRuleBadge.textContent = getRuleTitleText();
+                els.setupScreen.classList.add('hidden');
+                render();
+                speak('先手の側をタッチしてください', false);
+            }
+
+            /**
+             * ステップ3：先手が決まったあとの「対局開始」待機状態に入る
+             */
+            function enterReadyState() {
+                stopTimerLoop();
+                clearTimeout(state.autoReturnTimeoutId);
+
+                state.players.left = createPlayerState();
+                state.players.right = createPlayerState();
+                state.lastAnnouncedKey.left = '';
+                state.lastAnnouncedKey.right = '';
+                state.activeSide = config.senteSide;
+                state.phase = 'READY';
+
+                render();
+            }
+
+            /**
+             * ミリ秒を「〇分〇秒」にフォーマットする
+             */
+            function formatTimeJapanese(ms) {
+                const totalSec = Math.max(0, Math.ceil(ms / 1000));
+                const min = Math.floor(totalSec / 60);
+                const sec = totalSec % 60;
+                return `${min}分${String(sec).padStart(2, '0')}秒`;
+            }
+
+            /**
+             * 画面全体の描画更新
+             */
+            function render() {
+                if (!state.players.left || !state.players.right) return;
+
+                if (state.phase === 'SELECT_SENTE') {
+                    els.roleLeft.textContent = '左側';
+                    els.roleRight.textContent = '右側';
+                } else {
+                    els.roleLeft.textContent = config.senteSide === 'left' ? '先手 ☗' : '後手 ☖';
+                    els.roleRight.textContent = config.senteSide === 'right' ? '先手 ☗' : '後手 ☖';
+                }
+
+                els.movesLeft.textContent = `${state.players.left.moves}手`;
+                els.movesRight.textContent = `${state.players.right.moves}手`;
+
+                renderSide('left', els.panelLeft, els.subinfoLeft, els.timeLeft, els.statusLeft);
+                renderSide('right', els.panelRight, els.subinfoRight, els.timeRight, els.statusRight);
+
+                els.btnPause.disabled = !(state.phase === 'PLAYING' || state.phase === 'PAUSED');
+                els.btnPause.textContent = state.phase === 'PAUSED' ? '再開' : '一時停止';
+
+                renderOverlay();
+            }
+
+            function renderSide(side, panelEl, subinfoEl, timeEl, statusEl) {
+                const p = state.players[side];
+                const isTurn = (state.phase === 'PLAYING' || state.phase === 'PAUSED') && state.activeSide === side;
+
+                // パネルの明暗（指している側を明るいグレー、待機側を暗いグレー）
+                panelEl.classList.remove('panel-active', 'panel-inactive');
+                panelEl.classList.add(isTurn ? 'panel-active' : 'panel-inactive');
+
+                // 現在表示すべき時間（ms）とサブ情報の決定
+                let displayMs = 0;
+                if (p.stage === 'MAIN') {
+                    displayMs = p.mainMs;
+                    if (config.mode === 'fischer') {
+                        subinfoEl.innerHTML = `<span class="px-2.5 py-0.5 rounded-md bg-black/15">持ち時間（+${config.fischerIncSec}秒加算）</span>`;
+                    } else if (config.mode === 'nhk') {
+                        subinfoEl.innerHTML = `<span class="px-2.5 py-0.5 rounded-md bg-black/15">持ち時間（考慮残り${p.nhkConsiderLeft}回）</span>`;
+                    } else if (config.mode === 'byoyomi') {
+                        subinfoEl.innerHTML = `<span class="px-2.5 py-0.5 rounded-md bg-black/15">持ち時間（後${config.byoSec === 60 ? '1分' : '30秒'}秒読み）</span>`;
+                    } else {
+                        subinfoEl.innerHTML = '<span>持ち時間</span>';
+                    }
+                } else if (p.stage === 'NHK_CONSIDER') {
+                    displayMs = p.subMs;
+                    subinfoEl.innerHTML = `<span class="px-3 py-0.5 rounded-full bg-gray-700 text-white shadow-xs">考慮時間（残り ${p.nhkConsiderLeft} 回）</span>`;
+                } else if (p.stage === 'BYOYOMI') {
+                    displayMs = p.subMs;
+                    let label = '';
+                    if (config.mode === 'per_move') {
+                        label = `1手${config.perMoveSec === 60 ? '1分' : config.perMoveSec + '秒'}`;
+                    } else if (config.mode === 'nhk') {
+                        label = '秒読み（30秒）';
+                    } else {
+                        label = `秒読み（${config.byoSec === 60 ? '1分' : '30秒'}）`;
+                    }
+                    subinfoEl.innerHTML = `<span class="px-3 py-0.5 rounded-full bg-gray-700 text-white shadow-xs">${label}</span>`;
+                }
+
+                timeEl.textContent = formatTimeJapanese(displayMs);
+
+                // 残り10秒以内になったら文字を赤にする
+                const remainSec = Math.ceil(displayMs / 1000);
+                if (remainSec <= 10 && (state.phase === 'PLAYING' || state.phase === 'PAUSED' || state.phase === 'TIMEOUT')) {
+                    timeEl.classList.add('time-urgent');
+                } else {
+                    timeEl.classList.remove('time-urgent');
+                }
+
+                // 下部ステータス表示
+                if (state.phase === 'SELECT_SENTE') {
+                    statusEl.innerHTML = '<span class="opacity-85">先手ならこちらをタッチ</span>';
+                } else if (state.phase === 'READY') {
+                    const isSente = config.senteSide === side;
+                    statusEl.innerHTML = isSente
+                        ? '<span class="underline decoration-2">先手 ☗（最初に指します）</span>'
+                        : '<span class="opacity-70">後手 ☖（待機）</span>';
+                } else if (state.phase === 'PLAYING') {
+                    statusEl.innerHTML = isTurn
+                        ? '<span class="px-3.5 py-1 rounded-full bg-gray-800 text-white shadow-sm">手番です（指したらタッチ）</span>'
+                        : '<span class="opacity-65">相手の手番です</span>';
+                } else if (state.phase === 'PAUSED') {
+                    statusEl.innerHTML = '<span class="px-3 py-1 rounded-full bg-gray-700 text-white">一時停止中</span>';
+                } else if (state.phase === 'TIMEOUT') {
+                    statusEl.innerHTML = remainSec === 0
+                        ? '<span class="px-3.5 py-1 rounded-full bg-red-600 text-white font-black">時間切れ</span>'
+                        : '<span class="font-bold">対局終了</span>';
+                }
+            }
+
+            function renderOverlay() {
+                if (state.phase === 'SELECT_SENTE') {
+                    els.overlay.classList.remove('hidden');
+                    els.overlayTitle.textContent = '先手の側をタッチしてください';
+                    els.overlaySub.textContent = `${getRuleTitleText()} ／ 先手側の画面をタッチ`;
+                } else if (state.phase === 'READY') {
+                    els.overlay.classList.remove('hidden');
+                    const senteLabel = config.senteSide === 'left' ? '左側（先手 ☗）' : '右側（先手 ☗）';
+                    els.overlayTitle.textContent = '画面のどこかをタッチすると対局開始';
+                    els.overlaySub.textContent = `${senteLabel}からスタートします`;
+                } else if (state.phase === 'PAUSED') {
+                    els.overlay.classList.remove('hidden');
+                    els.overlayTitle.textContent = '一時停止中';
+                    els.overlaySub.textContent = '上部の「再開」を押すと対局を再開します';
+                } else if (state.phase === 'TIMEOUT') {
+                    els.overlay.classList.remove('hidden');
+                    const loserText = state.activeSide === config.senteSide ? '先手' : '後手';
+                    els.overlayTitle.textContent = `時間切れ（${loserText}の負け）`;
+                    els.overlaySub.textContent = '5秒後に「対局開始」の画面に戻ります';
+                } else {
+                    els.overlay.classList.add('hidden');
+                }
+            }
+
+            // ==========================================
+            // タイマー進行 ＆ 5方式のルールエンジン
+            // ==========================================
+            function startTimerLoop() {
+                stopTimerLoop();
+                state.lastTickTime = performance.now();
+                state.timerId = setInterval(tick, 100);
+            }
+
+            function stopTimerLoop() {
+                if (state.timerId !== null) {
+                    clearInterval(state.timerId);
+                    state.timerId = null;
+                }
+            }
+
+            function tick() {
+                if (state.phase !== 'PLAYING' || !state.activeSide) return;
+
+                const now = performance.now();
+                const deltaMs = now - state.lastTickTime;
+                state.lastTickTime = now;
+
+                const side = state.activeSide;
+                const p = state.players[side];
+
+                if (p.stage === 'MAIN') {
+                    const prevSec = Math.ceil(p.mainMs / 1000);
+                    p.mainMs = Math.max(0, p.mainMs - deltaMs);
+                    const currSec = Math.ceil(p.mainMs / 1000);
+
+                    if (currSec < prevSec) {
+                        if (currSec === 0) {
+                            if (config.mode === 'sudden' || config.mode === 'fischer') {
+                                handleTimeout(side);
+                                return;
+                            } else if (config.mode === 'byoyomi') {
+                                p.stage = 'BYOYOMI';
+                                p.subMs = config.byoSec * 1000;
+                                speak(`持ち時間がなくなりました。1手${config.byoSec === 60 ? '1分' : '30秒'}の秒読みです`, false);
+                            } else if (config.mode === 'nhk') {
+                                p.stage = 'NHK_CONSIDER';
+                                p.nhkConsiderLeft = 10;
+                                p.subMs = 60 * 1000;
+                                speak('持ち時間がなくなりました。考慮時間1分が10回あります', false);
+                            }
+                        } else {
+                            announceMainCountdown(side, currSec);
+                        }
+                    }
+                } else if (p.stage === 'NHK_CONSIDER') {
+                    const prevSec = Math.ceil(p.subMs / 1000);
+                    p.subMs = Math.max(0, p.subMs - deltaMs);
+                    const currSec = Math.ceil(p.subMs / 1000);
+
+                    if (currSec < prevSec) {
+                        if (currSec === 0) {
+                            p.nhkConsiderLeft -= 1;
+                            if (p.nhkConsiderLeft > 0) {
+                                p.subMs = 60 * 1000;
+                                speak(`考慮時間、残り${p.nhkConsiderLeft}回です`, false);
+                            } else {
+                                p.stage = 'BYOYOMI';
+                                p.subMs = 30 * 1000;
+                                speak('考慮時間終了、30秒秒読みに入ります', false);
+                            }
+                        } else if (currSec === 30) {
+                            speak('残り30秒です', false);
+                        } else if (currSec === 10) {
+                            speak('残り10秒', false);
+                        } else if (currSec <= 9 && currSec >= 1) {
+                            speak(String(currSec), true);
+                        }
+                    }
+                } else if (p.stage === 'BYOYOMI') {
+                    const prevSec = Math.ceil(p.subMs / 1000);
+                    p.subMs = Math.max(0, p.subMs - deltaMs);
+                    const currSec = Math.ceil(p.subMs / 1000);
+
+                    if (currSec < prevSec) {
+                        if (currSec === 0) {
+                            handleTimeout(side);
+                            return;
+                        } else {
+                            announceByoyomiCountdown(side, currSec);
+                        }
+                    }
+                }
+
+                render();
+            }
+
+            /**
+             * 持ち時間中の読み上げ：
+             * 5分まで5分ごと、1分前、30秒前、10秒前、9秒から1秒ごと
+             */
+            function announceMainCountdown(side, sec) {
+                const key = `MAIN_${sec}`;
+                if (state.lastAnnouncedKey[side] === key) return;
+                state.lastAnnouncedKey[side] = key;
+
+                if (sec >= 300 && sec % 300 === 0) {
+                    const mins = sec / 60;
+                    speak(`残り${mins}分です`, false);
+                } else if (sec === 60) {
+                    speak('残り1分です', false);
+                } else if (sec === 30) {
+                    speak('残り30秒です', false);
+                } else if (sec === 10) {
+                    speak('残り10秒', false);
+                } else if (sec <= 9 && sec >= 1) {
+                    speak(String(sec), true);
+                }
+            }
+
+            /**
+             * 秒読み・1手ごと中の読み上げ：
+             * 1分設定時は30秒前・10秒前・9〜1秒、30秒設定時は10秒前・9〜1秒、10秒設定時は9〜1秒
+             */
+            function announceByoyomiCountdown(side, sec) {
+                const key = `BYO_${sec}`;
+                if (state.lastAnnouncedKey[side] === key) return;
+                state.lastAnnouncedKey[side] = key;
+
+                const isOneMin = (config.mode === 'per_move' && config.perMoveSec === 60) ||
+                                 (config.mode === 'byoyomi' && config.byoSec === 60);
+
+                if (sec === 30 && isOneMin) {
+                    speak('残り30秒です', false);
+                } else if (sec === 10) {
+                    speak('残り10秒', false);
+                } else if (sec <= 9 && sec >= 1) {
+                    speak(String(sec), true);
+                }
+            }
+
+            /**
+             * 時間切れ終了処理（5秒後に「対局開始」待機状態へ自動復帰）
+             */
+            function handleTimeout(loserSide) {
+                stopTimerLoop();
+                state.phase = 'TIMEOUT';
+                const p = state.players[loserSide];
+                if (p.stage === 'MAIN') p.mainMs = 0;
+                else p.subMs = 0;
+
+                playWoodClick('end');
+                speak('時間切れです', false);
+                render();
+
+                clearTimeout(state.autoReturnTimeoutId);
+                state.autoReturnTimeoutId = setTimeout(() => {
+                    enterReadyState();
+                }, AUTO_RETURN_DELAY_MS);
+            }
+
+            // ==========================================
+            // 対局中のタッチ操作処理
+            // ==========================================
+            function handlePanelTap(side) {
+                const panelEl = side === 'left' ? els.panelLeft : els.panelRight;
+                panelEl.classList.add('panel-pressed');
+                setTimeout(() => panelEl.classList.remove('panel-pressed'), 120);
+
+                // 【ステップ2：先手の側をタッチして決定】
+                if (state.phase === 'SELECT_SENTE') {
+                    unlockAudioAndSpeech();
+                    requestWakeLock();
+                    playWoodClick('tap');
+                    config.senteSide = side;
+                    enterReadyState();
+                    return;
+                }
+
+                // 【ステップ3：開始待機中】画面のどこをタッチしても対局開始
+                if (state.phase === 'READY') {
+                    unlockAudioAndSpeech();
+                    requestWakeLock();
+                    playWoodClick('start');
+                    speak('対局開始', false);
+
+                    state.activeSide = config.senteSide;
+                    state.phase = 'PLAYING';
+                    render();
+                    startTimerLoop();
+                    return;
+                }
+
+                // 【対局中】現在手番のパネルがタッチされた場合のみ手番交代
+                if (state.phase === 'PLAYING') {
+                    if (state.activeSide !== side) return;
+
+                    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+                    const now = performance.now();
+                    const deltaMs = now - state.lastTickTime;
+                    const p = state.players[side];
+                    p.moves += 1;
+
+                    if (p.stage === 'MAIN') {
+                        p.mainMs = Math.max(1, p.mainMs - deltaMs);
+                        // 方式5（フィッシャー）：指した直後に指定秒数（10秒 or 5秒）自動加算
+                        if (config.mode === 'fischer') {
+                            p.mainMs += config.fischerIncSec * 1000;
+                            playWoodClick('plus');
+                        } else {
+                            playWoodClick('tap');
+                        }
+                    } else if (p.stage === 'NHK_CONSIDER') {
+                        // NHK考慮時間中に指した場合、次の手番は新たな1分の考慮時間（残回数）から始まる
+                        p.subMs = 60 * 1000;
+                        playWoodClick('tap');
+                    } else if (p.stage === 'BYOYOMI') {
+                        // 秒読み・1手ごと制限時間をリセット
+                        let resetSec = 30;
+                        if (config.mode === 'nhk') resetSec = 30;
+                        else if (config.mode === 'per_move') resetSec = config.perMoveSec;
+                        else if (config.mode === 'byoyomi') resetSec = config.byoSec;
+
+                        p.subMs = resetSec * 1000;
+                        playWoodClick('tap');
+                    }
+
+                    state.lastAnnouncedKey[side] = '';
+                    state.lastTickTime = now;
+                    state.activeSide = side === 'left' ? 'right' : 'left';
+                    render();
+                }
+            }
+
+            function bindPanelInteraction(el, side) {
+                let lastTouchTime = 0;
+                el.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    lastTouchTime = Date.now();
+                    handlePanelTap(side);
+                }, { passive: false });
+
+                el.addEventListener('click', () => {
+                    if (Date.now() - lastTouchTime < 400) return;
+                    handlePanelTap(side);
+                });
+            }
+
+            bindPanelInteraction(els.panelLeft, 'left');
+            bindPanelInteraction(els.panelRight, 'right');
+
+            // 一時停止 / 再開ボタン
+            els.btnPause.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (state.phase === 'PLAYING') {
+                    const now = performance.now();
+                    const deltaMs = now - state.lastTickTime;
+                    const p = state.players[state.activeSide];
+                    if (p.stage === 'MAIN') p.mainMs = Math.max(0, p.mainMs - deltaMs);
+                    else p.subMs = Math.max(0, p.subMs - deltaMs);
+
+                    stopTimerLoop();
+                    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+                    state.phase = 'PAUSED';
+                    render();
+                } else if (state.phase === 'PAUSED') {
+                    unlockAudioAndSpeech();
+                    requestWakeLock();
+                    state.phase = 'PLAYING';
+                    render();
+                    startTimerLoop();
+                }
+            });
+
+            // 確認ダイアログ表示ヘルパー
+            function openConfirmDialog(title, desc, actionType) {
+                state.pendingAction = actionType;
+                els.confirmTitle.textContent = title;
+                els.confirmDesc.textContent = desc;
+                els.confirmModal.classList.remove('hidden');
+            }
+
+            // リセットボタン（先手選択状態へリセット）
+            els.btnResetTurn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openConfirmDialog(
+                    '対局をリセットしますか？',
+                    '現在の時間と手数を初期化し、「先手の側をタッチしてください」の画面へ戻ります。',
+                    'RESET_SENTE'
+                );
+            });
+
+            // 設定変更ボタン（最初の設定画面へ戻る）
+            els.btnBackSetup.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openConfirmDialog(
+                    '設定画面に戻りますか？',
+                    '現在の対局を終了し、対局方式や音声設定の変更画面へ戻ります。',
+                    'BACK_SETUP'
+                );
+            });
+
+            els.btnConfirmCancel.addEventListener('click', (e) => {
+                e.stopPropagation();
+                state.pendingAction = null;
+                els.confirmModal.classList.add('hidden');
+            });
+
+            els.btnConfirmOk.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const action = state.pendingAction;
+                state.pendingAction = null;
+                els.confirmModal.classList.add('hidden');
+
+                if (action === 'RESET_SENTE') {
+                    enterSenteSelection();
+                } else if (action === 'BACK_SETUP') {
+                    stopTimerLoop();
+                    clearTimeout(state.autoReturnTimeoutId);
+                    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+                    state.phase = 'SETUP';
+                    state.activeSide = null;
+                    els.overlay.classList.add('hidden');
+                    els.setupScreen.classList.remove('hidden');
+                    updateSetupUI();
+                }
+            });
+
+            // 初期設定画面の反映
+            updateSetupUI();
+        })();
+    </script>
+</body>
+</html>
